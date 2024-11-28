@@ -81,21 +81,23 @@ namespace Starshine.Abp.SqlSugarCore
 
         public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
         {
-            //进行CodeFirst
             var service = context.ServiceProvider;
-            var options = service.GetRequiredService<IOptions<DbConnOptions>>().Value;
+            var options = service.GetRequiredService<IOptions<DbSettingsOptions>>().Value;
 
-            var logger = service.GetRequiredService<ILogger<YiFrameworkSqlSugarCoreModule>>();
+            var logger = service.GetRequiredService<ILogger<StarshineAbpSqlSugarCoreModule>>();
 
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine();
-            sb.AppendLine("==========Yi-SQL配置:==========");
-            sb.AppendLine($"数据库连接字符串：{options.Url}");
-            sb.AppendLine($"数据库类型：{options.DbType.ToString()}");
-            sb.AppendLine($"是否开启种子数据：{options.EnabledDbSeed}");
-            sb.AppendLine($"是否开启CodeFirst：{options.EnabledCodeFirst}");
-            sb.AppendLine($"是否开启Saas多租户：{options.EnabledSaasMultiTenancy}");
+            sb.AppendLine("==========数据库连接配置:==========");
+            foreach (var item in options.ConnectionConfigs!)
+            {
+                sb.AppendLine($"数据库连接字符串：{item.ConnectionString}");
+                sb.AppendLine($"数据库类型：{item.DbType.ToString()}");
+                sb.AppendLine($"是否开启种子数据：{item.EnableInitSeed}");
+                sb.AppendLine($"是否开启初始化表：{item.EnableInitDb}");
+                sb.AppendLine($"是否开启Saas多租户：{options.EnabledSaasMultiTenancy}");
+            }
             sb.AppendLine("===============================");
 
 
