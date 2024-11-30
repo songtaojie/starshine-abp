@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Starshine.Abp.Core\Starshine.Abp.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Uow\新文件夹\" />
+  </ItemGroup>
+
 </Project>

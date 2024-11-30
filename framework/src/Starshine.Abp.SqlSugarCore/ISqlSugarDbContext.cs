@@ -12,9 +12,15 @@ namespace Starshine.Abp.SqlSugarCore
         ISqlSugarClient SqlSugarClient { get; }
 
         /// <summary>
+        /// 原生 Ado 对象
+        /// </summary>
+        IAdo Ado { get; }
+
+        /// <summary>
         /// 数据库备份
         /// </summary>
         void BackupDataBase();
+
         void SetSqlSugarClient(ISqlSugarClient sqlSugarClient);
     }
 }

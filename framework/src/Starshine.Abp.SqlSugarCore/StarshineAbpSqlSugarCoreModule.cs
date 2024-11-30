@@ -12,6 +12,8 @@ using Volo.Abp;
 using Volo.Abp.Domain;
 using SqlSugar;
 using Volo.Abp.Domain.Repositories;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Starshine.Abp.SqlSugarCore.SqlSugarCore;
 
 namespace Starshine.Abp.SqlSugarCore
 {
@@ -24,8 +26,6 @@ namespace Starshine.Abp.SqlSugarCore
             var configuration = services.GetConfiguration();
             services.AddStarshineOptions<DbSettingsOptions>();
 
-            var section = configuration.GetSection("DbConnOptions");
-            Configure<DbConnOptions>(section);
             services.AddScoped<ISqlSugarClient>(provider => InitSqlSugarClient(provider, buildAction));
             services.TryAddScoped<ISqlSugarDbContext, SqlSugarDbContext>();
 
@@ -33,10 +33,10 @@ namespace Starshine.Abp.SqlSugarCore
             //service.AddTransient<ISqlSugarClient>(x => x.GetRequiredService<ISqlsugarDbContext>().SqlSugarClient);
 
 
-            service.AddTransient(typeof(IRepository<>), typeof(SqlSugarRepository<>));
-            service.AddTransient(typeof(IRepository<,>), typeof(SqlSugarRepository<,>));
-            service.AddTransient(typeof(ISqlSugarRepository<>), typeof(SqlSugarRepository<>));
-            service.AddTransient(typeof(ISqlSugarRepository<,>), typeof(SqlSugarRepository<,>));
+            services.AddTransient(typeof(IRepository<>), typeof(SqlSugarRepository<>));
+            services.AddTransient(typeof(IRepository<,>), typeof(SqlSugarRepository<,>));
+            services.AddTransient(typeof(ISqlSugarRepository<>), typeof(SqlSugarRepository<>));
+            services.AddTransient(typeof(ISqlSugarRepository<,>), typeof(SqlSugarRepository<,>));
 
             service.AddTransient(typeof(ISugarDbContextProvider<>), typeof(UnitOfWorkSqlsugarDbContextProvider<>));
             //替换Sqlsugar默认序列化器，用来解决.Select()不支持嵌套对象/匿名对象的非公有访问器 值无法绑定,如Id属性

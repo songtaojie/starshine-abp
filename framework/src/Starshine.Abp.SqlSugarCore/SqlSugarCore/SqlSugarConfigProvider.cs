@@ -8,13 +8,16 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Auditing;
+using Volo.Abp.Domain.Entities;
 
-namespace Starshine.Abp.SqlSugarCore
+namespace Starshine.Abp.SqlSugarCore.SqlSugarCore
 {
     /// <summary>
     /// SqlSugar配置初始化
     /// </summary>
-    internal static class SqlSugarConfigProvider
+    public static class SqlSugarConfigProvider
     {
         internal const string DefaultConfigId = $"starshine_sqlsugar_configId";
 
@@ -88,8 +91,7 @@ namespace Starshine.Abp.SqlSugarCore
                     {
                         column.IsNullable = true;
                     }
-                    if (config.EnableUnderLine && !column.IsIgnore && !column.DbColumnName.Contains('_'))
-                        column.DbColumnName = UtilMethods.ToUnderLine(column.DbColumnName); // 驼峰转下划线
+                    
 
                     if (config.DbType == DbType.Oracle)
                     {
@@ -98,38 +100,37 @@ namespace Starshine.Abp.SqlSugarCore
                         if (type.PropertyType == typeof(bool) || type.PropertyType == typeof(bool?))
                             column.DataType = "number(1)";
                     }
-
-                    if (typeof(IEntity<>).IsAssignableFromGenericType(type.ReflectedType)
-                        && !type.IsDefined(typeof(SugarColumn), false))
+                    if (!type.IsDefined(typeof(SugarColumn), false))
                     {
-                        switch (type.Name)
+                        if (config.EnableUnderLine && !column.IsIgnore && !column.DbColumnName.Contains('_'))
+                            column.DbColumnName = UtilMethods.ToUnderLine(column.DbColumnName); // 驼峰转下划线
+                        if (type.ReflectedType?.IsAssignableTo<ISoftDelete>() ?? false && type.Name.Equals(nameof(ISoftDelete.IsDeleted)))
                         {
-                            case nameof(EntityBase.Id):
-                                column.IsPrimarykey = true;
-                                if (type.PropertyType == typeof(string))
-                                {
-                                    column.Length = 36;
-                                }
-                                break;
-                            case nameof(CreationEntityBase.CreatorId):
-                                if (type.PropertyType == typeof(string))
-                                {
-                                    column.Length = 36;
-                                }
-                                break;
-                            case nameof(Starshine.Common.AuditedEntityBase.UpdaterId):
-                                if (type.PropertyType == typeof(string))
-                                {
-                                    column.Length = 36;
-                                }
-                                break;
-                            case nameof(FullAuditedEntityBase.DeleterId):
-                                if (type.PropertyType == typeof(string))
-                                {
-                                    column.Length = 36;
-                                }
-                                break;
+                            column.DefaultValue = "false";
+                            column.ColumnDescription = "是否删除";
                         }
+                        else if (type.ReflectedType?.IsAssignableTo<IHasDeletionTime>() ?? false && type.Name.Equals(nameof(IHasDeletionTime.DeletionTime)))
+                        {
+                            column.IsNullable = true;
+                            column.ColumnDescription = "删除时间";
+                            column.DefaultValue = "false";
+                        }
+                        else if (type.ReflectedType?.IsAssignableTo<IHasDeletionTime>() ?? false && type.Name.Equals(nameof(IHasDeletionTime.DeletionTime)))
+                        {
+                            column.IsNullable = true;
+                            column.ColumnDescription = "删除时间";
+                            column.DefaultValue = "false";
+                        }
+                        else if (type.ReflectedType?.IsAssignableTo<IHasCreationTime>() ?? false && type.Name.Equals(nameof(IHasCreationTime.CreationTime)))
+                        {
+                            column.IsNullable = false;
+                            column.ColumnDescription = "创建时间";
+                            column.DefaultValue = "false";
+                            b.Property(nameof(IHasCreationTime.CreationTime))
+                                .IsRequired()
+                                .HasColumnName(nameof(IHasCreationTime.CreationTime));
+                        }
+                       
                     }
                 }
             };
@@ -232,7 +233,7 @@ namespace Starshine.Abp.SqlSugarCore
             foreach (var entityType in entityTypes)
             {
                 var tAtt = entityType.GetCustomAttribute<TenantAttribute>();
-                if ((tAtt != null && tAtt.configId?.ToString() == configId) || (tAtt == null && configId == DefaultConfigId))
+                if (tAtt != null && tAtt.configId?.ToString() == configId || tAtt == null && configId == DefaultConfigId)
                 {
                     var splitTable = entityType.GetCustomAttribute<SplitTableAttribute>();
                     if (splitTable == null)
@@ -250,7 +251,7 @@ namespace Starshine.Abp.SqlSugarCore
             {
                 var entityType = seedType.GetInterfaces().First().GetGenericArguments().First();
                 var tAtt = entityType.GetCustomAttribute<TenantAttribute>();
-                var allowSeedData = (tAtt != null && tAtt.configId.ToString() == configId) || (tAtt == null && configId == DefaultConfigId);
+                var allowSeedData = tAtt != null && tAtt.configId.ToString() == configId || tAtt == null && configId == DefaultConfigId;
                 if (!allowSeedData) continue;
                 var hasDataMethod = seedType.GetMethod(nameof(ISqlSugarEntitySeedData<object>.HasData));
                 if (hasDataMethod == null) continue;

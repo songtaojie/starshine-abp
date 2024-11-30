@@ -1,11 +1,15 @@
 ﻿using Microsoft.Extensions.Options;
 using SqlSugar;
+using Starshine.Abp.SqlSugarCore.SqlSugarCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 
 namespace Starshine.Abp.SqlSugarCore
 {
@@ -19,6 +23,13 @@ namespace Starshine.Abp.SqlSugarCore
         /// </summary>
         public IEnumerable<DbConnectionConfig>? ConnectionConfigs { get; set; }
 
+        internal Dictionary<MultiTenantDbContextType, Type> DbContextReplacements { get; }
+
+        public DbSettingsOptions() 
+        {
+            DbContextReplacements = new Dictionary<MultiTenantDbContextType, Type>();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -30,6 +41,30 @@ namespace Starshine.Abp.SqlSugarCore
             {
                 if (dbConfig.ConfigId == null || string.IsNullOrWhiteSpace(dbConfig.ConfigId.ToString()))
                     dbConfig.ConfigId = SqlSugarConfigProvider.DefaultConfigId;
+            }
+        }
+
+        internal Type GetReplacedTypeOrSelf(Type dbContextType, MultiTenancySides multiTenancySides = MultiTenancySides.Both)
+        {
+            var replacementType = dbContextType;
+            while (true)
+            {
+                var foundType = DbContextReplacements.LastOrDefault(x => x.Key.Type == replacementType && x.Key.MultiTenancySide.HasFlag(multiTenancySides));
+                if (!foundType.Equals(default(KeyValuePair<MultiTenantDbContextType, Type>)))
+                {
+                    if (foundType.Value == dbContextType)
+                    {
+                        throw new AbpException(
+                            "Circular DbContext replacement found for " +
+                            dbContextType.AssemblyQualifiedName
+                        );
+                    }
+                    replacementType = foundType.Value;
+                }
+                else
+                {
+                    return replacementType;
+                }
             }
         }
     }

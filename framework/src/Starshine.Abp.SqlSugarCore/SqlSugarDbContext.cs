@@ -11,20 +11,20 @@ using Volo.Abp.Guids;
 
 namespace Starshine.Abp.SqlSugarCore
 {
-    internal class SqlSugarDbContext : ISqlSugarDbContext
+    public abstract class SqlSugarDbContext : ISqlSugarDbContext, ITransientDependency
     {
-        private IAbpLazyServiceProvider LazyServiceProvider { get; }
+        protected IAbpLazyServiceProvider LazyServiceProvider { get; }
 
         private IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetRequiredService<IGuidGenerator>();
         /// <summary>
         /// SqlSugar 客户端
         /// </summary>
-        public ISqlSugarClient SqlSugarClient { get; private set; }
+        public ISqlSugarClient SqlSugarClient { get;}
 
         public SqlSugarDbContext(IAbpLazyServiceProvider lazyServiceProvider)
         {
             LazyServiceProvider = lazyServiceProvider;
-            var connectionCreator = LazyServiceProvider.LazyGetRequiredService<ISqlSugarDbConnectionCreator>();
+            var connectionCreator = _lazyServiceProvider.LazyGetRequiredService<ISqlSugarDbConnectionCreator>();
             connectionCreator.OnSqlSugarClientConfig = OnSqlSugarClientConfig;
             connectionCreator.EntityService = EntityService;
             connectionCreator.DataExecuting = DataExecuting;
