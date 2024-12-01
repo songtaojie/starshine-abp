@@ -1,79 +1,20 @@
-﻿using Microsoft.Extensions.Options;
+﻿using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SqlSugar;
-using Starshine.Abp.SqlSugarCore.SqlSugarCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Volo.Abp;
-using Volo.Abp.Data;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.MultiTenancy;
 
 namespace Starshine.Abp.SqlSugarCore
 {
     /// <summary>
     /// 数据库连接配置
     /// </summary>
-    public class DbSettingsOptions : IConfigureOptions<DbSettingsOptions>
+    public sealed class DbSettingsOptions : ConnectionConfig, IConfigureOptions<DbSettingsOptions>
     {
-        /// <summary>
-        /// 数据库连接配置
-        /// </summary>
-        public IEnumerable<DbConnectionConfig>? ConnectionConfigs { get; set; }
-
-        internal Dictionary<MultiTenantDbContextType, Type> DbContextReplacements { get; }
-
-        public DbSettingsOptions() 
+        private readonly ILogger _logger;
+        public DbSettingsOptions(ILogger<DbSettingsOptions> logger) 
         {
-            DbContextReplacements = new Dictionary<MultiTenantDbContextType, Type>();
+            _logger = logger;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="options"></param>
-        public void Configure(DbSettingsOptions options)
-        {
-            options.ConnectionConfigs ??= new List<DbConnectionConfig>();
-            foreach (var dbConfig in options.ConnectionConfigs)
-            {
-                if (dbConfig.ConfigId == null || string.IsNullOrWhiteSpace(dbConfig.ConfigId.ToString()))
-                    dbConfig.ConfigId = SqlSugarConfigProvider.DefaultConfigId;
-            }
-        }
-
-        internal Type GetReplacedTypeOrSelf(Type dbContextType, MultiTenancySides multiTenancySides = MultiTenancySides.Both)
-        {
-            var replacementType = dbContextType;
-            while (true)
-            {
-                var foundType = DbContextReplacements.LastOrDefault(x => x.Key.Type == replacementType && x.Key.MultiTenancySide.HasFlag(multiTenancySides));
-                if (!foundType.Equals(default(KeyValuePair<MultiTenantDbContextType, Type>)))
-                {
-                    if (foundType.Value == dbContextType)
-                    {
-                        throw new AbpException(
-                            "Circular DbContext replacement found for " +
-                            dbContextType.AssemblyQualifiedName
-                        );
-                    }
-                    replacementType = foundType.Value;
-                }
-                else
-                {
-                    return replacementType;
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// 数据库连接配置
-    /// </summary>
-    public sealed class DbConnectionConfig : ConnectionConfig
-    {
         /// <summary>
         /// 启用库表初始化
         /// </summary>
@@ -99,22 +40,20 @@ namespace Starshine.Abp.SqlSugarCore
         /// </summary>
         public bool EnableSqlLog { get; set; }
 
-        internal ConnectionConfig ToConnectionConfig()
+        internal Action<AopProvider>? DefaultConfigureAop { get; set; }
+
+        public void ConfigureAop([NotNull] Action<AopProvider> action)
         {
-            return new ConnectionConfig
+            Volo.Abp.Check.NotNull(action, nameof(action));
+            DefaultConfigureAop = action;
+        }
+
+        public void Configure(DbSettingsOptions options)
+        {
+            SqlSugarConfigProvider.SetDbConfig(options);
+            options.DefaultConfigureAop ??= aop =>
             {
-                AopEvents = AopEvents,
-                ConfigId = ConfigId,
-                ConfigureExternalServices = ConfigureExternalServices,
-                ConnectionString = ConnectionString,
-                DbLinkName = DbLinkName,
-                DbType = DbType,
-                IndexSuffix = IndexSuffix,
-                IsAutoCloseConnection = IsAutoCloseConnection,
-                LanguageType = LanguageType,
-                MoreSettings = MoreSettings,
-                SlaveConnectionConfigs = SlaveConnectionConfigs,
-                SqlMiddle = SqlMiddle
+                SqlSugarConfigProvider.SetAopLog(aop, options, _logger);
             };
         }
     }

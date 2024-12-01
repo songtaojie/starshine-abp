@@ -111,11 +111,11 @@ namespace Starshine.Abp.SqlSugarCore.Uow
                     unitOfWork.AddTransactionApi(transactionApiKey, transaction);
                     if (unitOfWork.Options.IsolationLevel.HasValue)
                     {
-                        await dbContext.SqlSugarClient.Ado.BeginTranAsync(unitOfWork.Options.IsolationLevel.Value);
+                        await dbContext.Ado.BeginTranAsync(unitOfWork.Options.IsolationLevel.Value);
                     }
                     else
                     {
-                        await dbContext.SqlSugarClient.Ado.BeginTranAsync();
+                        await dbContext.Ado.BeginTranAsync();
                     }
                     
                 }

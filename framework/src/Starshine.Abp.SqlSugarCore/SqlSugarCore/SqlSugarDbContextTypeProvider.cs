@@ -22,7 +22,8 @@ namespace Starshine.Abp.SqlSugarCore
 
         public virtual Type GetDbContextType(Type dbContextType)
         {
-            return _options.GetReplacedTypeOrSelf(dbContextType, _currentTenant.GetMultiTenancySide());
+            //return _options.GetReplacedTypeOrSelf(dbContextType, _currentTenant.GetMultiTenancySide());
+            return dbContextType;
         }
     }
 }

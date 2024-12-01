@@ -5,8 +5,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
-namespace Microsoft.Extensions.Options
+namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
     /// Extension methods for adding options services to the DI container.
@@ -26,7 +27,7 @@ namespace Microsoft.Extensions.Options
         public static IServiceCollection Configure<TOptions, TDep>(this IServiceCollection services, Action<TOptions, TDep> configureOptions)
             where TOptions : class
             where TDep : class
-            => services.Configure<TOptions, TDep>(Options.DefaultName, configureOptions);
+            => services.Configure<TOptions, TDep>(Microsoft.Extensions.Options.Options.DefaultName, configureOptions);
 
         /// <summary>
         /// Registers an action used to configure a particular type of options.
@@ -62,7 +63,7 @@ namespace Microsoft.Extensions.Options
         public static IServiceCollection PostConfigure<TOptions, TDep>(this IServiceCollection services, Action<TOptions, TDep> configureOptions)
             where TOptions : class
             where TDep : class
-            => services.PostConfigure<TOptions, TDep>(Options.DefaultName, configureOptions);
+            => services.PostConfigure<TOptions, TDep>(Microsoft.Extensions.Options.Options.DefaultName, configureOptions);
 
         /// <summary>
         /// Registers an action used to configure a particular type of options.

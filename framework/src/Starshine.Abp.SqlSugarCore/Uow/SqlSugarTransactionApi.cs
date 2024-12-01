@@ -26,23 +26,19 @@ namespace Starshine.Abp.SqlSugarCore.Uow
 
         public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
-            var token = CancellationTokenProvider.FallbackToProvider(cancellationToken);
-            token.ThrowIfCancellationRequested();
-            await StarterDbContext.SqlSugarClient.Ado.CommitTranAsync();
+            StarterDbContext.Ado.CancellationToken = CancellationTokenProvider.FallbackToProvider(cancellationToken);
+            await StarterDbContext.Context.Ado.CommitTranAsync();
         }
 
         public void Dispose()
         {
             StarterDbContext.Dispose();
-            StarterDbContext.SqlSugarClient.Ado.BeginTranAsync();
-            StarterDbContext.SqlSugarClient.Ado.Connection
         }
 
         public async Task RollbackAsync(CancellationToken cancellationToken)
         {
-            var token = CancellationTokenProvider.FallbackToProvider(cancellationToken);
-            token.ThrowIfCancellationRequested();
-            await StarterDbContext.SqlSugarClient.Ado.RollbackTranAsync();
+            StarterDbContext.Ado.CancellationToken = CancellationTokenProvider.FallbackToProvider(cancellationToken);
+            await StarterDbContext.Ado.RollbackTranAsync();
         }
     }
 

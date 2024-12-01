@@ -18,11 +18,11 @@ namespace Starshine.Abp.Caching.FreeRedis
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddStarshineOptions<CacheSettingsOptions>();
             var configuration = context.Services.GetConfiguration();
             var redisEnabled = configuration["CacheSettings:Redis:IsEnabled"];
             if (redisEnabled.IsNullOrEmpty() || bool.Parse(redisEnabled))
             {
+                context.Services.AddStarshineOptions<CacheSettingsOptions>();
                 context.Services.AddSingleton<IRedisClient>(sp =>
                 {
                     var options = sp.GetRequiredService<IOptions<CacheSettingsOptions>>().Value;
