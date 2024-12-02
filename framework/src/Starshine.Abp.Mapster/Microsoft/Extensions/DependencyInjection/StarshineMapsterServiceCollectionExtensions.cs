@@ -11,14 +11,14 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class StarshineMapsterServiceCollectionExtensions
     {
-        public static IServiceCollection AddAutoMapperObjectMapper(this IServiceCollection services)
+        public static IServiceCollection AddMapsterObjectMapper(this IServiceCollection services)
         {
             return services.Replace(
                 ServiceDescriptor.Transient<IAutoObjectMappingProvider, MapsterAutoObjectMappingProvider>()
             );
         }
 
-        public static IServiceCollection AddAutoMapperObjectMapper<TContext>(this IServiceCollection services)
+        public static IServiceCollection AddMapsterObjectMapper<TContext>(this IServiceCollection services)
         {
             return services.Replace(
                 ServiceDescriptor.Transient<IAutoObjectMappingProvider<TContext>, MapsterAutoObjectMappingProvider<TContext>>()
