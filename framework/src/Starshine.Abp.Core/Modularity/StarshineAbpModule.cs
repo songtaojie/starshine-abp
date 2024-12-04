@@ -8,6 +8,9 @@ using Volo.Abp.Modularity;
 
 namespace Starshine.Abp.Core
 {
+    /// <summary>
+    /// StarshineAbp模块
+    /// </summary>
     public abstract class StarshineAbpModule:AbpModule
     {
         protected void Configure<TOptions, TDep>(Action<TOptions, TDep> configureOptions)

@@ -183,16 +183,6 @@ namespace System.Reflection
         }
 
         /// <summary>
-        /// 获取IEnumerable的类型
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static Type GetIEnumerableType(this Type type)
-        {
-            return type.GetGenericInterface(typeof(IEnumerable<>));
-        }
-
-        /// <summary>
         /// 获取Dictionary的类型
         /// </summary>
         /// <param name="type"></param>
