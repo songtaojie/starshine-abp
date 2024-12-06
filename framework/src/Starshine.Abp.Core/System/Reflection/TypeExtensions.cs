@@ -334,9 +334,10 @@ namespace System.Reflection
         /// <param name="type">类型</param>
         /// <param name="generic">泛型类型</param>
         /// <returns>bool</returns>
-        public static bool IsAssignableToGenericType(this Type? type, Type generic)
+        public static bool IsAssignableToGenericType(this Type? type, Type? generic)
         {
             if (type == null) return false;
+            if(generic == null) return false;
             // 检查接口类型
             var isTheRawGenericType = type.GetInterfaces().Any(IsTheRawGenericType);
             if (isTheRawGenericType) return true;

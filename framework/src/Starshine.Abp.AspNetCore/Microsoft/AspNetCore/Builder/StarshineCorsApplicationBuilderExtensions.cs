@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Starshine.Abp.AspNetCore.Starshine.Abp.AspNetCore.Cors;
+using Starshine.Abp.AspNetCore.Cors;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -18,7 +19,7 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseCorsAccessor(this IApplicationBuilder app)
         {
             // 获取选项
-            var options = app.ApplicationServices.GetService<IOptions<CorsAccessorSettingsOptions>>();
+            var options = app.ApplicationServices.GetService<IOptions<CorsSettingsOptions>>();
             if (options == null)
                 throw new ArgumentNullException(nameof(options), "Add the AddCorsAccessor method to services");
             var corsAccessorSettings = options.Value;
