@@ -9,9 +9,17 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Starshine.Abp.SqlSugarCore.Repositories
 {
+    /// <summary>
+    /// SqlSugar仓储
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     public interface ISqlSugarRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity,new()
     {
+        /// <summary>
+        /// 获取上下文
+        /// </summary>
+        /// <returns></returns>
         Task<ISqlSugarClient> GetDbContextAsync();
 
         /// <summary>
@@ -47,17 +55,45 @@ namespace Starshine.Abp.SqlSugarCore.Repositories
         /// <returns></returns>
         Task<IInsertable<TEntity>> GetInsertableAsync(TEntity[] insertObjs);
         
+        /// <summary>
+        /// 获取租户
+        /// </summary>
+        /// <returns></returns>
         Task<ITenant> GetTenantAsync();
 
+        /// <summary>
+        /// 获取更新上下文
+        /// </summary>
+        /// <param name="updateObjs"></param>
+        /// <returns></returns>
         Task<IUpdateable<TEntity>> GetUpdateableAsync(IEnumerable<TEntity> updateObjs);
 
+        /// <summary>
+        /// 获取更新上下文
+        /// </summary>
+        /// <param name="updateObj"></param>
+        /// <returns></returns>
         Task<IUpdateable<TEntity>> GetUpdateableAsync(TEntity updateObj);
 
+        /// <summary>
+        /// 获取插入操作
+        /// </summary>
+        /// <returns></returns>
         Task<IUpdateable<TEntity>> GetUpdateableAsync();
 
+        /// <summary>
+        /// 获取插入操作
+        /// </summary>
+        /// <param name="updateObjs"></param>
+        /// <returns></returns>
         Task<IUpdateable<TEntity>> GetUpdateableAsync(TEntity[] updateObjs);
     }
 
+    /// <summary>
+    /// SqlSugar仓储
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
     public interface ISqlSugarRepository<TEntity, TKey> : ISqlSugarRepository<TEntity>, IRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>, new()
     {

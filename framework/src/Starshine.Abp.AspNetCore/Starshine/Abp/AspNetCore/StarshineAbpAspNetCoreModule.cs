@@ -9,12 +9,18 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Starshine.Abp.AspNetCore
 {
+    /// <summary>
+    /// StarshineAbpAspNetCore模块入口
+    /// </summary>
     [DependsOn(
     typeof(AbpAspNetCoreModule)
     )]
     public class StarshineAbpAspNetCoreModule : StarshineAbpModule
     {
-
+        /// <summary>
+        /// 应用初始化
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             //var app = context.GetApplicationBuilder();

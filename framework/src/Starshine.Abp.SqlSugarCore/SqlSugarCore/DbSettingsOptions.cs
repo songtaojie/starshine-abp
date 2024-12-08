@@ -11,6 +11,11 @@ namespace Starshine.Abp.SqlSugarCore
     public sealed class DbSettingsOptions : ConnectionConfig, IConfigureOptions<DbSettingsOptions>
     {
         private readonly ILogger _logger;
+
+        /// <summary>
+        /// 数据库连接配置
+        /// </summary>
+        /// <param name="logger"></param>
         public DbSettingsOptions(ILogger<DbSettingsOptions> logger) 
         {
             _logger = logger;
@@ -42,12 +47,20 @@ namespace Starshine.Abp.SqlSugarCore
 
         internal Action<AopProvider>? DefaultConfigureAop { get; set; }
 
+        /// <summary>
+        /// 配置aop
+        /// </summary>
+        /// <param name="action"></param>
         public void ConfigureAop([NotNull] Action<AopProvider> action)
         {
             Volo.Abp.Check.NotNull(action, nameof(action));
             DefaultConfigureAop = action;
         }
 
+        /// <summary>
+        /// 配置
+        /// </summary>
+        /// <param name="options"></param>
         public void Configure(DbSettingsOptions options)
         {
             SqlSugarConfigProvider.SetDbConfig(options);

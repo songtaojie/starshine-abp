@@ -12,8 +12,18 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// SqlSugar服务扩展
+    /// </summary>
     public static class StarshineSugarServiceCollectionExtensions
     {
+        /// <summary>
+        /// 添加SqlSugar服务
+        /// </summary>
+        /// <typeparam name="TDbContext"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public static IServiceCollection AddStarshineSugarDbContext<TDbContext>(this IServiceCollection services, Action<DbSettingsOptions>? action = default)
             where TDbContext : class, ISqlSugarDbContext
         {

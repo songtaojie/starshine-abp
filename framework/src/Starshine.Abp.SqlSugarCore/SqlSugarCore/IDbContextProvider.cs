@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Starshine.Abp.SqlSugarCore
 {
+    /// <summary>
+    /// 数据库上下文提供器
+    /// </summary>
+    /// <typeparam name="TDbContext"></typeparam>
     public interface IDbContextProvider<TDbContext>
         where TDbContext : ISqlSugarDbContext
     {

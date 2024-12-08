@@ -5,11 +5,18 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Starshine.Abp.Swashbuckle
 {
+    /// <summary>
+    /// Swashbuckle模块入口
+    /// </summary>
     [DependsOn(
     typeof(AbpVirtualFileSystemModule),
     typeof(AbpAspNetCoreMvcModule))]
     public class StarshineAbpSwashbuckleModule : StarshineAbpModule
     {
+        /// <summary>
+        /// 配置服务
+        /// </summary>
+        /// <param name="context"></param>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpVirtualFileSystemOptions>(options =>

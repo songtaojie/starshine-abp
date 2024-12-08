@@ -13,6 +13,12 @@ namespace Starshine.Abp.Core
     /// </summary>
     public abstract class StarshineAbpModule:AbpModule
     {
+        /// <summary>
+        /// 配置
+        /// </summary>
+        /// <typeparam name="TOptions"></typeparam>
+        /// <typeparam name="TDep"></typeparam>
+        /// <param name="configureOptions"></param>
         protected void Configure<TOptions, TDep>(Action<TOptions, TDep> configureOptions)
             where TOptions : class
             where TDep : class
@@ -20,6 +26,12 @@ namespace Starshine.Abp.Core
             ServiceConfigurationContext.Services.Configure(configureOptions);
         }
 
+        /// <summary>
+        /// 后置配置
+        /// </summary>
+        /// <typeparam name="TOptions"></typeparam>
+        /// <typeparam name="TDep"></typeparam>
+        /// <param name="configureOptions"></param>
         protected void PostConfigure<TOptions, TDep>(Action<TOptions, TDep> configureOptions)
             where TOptions : class
             where TDep : class

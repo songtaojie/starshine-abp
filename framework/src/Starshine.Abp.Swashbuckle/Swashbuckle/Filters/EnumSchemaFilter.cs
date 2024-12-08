@@ -15,6 +15,16 @@ namespace Starshine.Abp.Swashbuckle.Filters
     /// </summary>
     public class EnumSchemaFilter : ISchemaFilter
     {
+        private readonly IReadOnlyList<Assembly> _assemblies;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assemblies"></param>
+        public EnumSchemaFilter(IReadOnlyList<Assembly> assemblies)
+        {
+            _assemblies = assemblies;
+        }
         /// <summary>
         /// 实现过滤器方法
         /// </summary>
@@ -25,7 +35,7 @@ namespace Starshine.Abp.Swashbuckle.Filters
             Type type = context.Type;
 
             // 排除其他程序集的枚举
-            if (type.IsEnum && Penetrates.Assemblies.Contains(type.Assembly))
+            if (type.IsEnum && _assemblies?.Contains(type.Assembly) == true)
             {
                 model.Enum.Clear();
                 var stringBuilder = new StringBuilder();

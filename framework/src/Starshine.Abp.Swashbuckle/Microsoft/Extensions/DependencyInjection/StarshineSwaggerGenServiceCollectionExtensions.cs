@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 添加规范化文档服务
         /// </summary>
         /// <param name="services">服务集合</param>
-        /// <param name="swaggerSettings">swagger配置</param>
+        /// <param name="action">swagger配置</param>
         /// <returns>服务集合</returns>
         public static IServiceCollection AddStarshineSwaggerGen(this IServiceCollection services, Action<SwaggerSettingsOptions>? action = default)
         {

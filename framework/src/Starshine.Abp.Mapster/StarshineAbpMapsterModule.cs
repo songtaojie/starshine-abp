@@ -13,10 +13,17 @@ using Volo.Abp.Reflection;
 
 namespace Starshine.Abp.Mapster
 {
+    /// <summary>
+    /// Mapster模块
+    /// </summary>
     [DependsOn(
     typeof(AbpObjectMappingModule))]
     public class StarshineAbpMapsterModule: StarshineAbpModule
     {
+        /// <summary>
+        /// 配置服务
+        /// </summary>
+        /// <param name="context"></param>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddMapsterObjectMapper();

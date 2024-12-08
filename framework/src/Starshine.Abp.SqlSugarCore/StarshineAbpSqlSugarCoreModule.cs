@@ -14,9 +14,17 @@ using Starshine.Abp.SqlSugarCore.Uow;
 
 namespace Starshine.Abp.SqlSugarCore
 {
+    /// <summary>
+    /// SqlSugar模块
+    /// </summary>
     [DependsOn(typeof(AbpDddDomainModule))]
     public class StarshineAbpSqlSugarCoreModule : StarshineAbpModule
     {
+        /// <summary>
+        /// 配置服务
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Task ConfigureServicesAsync(ServiceConfigurationContext context)
         {
             var services = context.Services;
@@ -31,6 +39,11 @@ namespace Starshine.Abp.SqlSugarCore
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// 初始化数据库
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override async Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
         {
             using var scope = context.ServiceProvider.CreateScope();

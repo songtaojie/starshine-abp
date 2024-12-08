@@ -17,26 +17,54 @@ using Volo.Abp.Threading;
 
 namespace Starshine.Abp.SqlSugarCore
 {
+    /// <summary>
+    /// SqlSugar上下文
+    /// </summary>
     public abstract class SqlSugarDbContext : ISqlSugarDbContext
     {
+        /// <summary>
+        /// 懒加载提供器
+        /// </summary>
         protected IAbpLazyServiceProvider LazyServiceProvider { get; }
 
+        /// <summary>
+        /// 当前租户
+        /// </summary>
         public ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
 
+        /// <summary>
+        /// Guid生成器
+        /// </summary>
         public IGuidGenerator GuidGenerator => LazyServiceProvider.LazyGetService<IGuidGenerator>(SimpleGuidGenerator.Instance);
 
+        /// <summary>
+        /// 数据过滤
+        /// </summary>
         public IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
 
-        protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
-
+        /// <summary>
+        /// 是否开启多租户过滤
+        /// </summary>
         protected virtual bool IsMultiTenantFilterEnabled => DataFilter?.IsEnabled<IMultiTenant>() ?? false;
 
+        /// <summary>
+        /// 是否开启软删除过滤
+        /// </summary>
         protected virtual bool IsSoftDeleteFilterEnabled => DataFilter?.IsEnabled<ISoftDelete>() ?? false;
 
+        /// <summary>
+        /// 当前时区
+        /// </summary>
         public IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
 
+        /// <summary>
+        /// 日志记录
+        /// </summary>
         public ILogger Logger => LazyServiceProvider.LazyGetService<ILogger<SqlSugarDbContext>>(NullLogger<SqlSugarDbContext>.Instance);
 
+        /// <summary>
+        /// 数据库设置
+        /// </summary>
         public DbSettingsOptions Options => LazyServiceProvider.LazyGetRequiredService<IOptions<DbSettingsOptions>>().Value;
 
         /// <summary>
@@ -44,8 +72,15 @@ namespace Starshine.Abp.SqlSugarCore
         /// </summary>
         public ISqlSugarClient Context { get; }
 
+        /// <summary>
+        /// 数据库操作对象
+        /// </summary>
         public IAdo Ado => Context.Ado;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lazyServiceProvider"></param>
         public SqlSugarDbContext(IAbpLazyServiceProvider lazyServiceProvider)
         {
             LazyServiceProvider = lazyServiceProvider;
@@ -76,6 +111,9 @@ namespace Starshine.Abp.SqlSugarCore
             return connectionString!;
         }
 
+        /// <summary>
+        /// 资源释放
+        /// </summary>
         public void Dispose()
         {
             Context.Dispose();

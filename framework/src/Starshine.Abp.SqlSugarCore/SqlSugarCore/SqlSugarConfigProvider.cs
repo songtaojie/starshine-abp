@@ -28,6 +28,7 @@ namespace Starshine.Abp.SqlSugarCore
         /// 配置连接属性
         /// </summary>
         /// <param name="config"></param>
+        /// <param name="serializeService"></param>
         internal static ConnectionConfig SetDbConfig(DbSettingsOptions config, ISerializeService? serializeService = null)
         {
             serializeService ??= DefaultServices.Serialize;
@@ -107,7 +108,7 @@ namespace Starshine.Abp.SqlSugarCore
         /// <summary>
         /// 配置Aop日志
         /// </summary>
-        /// <param name="db"></param>
+        /// <param name="aop"></param>
         /// <param name="config"></param>
         /// <param name="logger"></param>
         internal static void SetAopLog(AopProvider aop, DbSettingsOptions config, ILogger logger)
@@ -142,6 +143,7 @@ namespace Starshine.Abp.SqlSugarCore
         /// </summary>
         /// <param name="dbProvider"></param>
         /// <param name="config"></param>
+        /// <param name="types"></param>
         internal static void InitDatabase(ISqlSugarClient dbProvider, DbSettingsOptions config,IEnumerable<Type> types)
         {
             if (!config.EnableInitDb) return;
@@ -172,6 +174,7 @@ namespace Starshine.Abp.SqlSugarCore
         /// </summary>
         /// <param name="iTenant"></param>
         /// <param name="config"></param>
+        /// <param name="types"></param>
         internal static void InitTenantDatabase(ITenant iTenant, DbSettingsOptions config,IEnumerable<Type> types)
         {
             SetDbConfig(config);

@@ -7,6 +7,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
@@ -16,19 +17,31 @@ using Volo.Abp.Json;
 
 namespace Starshine.Abp.AspNetCore.ExceptionHandling;
 
-public class AbpExceptionHandlingMiddleware : Volo.Abp.AspNetCore.Middleware.AbpMiddlewareBase, ITransientDependency
+/// <summary>
+/// 异常处理中间件
+/// </summary>
+public class StarshineExceptionHandlingMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     private readonly ILogger<AbpExceptionHandlingMiddleware> _logger;
 
     private readonly Func<object, Task> _clearCacheHeadersDelegate;
 
-    public AbpExceptionHandlingMiddleware(ILogger<AbpExceptionHandlingMiddleware> logger)
+    /// <summary>
+    /// 异常处理中间件
+    /// </summary>
+    /// <param name="logger"></param>
+    public StarshineExceptionHandlingMiddleware(ILogger<AbpExceptionHandlingMiddleware> logger)
     {
         _logger = logger;
 
         _clearCacheHeadersDelegate = ClearCacheHeaders;
     }
-
+    /// <summary>
+    /// 处理
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="next"></param>
+    /// <returns></returns>
     public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try

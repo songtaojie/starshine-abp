@@ -6,6 +6,9 @@
 
 namespace Starshine.Abp.AspNetCore;
 
+/// <summary>
+/// 规范化结果响应
+/// </summary>
 public abstract class RESTfulResult
 {
     /// <summary>

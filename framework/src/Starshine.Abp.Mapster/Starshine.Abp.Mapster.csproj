@@ -1,18 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\common.props" />
+	
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<AssemblyName>Starshine.Abp.Mapster</AssemblyName>
+		<PackageId>Starshine.Abp.Mapster</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
+		<PackageReference Include="Volo.Abp.ObjectMapping" Version="$(AbpVersion)" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
-    <PackageReference Include="Volo.Abp.ObjectMapping" Version="8.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Starshine.Abp.Core\Starshine.Abp.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Starshine.Abp.Core\Starshine.Abp.Core.csproj" />
+	</ItemGroup>
 
 </Project>

@@ -131,7 +131,7 @@ internal class SwaggerDocumentBuilder: ISwaggerDocumentBuilder
         ConfigureSecurities(swaggerGenOptions, _swaggerSettings);
 
         //使得Swagger能够正确地显示Enum的对应关系
-        if (_swaggerSettings.EnableEnumSchemaFilter == true) swaggerGenOptions.SchemaFilter<EnumSchemaFilter>();
+        if (_swaggerSettings.EnableEnumSchemaFilter == true) swaggerGenOptions.SchemaFilter<EnumSchemaFilter>(_assemblyFinder.Assemblies);
 
         //// 支持控制器排序操作
         if (_swaggerSettings.EnableTagsOrderDocumentFilter == true) swaggerGenOptions.DocumentFilter<TagsOrderDocumentFilter>();

@@ -1,7 +1,4 @@
-﻿using Starshine.CorsAccessor.Internal;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Starshine.Abp.AspNetCore.Starshine.Abp.AspNetCore.Cors;
+﻿using Microsoft.Extensions.Options;
 using Starshine.Abp.AspNetCore.Cors;
 
 namespace Microsoft.AspNetCore.Builder

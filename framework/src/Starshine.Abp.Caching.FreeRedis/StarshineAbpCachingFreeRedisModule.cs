@@ -1,11 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.Modularity;
 using FreeRedis;
@@ -13,9 +8,17 @@ using Microsoft.Extensions.Options;
 
 namespace Starshine.Abp.Caching.FreeRedis
 {
+    /// <summary>
+    /// FreeRedis模块
+    /// </summary>
     [DependsOn(typeof(AbpCachingModule))]
     public class StarshineAbpCachingFreeRedisModule: AbpModule
     {
+        /// <summary>
+        /// 配置服务
+        /// </summary>
+        /// <param name="context"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();

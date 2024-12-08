@@ -15,7 +15,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starshine.Abp.Swashbuckle",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starshine.Abp.Mapster", "src\Starshine.Abp.Mapster\Starshine.Abp.Mapster.csproj", "{1387BF5A-DAA9-4085-B1B0-D9D5659FF65E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starshine.Abp.AspNetCore", "src\Starshine.Abp.AspNetCore\Starshine.Abp.AspNetCore.csproj", "{F384118E-51B9-41CE-A430-189026340374}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starshine.Abp.AspNetCore", "src\Starshine.Abp.AspNetCore\Starshine.Abp.AspNetCore.csproj", "{F384118E-51B9-41CE-A430-189026340374}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{04734570-036F-44CF-8C9F-5C6E9B71D97D}"
+	ProjectSection(SolutionItems) = preProject
+		common.props = common.props
+		version.props = version.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{3E996E9C-E4E7-4AEF-9470-F0EB9BB79429}"
+	ProjectSection(SolutionItems) = preProject
+		..\nupkg\common.ps1 = ..\nupkg\common.ps1
+		..\nupkg\pack.ps1 = ..\nupkg\pack.ps1
+		..\nupkg\push-nightly-packages-myget.ps1 = ..\nupkg\push-nightly-packages-myget.ps1
+		..\nupkg\push_packages.ps1 = ..\nupkg\push_packages.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +72,7 @@ Global
 		{9579E4EF-6FA0-4C05-AFAF-C4009D6CAE85} = {DE39BC10-BCD9-46BC-88B0-D672193A540A}
 		{1387BF5A-DAA9-4085-B1B0-D9D5659FF65E} = {DE39BC10-BCD9-46BC-88B0-D672193A540A}
 		{F384118E-51B9-41CE-A430-189026340374} = {DE39BC10-BCD9-46BC-88B0-D672193A540A}
+		{3E996E9C-E4E7-4AEF-9470-F0EB9BB79429} = {04734570-036F-44CF-8C9F-5C6E9B71D97D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1CA37F3-A248-4C96-8325-628AEE30BCB7}
