@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nupkg", "nupkg", "{3E996E9C
 		..\nupkg\push_packages.ps1 = ..\nupkg\push_packages.ps1
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starshine.Abp.Ddd.Application.Contracts", "src\Starshine.Abp.Ddd.Application.Contracts\Starshine.Abp.Ddd.Application.Contracts.csproj", "{8C7CEAEC-349B-4DA5-A595-C73B9B7B780F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{F384118E-51B9-41CE-A430-189026340374}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F384118E-51B9-41CE-A430-189026340374}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F384118E-51B9-41CE-A430-189026340374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C7CEAEC-349B-4DA5-A595-C73B9B7B780F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C7CEAEC-349B-4DA5-A595-C73B9B7B780F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C7CEAEC-349B-4DA5-A595-C73B9B7B780F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C7CEAEC-349B-4DA5-A595-C73B9B7B780F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{1387BF5A-DAA9-4085-B1B0-D9D5659FF65E} = {DE39BC10-BCD9-46BC-88B0-D672193A540A}
 		{F384118E-51B9-41CE-A430-189026340374} = {DE39BC10-BCD9-46BC-88B0-D672193A540A}
 		{3E996E9C-E4E7-4AEF-9470-F0EB9BB79429} = {04734570-036F-44CF-8C9F-5C6E9B71D97D}
+		{8C7CEAEC-349B-4DA5-A595-C73B9B7B780F} = {DE39BC10-BCD9-46BC-88B0-D672193A540A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1CA37F3-A248-4C96-8325-628AEE30BCB7}
