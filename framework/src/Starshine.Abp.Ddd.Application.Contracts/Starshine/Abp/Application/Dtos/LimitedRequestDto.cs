@@ -21,12 +21,12 @@ namespace Starshine.Abp.Application.Dtos;
 ///实现 <see cref="ILimitedRequest"/>.
 /// </summary>
 [Serializable]
-public class LimitedRequest : ILimitedRequest, IValidatableObject
+public class LimitedRequestDto : ILimitedRequest, IValidatableObject
 {
     /// <summary>
     /// Default value: 10.
     /// </summary>
-    public static int DefaultMaxResultCount { get; set; } = 10;
+    public static int DefaultPageSize { get; set; } = 10;
 
     /// <summary>
     /// 最大可能值 <see cref="PageSize"/>.
@@ -39,8 +39,13 @@ public class LimitedRequest : ILimitedRequest, IValidatableObject
     /// This is generally used to limit result count on paging.
     /// </summary>
     [Range(1, int.MaxValue)]
-    public virtual int PageSize { get; set; } = DefaultMaxResultCount;
+    public virtual int PageSize { get; set; } = DefaultPageSize;
 
+    /// <summary>
+    /// 验证
+    /// </summary>
+    /// <param name="validationContext"></param>
+    /// <returns></returns>
     public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (PageSize > MaxPageSize)
