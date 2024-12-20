@@ -1,17 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\..\common.props" />
 	<PropertyGroup>
 		<TargetFramework>$(NETVersion)</TargetFramework>
-		<AssemblyName>Starshine.Abp.Core</AssemblyName>
-		<PackageId>Starshine.Abp.Core</PackageId>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.Ddd.Application</AssemblyName>
+		<PackageId>Starshine.Abp.Ddd.Application</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Core" Version="$(AbpVersion)" />
-	</ItemGroup>
 
 </Project>
