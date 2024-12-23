@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\..\..\..\common.props" />
 	<PropertyGroup>
-		<TargetFramework>$(NETVersion)</TargetFramework>
 		<WarningsAsErrors>Nullable</WarningsAsErrors>
 		<AssemblyName>Starshine.Abp.Users.Domain.Shared</AssemblyName>
 		<PackageId>Starshine.Abp.Users.Domain.Shared</PackageId>

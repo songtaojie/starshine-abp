@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>Starshine.Abp.PermissionManagement.Tests</AssemblyName>
+    <PackageId>Starshine.Abp.PermissionManagement.Tests</PackageId>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Features\Volo.Abp.Features.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.GlobalFeatures\Volo.Abp.GlobalFeatures.csproj" />
+    <ProjectReference Include="..\..\src\Starshine.Abp.PermissionManagement.EntityFrameworkCore\Starshine.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Starshine.Abp.PermissionManagement.TestBase\Starshine.Abp.PermissionManagement.TestBase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+  </ItemGroup>
+
+</Project>

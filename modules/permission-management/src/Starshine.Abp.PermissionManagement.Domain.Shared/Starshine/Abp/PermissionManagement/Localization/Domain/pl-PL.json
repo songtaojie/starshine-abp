@@ -1,0 +1,11 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Permissions": "Uprawnienia",
+    "OnlyProviderPermissons": "Tylko ten dostawca",
+    "All": "Wszystkie",
+    "SelectAllInAllTabs": "Udziel wszystkich uprawnień",
+    "SelectAllInThisTab": "Zaznacz wszystkie",
+    "SaveWithoutAnyPermissionsWarningMessage": "Czy na pewno chcesz zapisać bez żadnych uprawnień?"
+  }
+}

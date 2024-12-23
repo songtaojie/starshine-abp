@@ -1,0 +1,26 @@
+
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.PermissionManagement.Domaind</AssemblyName>
+		<PackageId>Starshine.Abp.PermissionManagement.Domain</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Json" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Caching" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
+		<PackageReference Include="Polly" Version="8.5.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Starshine.Abp.PermissionManagement.Domain.Shared\Starshine.Abp.PermissionManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>
