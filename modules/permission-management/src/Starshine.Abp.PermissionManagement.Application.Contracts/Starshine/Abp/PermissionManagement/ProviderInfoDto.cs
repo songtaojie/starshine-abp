@@ -1,8 +1,17 @@
 ﻿namespace Starshine.Abp.PermissionManagement;
 
+/// <summary>
+/// 
+/// </summary>
 public class ProviderInfoDto
 {
-    public string ProviderName { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public required string ProviderName { get; set; }
 
-    public string ProviderKey { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public required string ProviderKey { get; set; }
 }

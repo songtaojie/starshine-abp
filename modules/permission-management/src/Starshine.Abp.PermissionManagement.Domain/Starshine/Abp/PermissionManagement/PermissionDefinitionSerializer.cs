@@ -11,12 +11,30 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Starshine.Abp.PermissionManagement;
 
+/// <summary>
+/// 权限定义序列化
+/// </summary>
 public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, ITransientDependency
 {
+    /// <summary>
+    /// 状态检查序列化
+    /// </summary>
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
+    /// <summary>
+    /// guid生成器
+    /// </summary>
     protected IGuidGenerator GuidGenerator { get; }
+    /// <summary>
+    /// 本地化
+    /// </summary>
     protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="guidGenerator"></param>
+    /// <param name="stateCheckerSerializer"></param>
+    /// <param name="localizableStringSerializer"></param>
     public PermissionDefinitionSerializer(
         IGuidGenerator guidGenerator,
         ISimpleStateCheckerSerializer stateCheckerSerializer,
@@ -27,8 +45,12 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         GuidGenerator = guidGenerator;
     }
 
-    public async Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])>
-        SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups)
+    /// <summary>
+    /// 序列化
+    /// </summary>
+    /// <param name="permissionGroups"></param>
+    /// <returns></returns>
+    public async Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])>SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups)
     {
         var permissionGroupRecords = new List<PermissionGroupDefinitionRecord>();
         var permissionRecords = new List<PermissionDefinitionRecord>();
@@ -46,15 +68,19 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         return (permissionGroupRecords.ToArray(), permissionRecords.ToArray());
     }
 
+    /// <summary>
+    /// 序列化
+    /// </summary>
+    /// <param name="permissionGroup"></param>
+    /// <returns></returns>
     public Task<PermissionGroupDefinitionRecord> SerializeAsync(PermissionGroupDefinition permissionGroup)
     {
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
         {
-            var permissionGroupRecord = new PermissionGroupDefinitionRecord(
+            var permissionGroupRecord = new PermissionGroupDefinitionRecord( 
                 GuidGenerator.Create(),
                 permissionGroup.Name,
-                LocalizableStringSerializer.Serialize(permissionGroup.DisplayName)
-            );
+                LocalizableStringSerializer.Serialize(permissionGroup.DisplayName));
 
             foreach (var property in permissionGroup.Properties)
             {
@@ -65,6 +91,12 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="permission"></param>
+    /// <param name="permissionGroup"></param>
+    /// <returns></returns>
     public Task<PermissionDefinitionRecord> SerializeAsync(
         PermissionDefinition permission,
         PermissionGroupDefinition permissionGroup)
@@ -92,14 +124,24 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
         }
     }
 
-    protected virtual string SerializeProviders(ICollection<string> providers)
+    /// <summary>
+    /// 序列化
+    /// </summary>
+    /// <param name="providers"></param>
+    /// <returns></returns>
+    protected virtual string? SerializeProviders(ICollection<string> providers)
     {
-        return providers.Any()
+        return providers.Count != 0
             ? providers.JoinAsString(",")
             : null;
     }
 
-    protected virtual string SerializeStateCheckers(List<ISimpleStateChecker<PermissionDefinition>> stateCheckers)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="stateCheckers"></param>
+    /// <returns></returns>
+    protected virtual string? SerializeStateCheckers(List<ISimpleStateChecker<PermissionDefinition>> stateCheckers)
     {
         return StateCheckerSerializer.Serialize(stateCheckers);
     }

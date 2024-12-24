@@ -3,10 +3,19 @@ using Volo.Abp.Collections;
 
 namespace Starshine.Abp.PermissionManagement;
 
+/// <summary>
+/// 权限配置
+/// </summary>
 public class PermissionManagementOptions
 {
+    /// <summary>
+    /// 提供商
+    /// </summary>
     public ITypeList<IPermissionManagementProvider> ManagementProviders { get; }
 
+    /// <summary>
+    /// 提供商策略
+    /// </summary>
     public Dictionary<string, string> ProviderPolicies { get; }
 
     /// <summary>
@@ -19,6 +28,9 @@ public class PermissionManagementOptions
     /// </summary>
     public bool IsDynamicPermissionStoreEnabled { get; set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public PermissionManagementOptions()
     {
         ManagementProviders = new TypeList<IPermissionManagementProvider>();

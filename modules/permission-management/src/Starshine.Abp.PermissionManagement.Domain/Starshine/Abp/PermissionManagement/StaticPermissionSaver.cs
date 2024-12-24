@@ -7,6 +7,7 @@ using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
@@ -17,21 +18,71 @@ using Volo.Abp.Uow;
 
 namespace Starshine.Abp.PermissionManagement;
 
+/// <summary>
+/// ¾²Ì¬È¨ÏÞ±£´æ
+/// </summary>
 public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependency
 {
+    /// <summary>
+    /// 
+    /// </summary>
     protected IStaticPermissionDefinitionStore StaticStore { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected IPermissionGroupDefinitionRecordRepository PermissionGroupRepository { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected IPermissionDefinitionRecordRepository PermissionRepository { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected IPermissionDefinitionSerializer PermissionSerializer { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected IDistributedCache Cache { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected IApplicationInfoAccessor ApplicationInfoAccessor { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected IAbpDistributedLock DistributedLock { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected AbpPermissionOptions PermissionOptions { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected AbpDistributedCacheOptions CacheOptions { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="staticStore"></param>
+    /// <param name="permissionGroupRepository"></param>
+    /// <param name="permissionRepository"></param>
+    /// <param name="permissionSerializer"></param>
+    /// <param name="cache"></param>
+    /// <param name="cacheOptions"></param>
+    /// <param name="applicationInfoAccessor"></param>
+    /// <param name="distributedLock"></param>
+    /// <param name="permissionOptions"></param>
+    /// <param name="cancellationTokenProvider"></param>
+    /// <param name="unitOfWorkManager"></param>
     public StaticPermissionSaver(
         IStaticPermissionDefinitionStore staticStore,
         IPermissionGroupDefinitionRecordRepository permissionGroupRepository,
@@ -58,6 +109,11 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         CacheOptions = cacheOptions.Value;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="AbpException"></exception>
     public async Task SaveAsync()
     {
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(

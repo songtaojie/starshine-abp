@@ -8,17 +8,30 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Starshine.Abp.PermissionManagement.EntityFrameworkCore;
 
+/// <summary>
+/// 权限组定义
+/// </summary>
 public class EfCorePermissionDefinitionRecordRepository :
     EfCoreRepository<IPermissionManagementDbContext, PermissionDefinitionRecord, Guid>,
     IPermissionDefinitionRecordRepository
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dbContextProvider"></param>
     public EfCorePermissionDefinitionRecordRepository(
         IDbContextProvider<IPermissionManagementDbContext> dbContextProvider)
         : base(dbContextProvider)
     {
     }
 
-    public virtual async Task<PermissionDefinitionRecord> FindByNameAsync(
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<PermissionDefinitionRecord?> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default)
     {

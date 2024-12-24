@@ -1,52 +1,91 @@
 ﻿using System;
+using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
 namespace Starshine.Abp.PermissionManagement;
 
+/// <summary>
+/// 权限定义记录
+/// </summary>
 public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
-    public string GroupName { get; set; }
+    /// <summary>
+    /// 组名称
+    /// </summary>
+    public string GroupName { get; set; } = null!;
 
-    public string Name { get; set; }
+    /// <summary>
+    /// 权限名称
+    /// </summary>
+    public string Name { get; set; } = null!;
 
-    public string ParentName { get; set; }
+    /// <summary>
+    /// 父级权限名称
+    /// </summary>
+    public string? ParentName { get; set; }
 
-    public string DisplayName { get; set; }
+    /// <summary>
+    /// 显示名称
+    /// </summary>
+    public string? DisplayName { get; set; }
 
+    /// <summary>
+    /// 是否启用
+    /// </summary>
     public bool IsEnabled { get; set; }
 
+    /// <summary>
+    /// 代表多租户应用程序中的各方
+    /// </summary>
     public MultiTenancySides MultiTenancySide { get; set; }
 
     /// <summary>
-    /// Comma separated list of provider names.
+    ///以逗号分隔的提供商名称列表。
     /// </summary>
-    public string Providers { get; set; }
+    public string? Providers { get; set; }
 
     /// <summary>
-    /// Serialized string to store info about the state checkers.
+    /// 序列化字符串来存储有关状态检查器的信息。
     /// </summary>
-    public string StateCheckers { get; set; }
+    public string? StateCheckers { get; set; }
 
+    /// <summary>
+    /// 额外信息
+    /// </summary>
     public ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public PermissionDefinitionRecord()
     {
-        ExtraProperties = new ExtraPropertyDictionary();
+        ExtraProperties = [];
         this.SetDefaultsForExtraProperties();
     }
 
-    public PermissionDefinitionRecord(
-        Guid id,
-        string groupName,
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="groupName"></param>
+    /// <param name="name"></param>
+    /// <param name="parentName"></param>
+    /// <param name="displayName"></param>
+    /// <param name="isEnabled"></param>
+    /// <param name="multiTenancySide"></param>
+    /// <param name="providers"></param>
+    /// <param name="stateCheckers"></param>
+    public PermissionDefinitionRecord(Guid id,
+        string? groupName,
         string name,
-        string parentName,
-        string displayName,
+        string? parentName,
+        string? displayName,
         bool isEnabled = true,
         MultiTenancySides multiTenancySide = MultiTenancySides.Both,
-        string providers = null,
-        string stateCheckers = null)
+        string? providers = null,
+        string? stateCheckers = null)
         : base(id)
     {
         GroupName = Check.NotNullOrWhiteSpace(groupName, nameof(groupName), PermissionGroupDefinitionRecordConsts.MaxNameLength);
@@ -62,6 +101,11 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
         this.SetDefaultsForExtraProperties();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="otherRecord"></param>
+    /// <returns></returns>
     public bool HasSameData(PermissionDefinitionRecord otherRecord)
     {
         if (Name != otherRecord.Name)
@@ -112,6 +156,10 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
         return true;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="otherRecord"></param>
     public void Patch(PermissionDefinitionRecord otherRecord)
     {
         if (Name != otherRecord.Name)

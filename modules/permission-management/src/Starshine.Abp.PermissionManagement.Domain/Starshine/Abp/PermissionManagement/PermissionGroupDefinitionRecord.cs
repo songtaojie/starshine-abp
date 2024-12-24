@@ -1,36 +1,62 @@
 using System;
+using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.PermissionManagement;
 
+/// <summary>
+/// 权限定义记录
+/// </summary>
 public class PermissionGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
-    public string Name { get; set; }
+    /// <summary>
+    /// 名称
+    /// </summary>
+    public string Name { get; set; } = null!;
 
-    public string DisplayName { get; set; }
+    /// <summary>
+    /// 显示名称
+    /// </summary>
+    public string? DisplayName { get; set; }
 
+    /// <summary>
+    /// 额外特性
+    /// </summary>
     public ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public PermissionGroupDefinitionRecord()
     {
-        ExtraProperties = new ExtraPropertyDictionary();
+        ExtraProperties = [];
         this.SetDefaultsForExtraProperties();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="name"></param>
+    /// <param name="displayName"></param>
     public PermissionGroupDefinitionRecord(
         Guid id,
         string name,
-        string displayName)
+        string? displayName)
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), PermissionGroupDefinitionRecordConsts.MaxNameLength);
-        DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), PermissionGroupDefinitionRecordConsts.MaxDisplayNameLength); ;
-
-        ExtraProperties = new ExtraPropertyDictionary();
+        DisplayName = Check.Length(displayName, nameof(displayName), PermissionGroupDefinitionRecordConsts.MaxDisplayNameLength); ;
+        ExtraProperties = [];
         this.SetDefaultsForExtraProperties();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="otherRecord"></param>
+    /// <returns></returns>
     public bool HasSameData(PermissionGroupDefinitionRecord otherRecord)
     {
         if (Name != otherRecord.Name)
@@ -51,6 +77,10 @@ public class PermissionGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExt
         return true;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="otherRecord"></param>
     public void Patch(PermissionGroupDefinitionRecord otherRecord)
     {
         if (Name != otherRecord.Name)

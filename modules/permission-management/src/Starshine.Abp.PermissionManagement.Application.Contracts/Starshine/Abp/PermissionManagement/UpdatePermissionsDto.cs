@@ -1,6 +1,12 @@
 ﻿namespace Starshine.Abp.PermissionManagement;
 
+/// <summary>
+/// 
+/// </summary>
 public class UpdatePermissionsDto
 {
-    public UpdatePermissionDto[] Permissions { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public required UpdatePermissionDto[] Permissions { get; set; }
 }

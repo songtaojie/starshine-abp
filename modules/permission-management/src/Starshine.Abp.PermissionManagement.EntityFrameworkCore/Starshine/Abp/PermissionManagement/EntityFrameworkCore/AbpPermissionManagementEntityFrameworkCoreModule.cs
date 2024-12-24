@@ -4,10 +4,17 @@ using Volo.Abp.Modularity;
 
 namespace Starshine.Abp.PermissionManagement.EntityFrameworkCore;
 
+/// <summary>
+/// 
+/// </summary>
 [DependsOn(typeof(StarshineAbpPermissionManagementDomainModule))]
 [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
 public class AbpPermissionManagementEntityFrameworkCoreModule : AbpModule
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="context"></param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddAbpDbContext<PermissionManagementDbContext>(options =>

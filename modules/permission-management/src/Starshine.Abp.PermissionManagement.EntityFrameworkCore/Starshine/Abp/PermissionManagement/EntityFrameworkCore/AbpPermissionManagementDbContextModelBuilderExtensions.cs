@@ -1,12 +1,20 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Starshine.Abp.PermissionManagement.EntityFrameworkCore;
 
+/// <summary>
+/// 数据库模型设置
+/// </summary>
 public static class AbpPermissionManagementDbContextModelBuilderExtensions
 {
+    /// <summary>
+    /// 配置数据库模型
+    /// </summary>
+    /// <param name="builder"></param>
     public static void ConfigurePermissionManagement(
         [NotNull] this ModelBuilder builder)
     {

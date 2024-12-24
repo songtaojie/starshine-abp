@@ -50,7 +50,7 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
         var group1 = CreatePermissionGroup1(context);
         var permission1 = group1.AddPermission(
                 "Permission1",
-                new LocalizableString(typeof(AbpPermissionManagementResource), "Permission1"),
+                new LocalizableString(typeof(StarshineAbpPermissionManagementResource), "Permission1"),
                 MultiTenancySides.Tenant
             )
             .WithProviders("ProviderA", "ProviderB")

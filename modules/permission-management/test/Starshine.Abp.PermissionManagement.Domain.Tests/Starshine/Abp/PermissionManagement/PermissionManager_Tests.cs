@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
 using Xunit;
 

@@ -2,9 +2,18 @@
 
 namespace Starshine.Abp.PermissionManagement;
 
+/// <summary>
+/// 
+/// </summary>
 public class GetPermissionListResultDto
 {
-    public string EntityDisplayName { get; set; }
+    /// <summary>
+    /// 显示名称
+    /// </summary>
+    public required string EntityDisplayName { get; set; }
 
-    public List<PermissionGroupDto> Groups { get; set; }
+    /// <summary>
+    /// 组
+    /// </summary>
+    public required List<PermissionGroupDto> Groups { get; set; }
 }
