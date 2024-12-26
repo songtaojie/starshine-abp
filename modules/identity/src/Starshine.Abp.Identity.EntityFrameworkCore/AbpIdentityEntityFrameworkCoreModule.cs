@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Identity;
+using Starshine.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users.EntityFrameworkCore;
 

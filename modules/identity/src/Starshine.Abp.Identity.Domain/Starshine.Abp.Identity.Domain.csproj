@@ -10,5 +10,12 @@
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
 	</PropertyGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\Starshine.Abp.Identity.Domain.Shared\Starshine.Abp.Identity.Domain.Shared.csproj" />
+		<ProjectReference Include="..\..\..\users\src\Starshine.Abp.Users.Domain\Starshine.Abp.Users.Domain.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.11" />
+	</ItemGroup>
 </Project>

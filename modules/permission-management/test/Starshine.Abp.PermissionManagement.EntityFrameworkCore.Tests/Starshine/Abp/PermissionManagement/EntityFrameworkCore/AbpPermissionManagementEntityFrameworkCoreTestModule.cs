@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -33,7 +34,7 @@ public class AbpPermissionManagementEntityFrameworkCoreTestModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        var task = context.ServiceProvider.GetRequiredService<AbpPermissionManagementDomainModule>().GetInitializeDynamicPermissionsTask();
+        var task = context.ServiceProvider.GetRequiredService<StarshineAbpPermissionManagementDomainModule>().GetInitializeDynamicPermissionsTask();
         if (!task.IsCompleted)
         {
             AsyncHelper.RunSync(() => Awaited(task));

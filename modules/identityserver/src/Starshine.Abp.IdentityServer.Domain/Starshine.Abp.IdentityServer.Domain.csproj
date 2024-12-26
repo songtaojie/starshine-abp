@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\common.props" />
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.IdentityServer.Domain</AssemblyName>
+		<PackageId>Starshine.Abp.IdentityServer.Domain</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Caching" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Security" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.BackgroundWorkers" Version="$(AbpVersion)" />
+		<PackageReference Include="IdentityServer4" />
+		<PackageReference Include="IdentityServer4.AspNetIdentity" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Starshine.Abp.IdentityServer.Domain.Shared\Starshine.Abp.IdentityServer.Domain.Shared.csproj" />
+		<ProjectReference Include="..\..\..\..\modules\identity\src\Starshine.Abp.Identity.Domain\Starshine.Abp.Identity.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

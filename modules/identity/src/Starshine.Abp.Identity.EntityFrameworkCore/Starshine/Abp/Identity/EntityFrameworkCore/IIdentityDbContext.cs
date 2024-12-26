@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Identity;
+using Starshine.Abp.Identity;
 
 namespace Starshine.Abp.Identity.EntityFrameworkCore;
 

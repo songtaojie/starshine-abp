@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Identity;
+using Starshine.Abp.Identity;
 
 namespace Starshine.Abp.Identity.EntityFrameworkCore;
 
 /// <summary>
-/// 用于身份的实体框架数据库上下文的基类。
+/// 锟斤拷锟斤拷锟斤拷锟捷碉拷实锟斤拷锟斤拷锟斤拷锟捷匡拷锟斤拷锟斤拷锟侥的伙拷锟洁。
 /// </summary>
 [ConnectionStringName(AbpIdentityDbProperties.ConnectionStringName)]
 public class IdentityDbContext : AbpDbContext<IdentityDbContext>, IIdentityDbContext

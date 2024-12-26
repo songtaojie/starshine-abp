@@ -8,7 +8,7 @@ using Volo.Abp.Modularity;
 namespace Starshine.Abp.PermissionManagement;
 
 [DependsOn(
-    typeof(AbpPermissionManagementApplicationModule),
+    typeof(StarshineAbpPermissionManagementApplicationModule),
     typeof(AbpPermissionManagementTestModule)
 )]
 public class AbpPermissionManagementApplicationTestModule : AbpModule
