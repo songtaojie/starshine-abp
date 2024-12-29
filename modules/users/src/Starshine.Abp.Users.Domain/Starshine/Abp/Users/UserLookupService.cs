@@ -67,7 +67,7 @@ public abstract class UserLookupService<TUser, TUserRepository> : IUserLookupSer
             return localUser;
         }
 
-        IUserData externalUser;
+        IUserData? externalUser;
 
         try
         {
@@ -127,7 +127,7 @@ public abstract class UserLookupService<TUser, TUserRepository> : IUserLookupSer
             return localUser;
         }
 
-        IUserData externalUser;
+        IUserData? externalUser;
 
         try
         {

@@ -10,11 +10,14 @@ using Volo.Abp.Text.Formatting;
 
 namespace Microsoft.AspNetCore.Identity;
 
-public static class AbpIdentityResultExtensions
+/// <summary>
+/// 
+/// </summary>
+public static class StarshineIdentityResultExtensions
 {
     private static readonly Dictionary<string, string> IdentityStrings = new Dictionary<string, string>();
 
-    static AbpIdentityResultExtensions()
+    static StarshineIdentityResultExtensions()
     {
         var identityResourceManager = new ResourceManager("Microsoft.Extensions.Identity.Core.Resources", typeof(UserManager<>).Assembly);
         var resourceSet = identityResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, false);
@@ -45,6 +48,12 @@ public static class AbpIdentityResultExtensions
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="identityResult"></param>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="StarshineIdentityResultException"></exception>
     public static void CheckErrors(this IdentityResult identityResult)
     {
         if (identityResult.Succeeded)
@@ -57,9 +66,16 @@ public static class AbpIdentityResultExtensions
             throw new ArgumentException("identityResult.Errors should not be null.");
         }
 
-        throw new AbpIdentityResultException(identityResult);
+        throw new StarshineIdentityResultException(identityResult);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="identityResult"></param>
+    /// <param name="localizer"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static string[] GetValuesFromErrorMessage(this IdentityResult identityResult, IStringLocalizer localizer)
     {
         if (identityResult.Succeeded)
@@ -89,6 +105,13 @@ public static class AbpIdentityResultExtensions
         return Array.Empty<string>();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="identityResult"></param>
+    /// <param name="localizer"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static string LocalizeErrors(this IdentityResult identityResult, IStringLocalizer localizer)
     {
         if (identityResult.Succeeded)
@@ -104,6 +127,12 @@ public static class AbpIdentityResultExtensions
         return identityResult.Errors.Select(err => LocalizeErrorMessage(err, localizer)).JoinAsString(", ");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="error"></param>
+    /// <param name="localizer"></param>
+    /// <returns></returns>
     public static string LocalizeErrorMessage(this IdentityError error, IStringLocalizer localizer)
     {
         var key = $"Starshine.Abp.Identity:{error.Code}";
@@ -125,6 +154,11 @@ public static class AbpIdentityResultExtensions
         return localizer["Starshine.Abp.Identity:DefaultError"];
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="signInResult"></param>
+    /// <returns></returns>
     public static string GetResultAsString(this SignInResult signInResult)
     {
         if (signInResult.Succeeded)

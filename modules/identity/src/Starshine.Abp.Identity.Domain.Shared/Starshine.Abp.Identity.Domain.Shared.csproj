@@ -11,7 +11,12 @@
 		<RootNamespace />
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="Volo.Abp.Features" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Features" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Auditing.Contracts" Version="$(AbpVersion)" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\users\src\Starshine.Abp.Users.Domain.Shared\Starshine.Abp.Users.Domain.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

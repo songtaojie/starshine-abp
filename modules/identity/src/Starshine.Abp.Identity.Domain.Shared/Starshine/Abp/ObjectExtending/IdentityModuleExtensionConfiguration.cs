@@ -1,43 +1,49 @@
-﻿using System;
-using Volo.Abp.ObjectExtending.Modularity;
+﻿using Volo.Abp.ObjectExtending.Modularity;
 
 namespace Starshine.Abp.ObjectExtending;
 
+/// <summary>
+/// 身份模块扩展配置
+/// </summary>
 public class IdentityModuleExtensionConfiguration : ModuleExtensionConfiguration
 {
-    public IdentityModuleExtensionConfiguration ConfigureUser(
-        Action<EntityExtensionConfiguration> configureAction)
+    /// <summary>
+    /// 配置用户
+    /// </summary>
+    /// <param name="configureAction"></param>
+    /// <returns></returns>
+    public IdentityModuleExtensionConfiguration ConfigureUser(Action<EntityExtensionConfiguration> configureAction)
     {
-        return this.ConfigureEntity(
-            IdentityModuleExtensionConsts.EntityNames.User,
-            configureAction
-        );
+        return this.ConfigureEntity(IdentityModuleExtensionConsts.EntityNames.User, configureAction);
     }
 
-    public IdentityModuleExtensionConfiguration ConfigureRole(
-        Action<EntityExtensionConfiguration> configureAction)
+    /// <summary>
+    /// 配置角色
+    /// </summary>
+    /// <param name="configureAction"></param>
+    /// <returns></returns>
+    public IdentityModuleExtensionConfiguration ConfigureRole(Action<EntityExtensionConfiguration> configureAction)
     {
-        return this.ConfigureEntity(
-            IdentityModuleExtensionConsts.EntityNames.Role,
-            configureAction
-        );
+        return this.ConfigureEntity(IdentityModuleExtensionConsts.EntityNames.Role, configureAction);
     }
 
-    public IdentityModuleExtensionConfiguration ConfigureClaimType(
-        Action<EntityExtensionConfiguration> configureAction)
+    /// <summary>
+    /// 配置声明类型
+    /// </summary>
+    /// <param name="configureAction"></param>
+    /// <returns></returns>
+    public IdentityModuleExtensionConfiguration ConfigureClaimType(Action<EntityExtensionConfiguration> configureAction)
     {
-        return this.ConfigureEntity(
-            IdentityModuleExtensionConsts.EntityNames.ClaimType,
-            configureAction
-        );
+        return this.ConfigureEntity(IdentityModuleExtensionConsts.EntityNames.ClaimType, configureAction);
     }
 
-    public IdentityModuleExtensionConfiguration ConfigureOrganizationUnit(
-        Action<EntityExtensionConfiguration> configureAction)
+    /// <summary>
+    /// 配置组织单位
+    /// </summary>
+    /// <param name="configureAction"></param>
+    /// <returns></returns>
+    public IdentityModuleExtensionConfiguration ConfigureOrganizationUnit(Action<EntityExtensionConfiguration> configureAction)
     {
-        return this.ConfigureEntity(
-            IdentityModuleExtensionConsts.EntityNames.OrganizationUnit,
-            configureAction
-        );
+        return this.ConfigureEntity(IdentityModuleExtensionConsts.EntityNames.OrganizationUnit, configureAction);
     }
 }

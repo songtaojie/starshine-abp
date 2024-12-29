@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Claims;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
@@ -12,53 +13,62 @@ using Volo.Abp.MultiTenancy;
 namespace Starshine.Abp.Identity;
 
 /// <summary>
-/// Represents a role in the identity system
+/// 代表身份系统中的角色
 /// </summary>
 public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
 {
+    /// <summary>
+    /// 租户uid
+    /// </summary>
     public virtual Guid? TenantId { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the name for this role.
+    ///获取或设置此角色的名称。
     /// </summary>
-    public virtual string Name { get; protected internal set; }
+    public virtual string Name { get; protected internal set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the normalized name for this role.
+    /// 获取或设置此角色的规范化名称。
     /// </summary>
     [DisableAuditing]
-    public virtual string NormalizedName { get; protected internal set; }
+    public virtual string? NormalizedName { get; protected internal set; }
 
     /// <summary>
-    /// Navigation property for claims in this role.
+    /// 此角色中声明的导航属性。
     /// </summary>
-    public virtual ICollection<IdentityRoleClaim> Claims { get; protected set; }
+    public virtual ICollection<IdentityRoleClaim> Claims { get; protected set; } = null!;
 
     /// <summary>
-    /// A default role is automatically assigned to a new user
+    /// 默认角色会自动分配给新用户
     /// </summary>
     public virtual bool IsDefault { get; set; }
 
     /// <summary>
-    /// A static role can not be deleted/renamed
+    ///静态角色无法删除/重命名
     /// </summary>
     public virtual bool IsStatic { get; set; }
 
     /// <summary>
-    /// A user can see other user's public roles
+    /// 用户可以看到其他用户的公共角色
     /// </summary>
     public virtual bool IsPublic { get; set; }
 
     /// <summary>
-    /// A version value that is increased whenever the entity is changed.
+    ///每当实体发生变化时，版本值就会增加。
     /// </summary>
     public virtual int EntityVersion { get; protected set; }
 
     /// <summary>
-    /// Initializes a new instance of <see cref="IdentityRole"/>.
+    /// 初始化 <see cref="IdentityRole"/> 的新实例。
     /// </summary>
     protected IdentityRole() { }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="name"></param>
+    /// <param name="tenantId"></param>
     public IdentityRole(Guid id, [NotNull] string name, Guid? tenantId = null)
     {
         Check.NotNull(name, nameof(name));
@@ -68,10 +78,13 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
         TenantId = tenantId;
         NormalizedName = name.ToUpperInvariant();
         ConcurrencyStamp = Guid.NewGuid().ToString("N");
-
         Claims = new Collection<IdentityRoleClaim>();
     }
-
+    /// <summary>
+    /// 添加声明
+    /// </summary>
+    /// <param name="guidGenerator"></param>
+    /// <param name="claim"></param>
     public virtual void AddClaim([NotNull] IGuidGenerator guidGenerator, [NotNull] Claim claim)
     {
         Check.NotNull(guidGenerator, nameof(guidGenerator));
@@ -79,25 +92,36 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
 
         Claims.Add(new IdentityRoleClaim(guidGenerator.Create(), Id, claim, TenantId));
     }
-
+    /// <summary>
+    /// 添加声明
+    /// </summary>
+    /// <param name="guidGenerator"></param>
+    /// <param name="claims"></param>
     public virtual void AddClaims([NotNull] IGuidGenerator guidGenerator, [NotNull] IEnumerable<Claim> claims)
     {
         Check.NotNull(guidGenerator, nameof(guidGenerator));
         Check.NotNull(claims, nameof(claims));
-
         foreach (var claim in claims)
         {
             AddClaim(guidGenerator, claim);
         }
     }
-
-    public virtual IdentityRoleClaim FindClaim([NotNull] Claim claim)
+    /// <summary>
+    /// 获取声明
+    /// </summary>
+    /// <param name="claim"></param>
+    /// <returns></returns>
+    public virtual IdentityRoleClaim? FindClaim([NotNull] Claim claim)
     {
         Check.NotNull(claim, nameof(claim));
 
         return Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
     }
 
+    /// <summary>
+    /// 移除声明
+    /// </summary>
+    /// <param name="claim"></param>
     public virtual void RemoveClaim([NotNull] Claim claim)
     {
         Check.NotNull(claim, nameof(claim));
@@ -105,6 +129,10 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
         Claims.RemoveAll(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
     }
 
+    /// <summary>
+    /// 改变名字
+    /// </summary>
+    /// <param name="name"></param>
     public virtual void ChangeName(string name)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
@@ -112,27 +140,27 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
         var oldName = Name;
         Name = name;
 
-        AddLocalEvent(
-#pragma warning disable 618
-                new IdentityRoleNameChangedEvent
-#pragma warning restore 618
-                {
-                    IdentityRole = this,
-                    OldName = oldName
-                }
-        );
+        AddLocalEvent(new IdentityRoleNameChangedEto
+        {
+            Name = name,
+            Id = Id,
+            TenantId = TenantId,
+            OldName = oldName
+        });
 
-        AddDistributedEvent(
-            new IdentityRoleNameChangedEto
-            {
-                Id = Id,
-                Name = Name,
-                OldName = oldName,
-                TenantId = TenantId
-            }
-        );
+        AddDistributedEvent(new IdentityRoleNameChangedEto
+        {
+            Id = Id,
+            Name = Name,
+            OldName = oldName,
+            TenantId = TenantId
+        });
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override string ToString()
     {
         return $"{base.ToString()}, Name = {Name}";

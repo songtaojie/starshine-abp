@@ -6,7 +6,7 @@ using Volo.Abp.PermissionManagement;
 namespace Starshine.Abp.Identity;
 
 [DependsOn(
-    typeof(AbpIdentityDomainModule),
+    typeof(StarshineIdentityDomainModule),
     typeof(AbpIdentityApplicationContractsModule),
     typeof(AbpAutoMapperModule),
     typeof(AbpPermissionManagementApplicationModule)

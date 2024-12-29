@@ -1,30 +1,34 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
+using Starshine.Abp.ObjectExtending;
+using Starshine.Abp.Users;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
-using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
-using Volo.Abp.Users;
 
 namespace Starshine.Abp.Identity;
 
+/// <summary>
+/// StarshineAbp 身份域模块
+/// </summary>
 [DependsOn(
     typeof(AbpDddDomainModule),
-    typeof(AbpIdentityDomainSharedModule),
-    typeof(AbpUsersDomainModule),
+    typeof(StarshineAbpIdentityDomainSharedModule),
+    typeof(StarshineAbpUsersDomainModule),
     typeof(AbpAutoMapperModule)
     )]
-public class AbpIdentityDomainModule : AbpModule
+public class StarshineIdentityDomainModule : AbpModule
 {
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
+    /// <summary>
+    /// 前置配置
+    /// </summary>
+    /// <param name="context"></param>
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         PreConfigure<AbpClaimsPrincipalFactoryOptions>(options =>
@@ -33,9 +37,13 @@ public class AbpIdentityDomainModule : AbpModule
         });
     }
 
+    /// <summary>
+    /// 服务配置
+    /// </summary>
+    /// <param name="context"></param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpIdentityDomainModule>();
+        context.Services.AddAutoMapperObjectMapper<StarshineIdentityDomainModule>();
 
         Configure<AbpAutoMapperOptions>(options =>
         {
@@ -44,16 +52,16 @@ public class AbpIdentityDomainModule : AbpModule
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
-            options.EtoMappings.Add<IdentityUser, UserEto>(typeof(AbpIdentityDomainModule));
-            options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(AbpIdentityDomainModule));
-            options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(AbpIdentityDomainModule));
-            options.EtoMappings.Add<OrganizationUnit, OrganizationUnitEto>(typeof(AbpIdentityDomainModule));
+            options.EtoMappings.Add<IdentityUser, UserEto>(typeof(StarshineIdentityDomainModule));
+            options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(StarshineIdentityDomainModule));
+            options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(StarshineIdentityDomainModule));
+            options.EtoMappings.Add<OrganizationUnit, OrganizationUnitEto>(typeof(StarshineIdentityDomainModule));
 
             options.AutoEventSelectors.Add<IdentityUser>();
             options.AutoEventSelectors.Add<IdentityRole>();
         });
 
-        var identityBuilder = context.Services.AddAbpIdentity(options =>
+        var identityBuilder = context.Services.AddStarshineIdentity(options =>
         {
             options.User.RequireUniqueEmail = true;
         });
@@ -69,9 +77,13 @@ public class AbpIdentityDomainModule : AbpModule
             options.ClaimsIdentity.EmailClaimType = AbpClaimTypes.Email;
         });
 
-        context.Services.AddAbpDynamicOptions<IdentityOptions, AbpIdentityOptionsManager>();
+        context.Services.AddAbpDynamicOptions<IdentityOptions, StarshineIdentityOptionsManager>();
     }
 
+    /// <summary>
+    /// 后置配置
+    /// </summary>
+    /// <param name="context"></param>
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         OneTimeRunner.Run(() =>

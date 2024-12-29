@@ -1,14 +1,17 @@
 ﻿namespace Starshine.Abp.Identity;
 
+/// <summary>
+/// 身份用户令牌常量
+/// </summary>
 public static class IdentityUserTokenConsts
 {
     /// <summary>
-    /// Default value: 64
+    /// 默认值: 64
     /// </summary>
     public static int MaxLoginProviderLength { get; set; } = 64;
 
     /// <summary>
-    /// Default value: 128
+    /// 默认值: 128
     /// </summary>
     public static int MaxNameLength { get; set; } = 128;
 }

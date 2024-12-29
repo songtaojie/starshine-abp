@@ -10,20 +10,43 @@ using Starshine.Abp.Identity.Localization;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
+using Volo.Abp;
 
 namespace Starshine.Abp.Identity;
 
 /// <summary>
-/// Performs domain logic for Organization Units.
+///为组织单位执行域逻辑。
 /// </summary>
 public class OrganizationUnitManager : DomainService
 {
+    /// <summary>
+    /// 组织单位存储库
+    /// </summary>
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+    /// <summary>
+    /// 本地化
+    /// </summary>
     protected IStringLocalizer<IdentityResource> Localizer { get; }
+    /// <summary>
+    /// IdentityRole 存储库
+    /// </summary>
     protected IIdentityRoleRepository IdentityRoleRepository { get; }
+    /// <summary>
+    /// 动态声明缓存
+    /// </summary>
     protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
+    /// <summary>
+    /// CancellationToken 提供程序
+    /// </summary>
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="organizationUnitRepository"></param>
+    /// <param name="localizer"></param>
+    /// <param name="identityRoleRepository"></param>
+    /// <param name="dynamicClaimCache"></param>
+    /// <param name="cancellationTokenProvider"></param>
     public OrganizationUnitManager(
         IOrganizationUnitRepository organizationUnitRepository,
         IStringLocalizer<IdentityResource> localizer,
@@ -38,6 +61,11 @@ public class OrganizationUnitManager : DomainService
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="organizationUnit"></param>
+    /// <returns></returns>
     [UnitOfWork]
     public virtual async Task CreateAsync(OrganizationUnit organizationUnit)
     {
@@ -46,6 +74,11 @@ public class OrganizationUnitManager : DomainService
         await OrganizationUnitRepository.InsertAsync(organizationUnit);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="organizationUnit"></param>
+    /// <returns></returns>
     public virtual async Task UpdateAsync(OrganizationUnit organizationUnit)
     {
         await ValidateOrganizationUnitAsync(organizationUnit);
@@ -53,6 +86,11 @@ public class OrganizationUnitManager : DomainService
         await RemoveDynamicClaimCacheAsync(organizationUnit);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="parentId"></param>
+    /// <returns></returns>
     public virtual async Task<string> GetNextChildCodeAsync(Guid? parentId)
     {
         var lastChild = await GetLastChildOrNullAsync(parentId);
@@ -71,12 +109,22 @@ public class OrganizationUnitManager : DomainService
         );
     }
 
-    public virtual async Task<OrganizationUnit> GetLastChildOrNullAsync(Guid? parentId)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="parentId"></param>
+    /// <returns></returns>
+    public virtual async Task<OrganizationUnit?> GetLastChildOrNullAsync(Guid? parentId)
     {
         var children = await OrganizationUnitRepository.GetChildrenAsync(parentId);
         return children.OrderBy(c => c.Code).LastOrDefault();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [UnitOfWork]
     public virtual async Task DeleteAsync(Guid id)
     {
@@ -98,6 +146,12 @@ public class OrganizationUnitManager : DomainService
         await OrganizationUnitRepository.DeleteAsync(id);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="parentId"></param>
+    /// <returns></returns>
     [UnitOfWork]
     public virtual async Task MoveAsync(Guid id, Guid? parentId)
     {
@@ -129,12 +183,22 @@ public class OrganizationUnitManager : DomainService
         await OrganizationUnitRepository.UpdateAsync(organizationUnit);
     }
 
-    public virtual async Task<string> GetCodeOrDefaultAsync(Guid id)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public virtual async Task<string?> GetCodeOrDefaultAsync(Guid id)
     {
         var ou = await OrganizationUnitRepository.FindAsync(id);
         return ou?.Code;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="organizationUnit"></param>
+    /// <returns></returns>
     protected virtual async Task ValidateOrganizationUnitAsync(OrganizationUnit organizationUnit)
     {
         var siblings = (await FindChildrenAsync(organizationUnit.ParentId))
@@ -144,10 +208,16 @@ public class OrganizationUnitManager : DomainService
         if (siblings.Any(ou => ou.DisplayName == organizationUnit.DisplayName))
         {
             throw new BusinessException(IdentityErrorCodes.DuplicateOrganizationUnitDisplayName)
-                .WithData("0", organizationUnit.DisplayName);
+                .WithData("0", organizationUnit.DisplayName ?? string.Empty);
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="parentId"></param>
+    /// <param name="recursive"></param>
+    /// <returns></returns>
     public async Task<List<OrganizationUnit>> FindChildrenAsync(Guid? parentId, bool recursive = false)
     {
         if (!recursive)
@@ -165,11 +235,23 @@ public class OrganizationUnitManager : DomainService
         return await OrganizationUnitRepository.GetAllChildrenWithParentCodeAsync(code, parentId, includeDetails: true);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="ou"></param>
+    /// <returns></returns>
     public virtual Task<bool> IsInOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
     {
         return Task.FromResult(user.IsInOrganizationUnit(ou.Id));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <param name="ouId"></param>
+    /// <returns></returns>
     public virtual async Task AddRoleToOrganizationUnitAsync(Guid roleId, Guid ouId)
     {
         await AddRoleToOrganizationUnitAsync(
@@ -178,6 +260,12 @@ public class OrganizationUnitManager : DomainService
             );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="role"></param>
+    /// <param name="ou"></param>
+    /// <returns></returns>
     public virtual async Task AddRoleToOrganizationUnitAsync(IdentityRole role, OrganizationUnit ou)
     {
         var currentRoles = ou.Roles;
@@ -191,6 +279,12 @@ public class OrganizationUnitManager : DomainService
         await RemoveDynamicClaimCacheAsync(ou);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <param name="ouId"></param>
+    /// <returns></returns>
     public virtual async Task RemoveRoleFromOrganizationUnitAsync(Guid roleId, Guid ouId)
     {
         await RemoveRoleFromOrganizationUnitAsync(
@@ -199,6 +293,12 @@ public class OrganizationUnitManager : DomainService
             );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="role"></param>
+    /// <param name="organizationUnit"></param>
+    /// <returns></returns>
     public virtual async Task RemoveRoleFromOrganizationUnitAsync(IdentityRole role, OrganizationUnit organizationUnit)
     {
         organizationUnit.RemoveRole(role.Id);
@@ -206,6 +306,11 @@ public class OrganizationUnitManager : DomainService
         await RemoveDynamicClaimCacheAsync(organizationUnit);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="organizationUnit"></param>
+    /// <returns></returns>
     public virtual async Task RemoveDynamicClaimCacheAsync(OrganizationUnit organizationUnit)
     {
         Logger.LogDebug($"Remove dynamic claims cache for users of organization: {organizationUnit.Id}");

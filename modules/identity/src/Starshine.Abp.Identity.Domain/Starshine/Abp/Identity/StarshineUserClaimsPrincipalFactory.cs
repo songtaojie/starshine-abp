@@ -11,13 +11,30 @@ using Volo.Abp.Uow;
 
 namespace Starshine.Abp.Identity;
 
-public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>,
+/// <summary>
+/// 用户声明主体工厂
+/// </summary>
+public class StarshineUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>,
     ITransientDependency
 {
+    /// <summary>
+    /// 当前主要访问者
+    /// </summary>
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
+    /// <summary>
+    /// Abp 声明主要工厂
+    /// </summary>
     protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
 
-    public AbpUserClaimsPrincipalFactory(
+    /// <summary>
+    /// 用户声明主体工厂
+    /// </summary>
+    /// <param name="userManager"></param>
+    /// <param name="roleManager"></param>
+    /// <param name="options"></param>
+    /// <param name="currentPrincipalAccessor"></param>
+    /// <param name="abpClaimsPrincipalFactory"></param>
+    public StarshineUserClaimsPrincipalFactory(
         UserManager<IdentityUser> userManager,
         RoleManager<IdentityRole> roleManager,
         IOptions<IdentityOptions> options,
@@ -32,6 +49,11 @@ public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<Identity
         AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
     }
 
+    /// <summary>
+    /// 创建
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     [UnitOfWork]
     public async override Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
     {
@@ -40,7 +62,7 @@ public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<Identity
 
         if (user.TenantId.HasValue)
         {
-            identity.AddIfNotContains(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString()));
+            identity.AddIfNotContains(new Claim(AbpClaimTypes.TenantId, user.TenantId.Value.ToString()));
         }
 
         if (!user.Name.IsNullOrWhiteSpace())

@@ -5,27 +5,27 @@ using Volo.Abp.MultiTenancy;
 namespace Starshine.Abp.Identity;
 
 /// <summary>
-/// Represents the link between a role and an organization unit.
+///表示角色和组织单位之间的联系。
 /// </summary>
 public class OrganizationUnitRole : CreationAuditedEntity, IMultiTenant
 {
     /// <summary>
-    /// TenantId of this entity.
+    /// 此实体的 TenantId。
     /// </summary>
     public virtual Guid? TenantId { get; protected set; }
 
     /// <summary>
-    /// Id of the Role.
+    /// 角色id
     /// </summary>
     public virtual Guid RoleId { get; protected set; }
 
     /// <summary>
-    /// Id of the <see cref="OrganizationUnit"/>.
+    /// <see cref="OrganizationUnit"/> 的 ID。
     /// </summary>
     public virtual Guid OrganizationUnitId { get; protected set; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OrganizationUnitRole"/> class.
+    /// 初始化 <see cref="OrganizationUnitRole"/> 类的新实例。
     /// </summary>
     protected OrganizationUnitRole()
     {
@@ -33,10 +33,10 @@ public class OrganizationUnitRole : CreationAuditedEntity, IMultiTenant
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OrganizationUnitRole"/> class.
+    /// 初始化 <see cref="OrganizationUnitRole"/> 类的新实例。
     /// </summary>
-    /// <param name="tenantId">TenantId</param>
-    /// <param name="roleId">Id of the Role.</param>
+    /// <param name="tenantId">租户id</param>
+    /// <param name="roleId">角色id</param>
     /// <param name="organizationUnitId">Id of the <see cref="OrganizationUnit"/>.</param>
     public OrganizationUnitRole(Guid roleId, Guid organizationUnitId, Guid? tenantId = null)
     {
@@ -45,8 +45,12 @@ public class OrganizationUnitRole : CreationAuditedEntity, IMultiTenant
         TenantId = tenantId;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override object[] GetKeys()
     {
-        return new object[] { OrganizationUnitId, RoleId };
+        return [OrganizationUnitId, RoleId];
     }
 }

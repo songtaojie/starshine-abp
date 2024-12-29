@@ -14,24 +14,57 @@ using Volo.Abp.Security.Claims;
 
 namespace Starshine.Abp.Identity;
 
+/// <summary>
+/// 身份动态声明主体贡献者缓存
+/// </summary>
 public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependency
 {
-    public ILogger<IdentityDynamicClaimsPrincipalContributorCache> Logger { get; set; }
-
+    /// <summary>
+    /// 日志记录
+    /// </summary>
+    protected ILogger<IdentityDynamicClaimsPrincipalContributorCache> Logger { get; }
+    /// <summary>
+    /// 分布式缓存
+    /// </summary>
     protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
+    /// <summary>
+    /// 当前租户
+    /// </summary>
     protected ICurrentTenant CurrentTenant { get; }
+    /// <summary>
+    /// 用户管理
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
+    /// <summary>
+    /// 用户声明主体工厂
+    /// </summary>
     protected IUserClaimsPrincipalFactory<IdentityUser> UserClaimsPrincipalFactory { get; }
+    /// <summary>
+    /// Abp 声明主要工厂期权
+    /// </summary>
     protected IOptions<AbpClaimsPrincipalFactoryOptions> AbpClaimsPrincipalFactoryOptions { get; }
+    /// <summary>
+    /// 缓存配置
+    /// </summary>
     protected IOptions<IdentityDynamicClaimsPrincipalContributorCacheOptions> CacheOptions { get; }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dynamicClaimCache"></param>
+    /// <param name="currentTenant"></param>
+    /// <param name="userManager"></param>
+    /// <param name="userClaimsPrincipalFactory"></param>
+    /// <param name="abpClaimsPrincipalFactoryOptions"></param>
+    /// <param name="cacheOptions"></param>
+    /// <param name="logger"></param>
     public IdentityDynamicClaimsPrincipalContributorCache(
         IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache,
         ICurrentTenant currentTenant,
         IdentityUserManager userManager,
         IUserClaimsPrincipalFactory<IdentityUser> userClaimsPrincipalFactory,
         IOptions<AbpClaimsPrincipalFactoryOptions> abpClaimsPrincipalFactoryOptions,
-        IOptions<IdentityDynamicClaimsPrincipalContributorCacheOptions> cacheOptions)
+        IOptions<IdentityDynamicClaimsPrincipalContributorCacheOptions> cacheOptions,
+        ILogger<IdentityDynamicClaimsPrincipalContributorCache> logger)
     {
         DynamicClaimCache = dynamicClaimCache;
         CurrentTenant = currentTenant;
@@ -40,12 +73,18 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
         AbpClaimsPrincipalFactoryOptions = abpClaimsPrincipalFactoryOptions;
         CacheOptions = cacheOptions;
 
-        Logger = NullLogger<IdentityDynamicClaimsPrincipalContributorCache>.Instance;
+        Logger = logger;
     }
 
-    public virtual async Task<AbpDynamicClaimCacheItem> GetAsync(Guid userId, Guid? tenantId = null)
+    /// <summary>
+    /// 获取缓存项
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="tenantId"></param>
+    /// <returns></returns>
+    public virtual async Task<AbpDynamicClaimCacheItem?> GetAsync(Guid userId, Guid? tenantId = null)
     {
-        Logger.LogDebug($"Get dynamic claims cache for user: {userId}");
+        Logger.LogDebug($"获取用户的动态声明缓存: {userId}");
 
         if (AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims.IsNullOrEmpty())
         {
@@ -62,7 +101,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
         {
             using (CurrentTenant.Change(tenantId))
             {
-                Logger.LogDebug($"Filling dynamic claims cache for user: {userId}");
+                Logger.LogDebug($"为用户: {userId}填充动态声明缓存");
 
                 var user = await UserManager.GetByIdAsync(userId);
                 var principal = await UserClaimsPrincipalFactory.CreateAsync(user);
@@ -71,7 +110,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
                 foreach (var claimType in AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims)
                 {
                     var claims = principal.Claims.Where(x => x.Type == claimType).ToList();
-                    if (claims.Any())
+                    if (claims.Count != 0)
                     {
                         dynamicClaims.Claims.AddRange(claims.Select(claim => new AbpDynamicClaim(claimType, claim.Value)));
                     }
@@ -89,9 +128,15 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
         });
     }
 
+    /// <summary>
+    /// 清除缓存
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="tenantId"></param>
+    /// <returns></returns>
     public virtual async Task ClearAsync(Guid userId, Guid? tenantId = null)
     {
-        Logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
+        Logger.LogDebug($"删除用户: {userId}的动态声明缓存");
         await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
     }
 }

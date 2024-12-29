@@ -4,21 +4,30 @@ using Volo.Abp.DependencyInjection;
 
 namespace Starshine.Abp.Identity;
 
+/// <summary>
+/// 
+/// </summary>
 public class UserRoleFinder : IUserRoleFinder, ITransientDependency
 {
+    /// <summary>
+    /// 
+    /// </summary>
     protected IIdentityUserRepository IdentityUserRepository { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="identityUserRepository"></param>
     public UserRoleFinder(IIdentityUserRepository identityUserRepository)
     {
         IdentityUserRepository = identityUserRepository;
     }
 
-    [Obsolete("Use GetRoleNamesAsync instead.")]
-    public virtual async Task<string[]> GetRolesAsync(Guid userId)
-    {
-        return (await IdentityUserRepository.GetRoleNamesAsync(userId)).ToArray();
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     public async Task<string[]> GetRoleNamesAsync(Guid userId)
     {
         return (await IdentityUserRepository.GetRoleNamesAsync(userId)).ToArray();

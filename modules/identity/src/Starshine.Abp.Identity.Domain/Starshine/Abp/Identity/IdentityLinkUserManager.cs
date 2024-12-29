@@ -7,22 +7,42 @@ using Volo.Abp.Domain.Services;
 using Volo.Abp.MultiTenancy;
 
 namespace Starshine.Abp.Identity;
-
+/// <summary>
+/// 
+/// </summary>
 public class IdentityLinkUserManager : DomainService
 {
+    /// <summary>
+    /// 
+    /// </summary>
     protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
-
+    /// <summary>
+    /// 用户管理
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
-
+    /// <summary>
+    /// 当前租户
+    /// </summary>
     protected new ICurrentTenant CurrentTenant { get; }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="identityLinkUserRepository"></param>
+    /// <param name="userManager"></param>
+    /// <param name="currentTenant"></param>
     public IdentityLinkUserManager(IIdentityLinkUserRepository identityLinkUserRepository, IdentityUserManager userManager, ICurrentTenant currentTenant)
     {
         IdentityLinkUserRepository = identityLinkUserRepository;
         UserManager = userManager;
         CurrentTenant = currentTenant;
     }
-
+    /// <summary>
+    /// 获取用户列表
+    /// </summary>
+    /// <param name="linkUserInfo"></param>
+    /// <param name="includeIndirect"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, bool includeIndirect = false, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(null))
@@ -65,12 +85,18 @@ public class IdentityLinkUserManager : DomainService
 
                 userInfos.AddRange(nextUsers);
                 allUsers.AddRange(users);
-            } while (users.Any());
+            } while (users.Count != 0);
 
             return allUsers;
         }
     }
-
+    /// <summary>
+    /// 关联用户
+    /// </summary>
+    /// <param name="sourceLinkUser"></param>
+    /// <param name="targetLinkUser"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task LinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(null))
@@ -85,14 +111,18 @@ public class IdentityLinkUserManager : DomainService
                 return;
             }
 
-            var userLink = new IdentityLinkUser(
-                GuidGenerator.Create(),
-                sourceLinkUser,
-                targetLinkUser);
+            var userLink = new IdentityLinkUser(GuidGenerator.Create(),sourceLinkUser,targetLinkUser);
             await IdentityLinkUserRepository.InsertAsync(userLink, true, cancellationToken);
         }
     }
-
+    /// <summary>
+    /// 是否关联
+    /// </summary>
+    /// <param name="sourceLinkUser"></param>
+    /// <param name="targetLinkUser"></param>
+    /// <param name="includeIndirect"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<bool> IsLinkedAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser, bool includeIndirect = false, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(null))
@@ -106,7 +136,13 @@ public class IdentityLinkUserManager : DomainService
             return await IdentityLinkUserRepository.FindAsync(sourceLinkUser, targetLinkUser, cancellationToken) != null;
         }
     }
-
+    /// <summary>
+    /// 取消关联
+    /// </summary>
+    /// <param name="sourceLinkUser"></param>
+    /// <param name="targetLinkUser"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task UnlinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(null))
@@ -123,29 +159,35 @@ public class IdentityLinkUserManager : DomainService
             }
         }
     }
-
+    /// <summary>
+    /// 生成关联token
+    /// </summary>
+    /// <param name="targetLinkUser"></param>
+    /// <param name="tokenPurpose"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<string> GenerateLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, string tokenPurpose, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(targetLinkUser.TenantId))
         {
             var user = await UserManager.GetByIdAsync(targetLinkUser.UserId);
-            return await UserManager.GenerateUserTokenAsync(
-                user,
-                LinkUserTokenProviderConsts.LinkUserTokenProviderName,
-                tokenPurpose);
+            return await UserManager.GenerateUserTokenAsync(user, LinkUserTokenProviderConsts.LinkUserTokenProviderName,tokenPurpose);
         }
     }
-
+    /// <summary>
+    /// 验证关联token
+    /// </summary>
+    /// <param name="targetLinkUser"></param>
+    /// <param name="token"></param>
+    /// <param name="tokenPurpose"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<bool> VerifyLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, string token, string tokenPurpose, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(targetLinkUser.TenantId))
         {
             var user = await UserManager.GetByIdAsync(targetLinkUser.UserId);
-            return await UserManager.VerifyUserTokenAsync(
-                user,
-                LinkUserTokenProviderConsts.LinkUserTokenProviderName,
-                tokenPurpose,
-                token);
+            return await UserManager.VerifyUserTokenAsync( user,LinkUserTokenProviderConsts.LinkUserTokenProviderName,tokenPurpose,token);
         }
     }
 }

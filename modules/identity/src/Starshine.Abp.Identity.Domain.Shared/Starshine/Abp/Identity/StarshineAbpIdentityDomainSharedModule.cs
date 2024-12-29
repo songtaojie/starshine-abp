@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Starshine.Abp.Identity.Localization;
+using Starshine.Abp.Users;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -15,7 +16,7 @@ namespace Starshine.Abp.Identity;
 /// DomainShared模块
 /// </summary>
 [DependsOn(
-    //typeof(AbpUsersDomainSharedModule),
+    typeof(StarshineAbpUsersDomainSharedModule),
     typeof(AbpValidationModule),
     typeof(AbpFeaturesModule)
     )]

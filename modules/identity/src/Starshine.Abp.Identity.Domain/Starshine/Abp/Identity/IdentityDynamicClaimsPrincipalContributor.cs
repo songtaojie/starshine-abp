@@ -9,33 +9,39 @@ using Volo.Abp.Security.Claims;
 
 namespace Starshine.Abp.Identity;
 
+/// <summary>
+/// 身份动态声明主体贡献者
+/// </summary>
 public class IdentityDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincipalContributorBase
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
     public async override Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
     {
         var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
-        var userId = identity?.FindUserId();
-        if (userId == null)
-        {
-            return;
-        }
+        if (identity == null) return;
+        var userId = identity.FindUserId();
+        if (userId == null) return;
 
         var dynamicClaimsCache = context.GetRequiredService<IdentityDynamicClaimsPrincipalContributorCache>();
-        AbpDynamicClaimCacheItem dynamicClaims;
+        AbpDynamicClaimCacheItem? dynamicClaims;
         try
         {
             dynamicClaims = await dynamicClaimsCache.GetAsync(userId.Value, identity.FindTenantId());
         }
         catch (EntityNotFoundException e)
         {
-            // In case if user not found, We force to clear the claims principal.
+            // 如果找不到用户，我们将强制清除声明。
             context.ClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
             var logger = context.GetRequiredService<ILogger<IdentityDynamicClaimsPrincipalContributor>>();
-            logger.LogWarning(e, $"User not found: {userId.Value}");
+            logger.LogWarning(e, $"未找到用户: {userId.Value}");
             return;
         }
 
-        if (dynamicClaims.Claims.IsNullOrEmpty())
+        if (dynamicClaims == null || dynamicClaims.Claims.IsNullOrEmpty())
         {
             return;
         }

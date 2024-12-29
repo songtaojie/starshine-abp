@@ -11,37 +11,64 @@ using Volo.Abp.Uow;
 
 namespace Starshine.Abp.Identity;
 
+/// <summary>
+/// 
+/// </summary>
 public class UserEntityUpdatedOrDeletedEventHandler :
     ILocalEventHandler<EntityUpdatedEventData<IdentityUser>>,
     ILocalEventHandler<EntityDeletedEventData<IdentityUser>>,
     ITransientDependency
 {
-    public ILogger<UserEntityUpdatedOrDeletedEventHandler> Logger { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    private readonly ILogger<UserEntityUpdatedOrDeletedEventHandler> _logger;
 
     private readonly IDistributedCache<AbpDynamicClaimCacheItem> _dynamicClaimCache;
 
-    public UserEntityUpdatedOrDeletedEventHandler(IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dynamicClaimCache"></param>
+    /// <param name="logger"></param>
+    public UserEntityUpdatedOrDeletedEventHandler(IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache,
+        ILogger<UserEntityUpdatedOrDeletedEventHandler> logger)
     {
-        Logger = NullLogger<UserEntityUpdatedOrDeletedEventHandler>.Instance;
+        _logger = logger;
 
         _dynamicClaimCache = dynamicClaimCache;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
     [UnitOfWork]
     public virtual async Task HandleEventAsync(EntityUpdatedEventData<IdentityUser> eventData)
     {
         await RemoveDynamicClaimCacheAsync(eventData.Entity.Id, eventData.Entity.TenantId);
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
     [UnitOfWork]
     public virtual async Task HandleEventAsync(EntityDeletedEventData<IdentityUser> eventData)
     {
         await RemoveDynamicClaimCacheAsync(eventData.Entity.Id, eventData.Entity.TenantId);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="tenantId"></param>
+    /// <returns></returns>
     protected virtual async Task RemoveDynamicClaimCacheAsync(Guid userId, Guid? tenantId)
     {
-        Logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
+        _logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
         await _dynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
     }
 }

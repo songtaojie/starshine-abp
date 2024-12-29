@@ -8,17 +8,32 @@ using Volo.Abp.Settings;
 
 namespace Starshine.Abp.Identity;
 
-public class AbpIdentityOptionsManager : AbpDynamicOptionsManager<IdentityOptions>
+/// <summary>
+/// 身份选项管理器
+/// </summary>
+public class StarshineIdentityOptionsManager : AbpDynamicOptionsManager<IdentityOptions>
 {
+    /// <summary>
+    /// 设置提供者
+    /// </summary>
     protected ISettingProvider SettingProvider { get; }
 
-    public AbpIdentityOptionsManager(IOptionsFactory<IdentityOptions> factory,
-        ISettingProvider settingProvider)
-        : base(factory)
+    /// <summary>
+    /// 身份选项管理器
+    /// </summary>
+    /// <param name="factory"></param>
+    /// <param name="settingProvider"></param>
+    public StarshineIdentityOptionsManager(IOptionsFactory<IdentityOptions> factory,ISettingProvider settingProvider) : base(factory)
     {
         SettingProvider = settingProvider;
     }
 
+    /// <summary>
+    /// 覆盖选项
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     protected override async Task OverrideOptionsAsync(string name, IdentityOptions options)
     {
         options.Password.RequiredLength = await SettingProvider.GetAsync(IdentitySettingNames.Password.RequiredLength, options.Password.RequiredLength);

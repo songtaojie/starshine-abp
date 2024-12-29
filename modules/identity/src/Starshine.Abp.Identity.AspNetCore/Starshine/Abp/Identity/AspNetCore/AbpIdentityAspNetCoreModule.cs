@@ -8,7 +8,7 @@ using static Starshine.Abp.Identity.AspNetCore.AbpSecurityStampValidatorCallback
 namespace Starshine.Abp.Identity.AspNetCore;
 
 [DependsOn(
-    typeof(AbpIdentityDomainModule)
+    typeof(StarshineIdentityDomainModule)
     )]
 public class AbpIdentityAspNetCoreModule : AbpModule
 {
@@ -20,7 +20,7 @@ public class AbpIdentityAspNetCoreModule : AbpModule
                 .AddDefaultTokenProviders()
                 .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProviderConsts.LinkUserTokenProviderName)
                 .AddSignInManager<AbpSignInManager>()
-                .AddUserValidator<AbpIdentityUserValidator>();
+                .AddUserValidator<StarshineIdentityUserValidator>();
         });
     }
 

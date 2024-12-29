@@ -1,59 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Starshine.Abp.Users;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Users;
 
 namespace Starshine.Abp.Identity;
-
+/// <summary>
+/// 身份用户存储库外部用户查找服务提供商
+/// </summary>
 public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
 {
+    /// <summary>
+    /// 用户存储库
+    /// </summary>
     protected IIdentityUserRepository UserRepository { get; }
+    /// <summary>
+    /// 查找规范器
+    /// </summary>
     protected ILookupNormalizer LookupNormalizer { get; }
-
-    public IdentityUserRepositoryExternalUserLookupServiceProvider(
-        IIdentityUserRepository userRepository,
-        ILookupNormalizer lookupNormalizer)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userRepository"></param>
+    /// <param name="lookupNormalizer"></param>
+    public IdentityUserRepositoryExternalUserLookupServiceProvider(IIdentityUserRepository userRepository, ILookupNormalizer lookupNormalizer)
     {
         UserRepository = userRepository;
         LookupNormalizer = lookupNormalizer;
     }
-
-    public virtual async Task<IUserData> FindByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 根据id获取数据
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<IUserData?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return (
-                await UserRepository.FindAsync(
-                    id,
-                    includeDetails: false,
-                    cancellationToken: cancellationToken
-                )
-            )?.ToAbpUserData();
+        var identityUser = await UserRepository.FindAsync(id, includeDetails: false, cancellationToken: cancellationToken);
+        if (identityUser == null) return null;
+        return identityUser.ToStarshineAbpUserData();
     }
 
-    public virtual async Task<IUserData> FindByUserNameAsync(
-        string userName,
-        CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 根据名称获取
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<IUserData?> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
     {
-        return (
-                await UserRepository.FindByNormalizedUserNameAsync(
-                    LookupNormalizer.NormalizeName(userName),
-                    includeDetails: false,
-                    cancellationToken: cancellationToken
-                )
-            )?.ToAbpUserData();
+        var identityUser = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName(userName), includeDetails: false, cancellationToken: cancellationToken);
+        if (identityUser == null) return null;
+        return identityUser.ToStarshineAbpUserData();
     }
 
-    public virtual async Task<List<IUserData>> SearchAsync(
-        string sorting = null,
-        string filter = null,
-        int maxResultCount = int.MaxValue,
-        int skipCount = 0,
-        CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 查找用户信息
+    /// </summary>
+    /// <param name="sorting"></param>
+    /// <param name="filter"></param>
+    /// <param name="maxResultCount"></param>
+    /// <param name="skipCount"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<List<IUserData>> SearchAsync(string? sorting = null,string? filter = null,int maxResultCount = int.MaxValue,int skipCount = 0,CancellationToken cancellationToken = default)
     {
         var users = await UserRepository.GetListAsync(
             sorting: sorting,
@@ -64,12 +72,16 @@ public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternal
             cancellationToken: cancellationToken
         );
 
-        return users.Select(u => u.ToAbpUserData()).ToList();
+        return users.Select(u => u.ToStarshineAbpUserData()).ToList();
     }
 
-    public async Task<long> GetCountAsync(
-        string filter = null,
-        CancellationToken cancellationToken = new CancellationToken())
+    /// <summary>
+    /// 获取数量
+    /// </summary>
+    /// <param name="filter"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<long> GetCountAsync(string? filter = null, CancellationToken cancellationToken = new CancellationToken())
     {
         return await UserRepository.GetCountAsync(filter, cancellationToken: cancellationToken);
     }

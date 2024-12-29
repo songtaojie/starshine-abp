@@ -5,8 +5,15 @@ using Volo.Abp.Settings;
 
 namespace Starshine.Abp.Identity;
 
-public class AbpIdentitySettingDefinitionProvider : SettingDefinitionProvider
+/// <summary>
+/// 身份设置定义提供者
+/// </summary>
+public class StarshineIdentitySettingDefinitionProvider : SettingDefinitionProvider
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="context"></param>
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(

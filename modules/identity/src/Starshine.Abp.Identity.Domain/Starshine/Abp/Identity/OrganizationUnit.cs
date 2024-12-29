@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
@@ -9,43 +10,42 @@ using Volo.Abp.MultiTenancy;
 namespace Starshine.Abp.Identity;
 
 /// <summary>
-/// Represents an organization unit (OU).
+/// 代表组织单位 (OU)。
 /// </summary>
 public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
 {
+    /// <summary>
+    /// 租户uid
+    /// </summary>
     public virtual Guid? TenantId { get; protected set; }
 
     /// <summary>
-    /// Parent <see cref="OrganizationUnit"/> Id.
-    /// Null, if this OU is a root.
+    /// 父级 <see cref="OrganizationUnit"/> Id。如果此 OU 是根，则为 Null。
     /// </summary>
     public virtual Guid? ParentId { get; internal set; }
 
     /// <summary>
-    /// Hierarchical Code of this organization unit.
-    /// Example: "00001.00042.00005".
-    /// This is a unique code for an OrganizationUnit.
-    /// It's changeable if OU hierarchy is changed.
+    /// 此组织单位的层级代码。示例：“00001.00042.00005”。这是组织单位的唯一代码。如果 OU 层级发生变化，该代码也会发生变化。
     /// </summary>
-    public virtual string Code { get; internal set; }
+    public virtual string Code { get; internal set; } = string.Empty;
 
     /// <summary>
-    /// Display name of this OrganizationUnit.
+    /// 此 OrganizationUnit 的显示名称。
     /// </summary>
-    public virtual string DisplayName { get; set; }
+    public virtual string? DisplayName { get; set; }
 
     /// <summary>
-    /// A version value that is increased whenever the entity is changed.
+    ///每当实体发生变化时，版本值就会增加。
     /// </summary>
     public virtual int EntityVersion { get; set; }
 
     /// <summary>
-    /// Roles of this OU.
+    ///此 OU 的角色。
     /// </summary>
-    public virtual ICollection<OrganizationUnitRole> Roles { get; protected set; }
+    public virtual ICollection<OrganizationUnitRole> Roles { get; protected set; } = [];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OrganizationUnit"/> class.
+    /// 初始化 <see cref="OrganizationUnit"/> 类的新实例。
     /// </summary>
     public OrganizationUnit()
     {
@@ -53,12 +53,12 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OrganizationUnit"/> class.
+    ///  初始化 <see cref="OrganizationUnit"/> 类的新实例。
     /// </summary>
     /// <param name="id">id</param>
-    /// <param name="displayName">Display name.</param>
-    /// <param name="parentId">Parent's Id or null if OU is a root.</param>
-    /// <param name="tenantId">Tenant's Id or null for host.</param>
+    /// <param name="displayName">显示名称。</param>
+    /// <param name="parentId">如果 OU 是根，则为父级的 ID 或空。</param>
+    /// <param name="tenantId">租户 ID 或null。</param>
     public OrganizationUnit(Guid id, string displayName, Guid? parentId = null, Guid? tenantId = null)
         : base(id)
     {
@@ -69,11 +69,10 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Creates code for given numbers.
-    /// Example: if numbers are 4,2 then returns "00004.00002";
+    /// 为给定的数字创建代码。例如：如果数字为 4,2，则返回“00004.00002”；
     /// </summary>
     /// <param name="numbers">Numbers</param>
-    public static string CreateCode(params int[] numbers)
+    public static string? CreateCode(params int[] numbers)
     {
         if (numbers.IsNullOrEmpty())
         {
@@ -84,12 +83,11 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Appends a child code to a parent code.
-    /// Example: if parentCode = "00001", childCode = "00042" then returns "00001.00042".
+    /// 将子代码附加到父代码。例如：如果 parentCode =“00001”，childCode =“00042”，则返回“00001.00042”。
     /// </summary>
-    /// <param name="parentCode">Parent code. Can be null or empty if parent is a root.</param>
-    /// <param name="childCode">Child code.</param>
-    public static string AppendCode(string parentCode, string childCode)
+    /// <param name="parentCode">父代码。如果父级是根，则可以为 null 或为空。</param>
+    /// <param name="childCode">子代码。</param>
+    public static string AppendCode(string? parentCode, string? childCode)
     {
         if (childCode.IsNullOrEmpty())
         {
@@ -105,16 +103,15 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Gets relative code to the parent.
-    /// Example: if code = "00019.00055.00001" and parentCode = "00019" then returns "00055.00001".
+    /// 获取相对于父级的代码。例如：如果 code = “00019.00055.00001” 且 parentCode = “00019”，则返回“00055.00001”。
     /// </summary>
-    /// <param name="code">The code.</param>
-    /// <param name="parentCode">The parent code.</param>
-    public static string GetRelativeCode(string code, string parentCode)
+    /// <param name="code">代码。</param>
+    /// <param name="parentCode">父代码。</param>
+    public static string? GetRelativeCode(string code, string parentCode)
     {
         if (code.IsNullOrEmpty())
         {
-            throw new ArgumentNullException(nameof(code), "code can not be null or empty.");
+            throw new ArgumentNullException(nameof(code), "代码不能为空。");
         }
 
         if (parentCode.IsNullOrEmpty())
@@ -131,10 +128,9 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Calculates next code for given code.
-    /// Example: if code = "00019.00055.00001" returns "00019.00055.00002".
+    ///计算给定代码的下一个代码。例如：如果 code = “00019.00055.00001”，则返回“00019.00055.00002”。
     /// </summary>
-    /// <param name="code">The code.</param>
+    /// <param name="code">代码。</param>
     public static string CalculateNextCode(string code)
     {
         if (code.IsNullOrEmpty())
@@ -149,8 +145,7 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Gets the last unit code.
-    /// Example: if code = "00019.00055.00001" returns "00001".
+    /// 获取最后一个单位代码。例如：如果 code = “00019.00055.00001”，则返回“00001”。
     /// </summary>
     /// <param name="code">The code.</param>
     public static string GetLastUnitCode(string code)
@@ -165,11 +160,10 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Gets parent code.
-    /// Example: if code = "00019.00055.00001" returns "00019.00055".
+    /// 获取父代码。例如：如果 code = “00019.00055.00001”，则返回“00019.00055”。
     /// </summary>
     /// <param name="code">The code.</param>
-    public static string GetParentCode(string code)
+    public static string? GetParentCode(string code)
     {
         if (code.IsNullOrEmpty())
         {
@@ -185,6 +179,10 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
         return splittedCode.Take(splittedCode.Length - 1).JoinAsString(".");
     }
 
+    /// <summary>
+    /// 添加角色信息
+    /// </summary>
+    /// <param name="roleId"></param>
     public virtual void AddRole(Guid roleId)
     {
         Check.NotNull(roleId, nameof(roleId));
@@ -197,6 +195,10 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
         Roles.Add(new OrganizationUnitRole(roleId, Id, TenantId));
     }
 
+    /// <summary>
+    /// 移除角色信息
+    /// </summary>
+    /// <param name="roleId"></param>
     public virtual void RemoveRole(Guid roleId)
     {
         Check.NotNull(roleId, nameof(roleId));
@@ -209,6 +211,11 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
         Roles.RemoveAll(r => r.RoleId == roleId);
     }
 
+    /// <summary>
+    /// 是否存在角色
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
     public virtual bool IsInRole(Guid roleId)
     {
         Check.NotNull(roleId, nameof(roleId));

@@ -13,7 +13,7 @@ namespace Starshine.Abp.Identity.AspNetCore;
 
 public class AbpSignInManager : SignInManager<IdentityUser>
 {
-    protected AbpIdentityOptions AbpOptions { get; }
+    protected StarshineIdentityOptions AbpOptions { get; }
 
     protected ISettingProvider SettingProvider { get; }
 
@@ -27,7 +27,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         ILogger<SignInManager<IdentityUser>> logger,
         IAuthenticationSchemeProvider schemes,
         IUserConfirmation<IdentityUser> confirmation,
-        IOptions<AbpIdentityOptions> options,
+        IOptions<StarshineIdentityOptions> options,
         ISettingProvider settingProvider) : base(
         userManager,
         contextAccessor,
@@ -42,11 +42,16 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         _identityUserManager = userManager;
     }
 
-    public async override Task<SignInResult> PasswordSignInAsync(
-        string userName,
-        string password,
-        bool isPersistent,
-        bool lockoutOnFailure)
+    
+    /// <summary>
+    /// 密码登录
+    /// </summary>
+    /// <param name="userName">用户名</param>
+    /// <param name="password">用户密码</param>
+    /// <param name="isPersistent">是否持久化</param>
+    /// <param name="lockoutOnFailure">失败时是否锁定</param>
+    /// <returns></returns>
+    public async override Task<SignInResult> PasswordSignInAsync(string userName,string password, bool isPersistent,bool lockoutOnFailure)
     {
         foreach (var externalLoginProviderInfo in AbpOptions.ExternalLoginProviders.Values)
         {

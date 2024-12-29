@@ -2,15 +2,22 @@ using System;
 
 namespace Starshine.Abp.Identity;
 
-public class IdentityRoleWithUserCount
+/// <summary>
+/// 身份角色与用户计数
+/// </summary>
+/// <remarks>
+/// </remarks>
+/// <param name="role"></param>
+/// <param name="userCount"></param>
+public class IdentityRoleWithUserCount(IdentityRole role, long userCount)
 {
-    public IdentityRole Role { get; set; }
+    /// <summary>
+    /// 角色
+    /// </summary>
+    public IdentityRole Role { get; set; } = role;
 
-    public long UserCount { get; set; }
-
-    public IdentityRoleWithUserCount(IdentityRole role, long userCount)
-    {
-        Role = role;
-        UserCount = userCount;
-    }
+    /// <summary>
+    /// 用户数量
+    /// </summary>
+    public long UserCount { get; set; } = userCount;
 }

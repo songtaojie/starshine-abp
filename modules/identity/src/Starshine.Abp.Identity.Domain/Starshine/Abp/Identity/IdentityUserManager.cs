@@ -1,37 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Starshine.Abp.Identity.Settings;
+using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.EventBus.Distributed;
-using Starshine.Abp.Identity.Settings;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
 namespace Starshine.Abp.Identity;
-
+/// <summary>
+/// 身份用户管理器
+/// </summary>
 public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 {
+    /// <summary>
+    /// 角色存储库
+    /// </summary>
     protected IIdentityRoleRepository RoleRepository { get; }
+    /// <summary>
+    /// 用户存储库
+    /// </summary>
     protected IIdentityUserRepository UserRepository { get; }
+    /// <summary>
+    /// 组织单位存储库
+    /// </summary>
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+    /// <summary>
+    /// 设置提供者
+    /// </summary>
     protected ISettingProvider SettingProvider { get; }
+    /// <summary>
+    /// CancellationToken 提供程序
+    /// </summary>
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    /// <summary>
+    /// 分布式事件总线
+    /// </summary>
     protected IDistributedEventBus DistributedEventBus { get; }
+    /// <summary>
+    /// IdentityLink 用户存储库
+    /// </summary>
     protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
+    /// <summary>
+    /// 动态声明缓存
+    /// </summary>
     protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="store"></param>
+    /// <param name="roleRepository"></param>
+    /// <param name="userRepository"></param>
+    /// <param name="optionsAccessor"></param>
+    /// <param name="passwordHasher"></param>
+    /// <param name="userValidators"></param>
+    /// <param name="passwordValidators"></param>
+    /// <param name="keyNormalizer"></param>
+    /// <param name="errors"></param>
+    /// <param name="services"></param>
+    /// <param name="logger"></param>
+    /// <param name="cancellationTokenProvider"></param>
+    /// <param name="organizationUnitRepository"></param>
+    /// <param name="settingProvider"></param>
+    /// <param name="distributedEventBus"></param>
+    /// <param name="identityLinkUserRepository"></param>
+    /// <param name="dynamicClaimCache"></param>
     public IdentityUserManager(
         IdentityUserStore store,
         IIdentityRoleRepository roleRepository,
@@ -71,6 +116,13 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
+    /// <summary>
+    /// 创建用户
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="password"></param>
+    /// <param name="validatePassword"></param>
+    /// <returns></returns>
     public virtual async Task<IdentityResult> CreateAsync(IdentityUser user, string password, bool validatePassword)
     {
         var result = await UpdatePasswordHash(user, password, validatePassword);
@@ -78,10 +130,13 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         {
             return result;
         }
-
         return await CreateAsync(user);
     }
-
+    /// <summary>
+    /// 删除用户
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     public async override Task<IdentityResult> DeleteAsync(IdentityUser user)
     {
         user.Claims.Clear();
@@ -94,7 +149,11 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return await base.DeleteAsync(user);
     }
-
+    /// <summary>
+    /// 更新用户
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     protected async override Task<IdentityResult> UpdateUserAsync(IdentityUser user)
     {
         var result = await base.UpdateUserAsync(user);
@@ -103,21 +162,25 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         {
             await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId), token: CancellationToken);
         }
-
         return result;
     }
-
+    /// <summary>
+    /// 根据主键获取用户信息
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="EntityNotFoundException"></exception>
     public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
     {
-        var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
-        if (user == null)
-        {
-            throw new EntityNotFoundException(typeof(IdentityUser), id);
-        }
-
+        var user = await Store.FindByIdAsync(id.ToString(), CancellationToken) ?? throw new EntityNotFoundException(typeof(IdentityUser), id);
         return user;
     }
-
+    /// <summary>
+    /// 设置角色信息
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="roleNames"></param>
+    /// <returns></returns>
     public virtual async Task<IdentityResult> SetRolesAsync([NotNull] IdentityUser user,
         [NotNull] IEnumerable<string> roleNames)
     {
@@ -125,7 +188,6 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         Check.NotNull(roleNames, nameof(roleNames));
 
         var currentRoleNames = await GetRolesAsync(user);
-
         var result = await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct());
         if (!result.Succeeded)
         {
@@ -140,20 +202,35 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return IdentityResult.Success;
     }
-
+    /// <summary>
+    /// 是否是组织单元
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="ouId"></param>
+    /// <returns></returns>
     public virtual async Task<bool> IsInOrganizationUnitAsync(Guid userId, Guid ouId)
     {
         var user = await UserRepository.GetAsync(userId, cancellationToken: CancellationToken);
         return user.IsInOrganizationUnit(ouId);
     }
-
+    /// <summary>
+    /// 是否是组织单元
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="ou"></param>
+    /// <returns></returns>
     public virtual async Task<bool> IsInOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
     {
         await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
             CancellationTokenProvider.Token);
         return user.IsInOrganizationUnit(ou.Id);
     }
-
+    /// <summary>
+    /// 添加组织单元
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="ouId"></param>
+    /// <returns></returns>
     public virtual async Task AddToOrganizationUnitAsync(Guid userId, Guid ouId)
     {
         await AddToOrganizationUnitAsync(
@@ -161,7 +238,12 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
             await OrganizationUnitRepository.GetAsync(ouId, cancellationToken: CancellationToken)
         );
     }
-
+    /// <summary>
+    /// 添加用户到组织单元
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="ou"></param>
+    /// <returns></returns>
     public virtual async Task AddToOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
     {
         await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
@@ -179,7 +261,12 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId), token: CancellationToken);
     }
-
+    /// <summary>
+    /// 移除用户从组织单元
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="ouId"></param>
+    /// <returns></returns>
     public virtual async Task RemoveFromOrganizationUnitAsync(Guid userId, Guid ouId)
     {
         var user = await UserRepository.GetAsync(userId, cancellationToken: CancellationToken);
@@ -189,6 +276,12 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId), token: CancellationToken);
     }
 
+    /// <summary>
+    /// 移除用户从组织单元
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="ou"></param>
+    /// <returns></returns>
     public virtual async Task RemoveFromOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
     {
         await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
@@ -197,7 +290,12 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         user.RemoveOrganizationUnit(ou.Id);
         await UserRepository.UpdateAsync(user, cancellationToken: CancellationToken);
     }
-
+    /// <summary>
+    /// 设置用户到组织单元
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="organizationUnitIds"></param>
+    /// <returns></returns>
     public virtual async Task SetOrganizationUnitsAsync(Guid userId, params Guid[] organizationUnitIds)
     {
         await SetOrganizationUnitsAsync(
@@ -205,7 +303,12 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
             organizationUnitIds
         );
     }
-
+    /// <summary>
+    /// 设置用户到组织单元
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="organizationUnitIds"></param>
+    /// <returns></returns>
     public virtual async Task SetOrganizationUnitsAsync(IdentityUser user, params Guid[] organizationUnitIds)
     {
         Check.NotNull(user, nameof(user));
@@ -216,7 +319,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
             CancellationTokenProvider.Token);
 
-        //Remove from removed OUs
+        //从已删除的 OU 中删除
         foreach (var ouId in user.OrganizationUnits.Select(uou => uou.OrganizationUnitId).ToArray())
         {
             if (!organizationUnitIds.Contains(ouId))
@@ -247,38 +350,42 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
                 .WithData("MaxUserMembershipCount", maxCount);
         }
     }
-
+    /// <summary>
+    /// 获取用户的组织单元
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="includeDetails"></param>
+    /// <returns></returns>
     [UnitOfWork]
-    public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user,
-        bool includeDetails = false)
+    public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user, bool includeDetails = false)
     {
-        await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
-            CancellationTokenProvider.Token);
+        await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
 
-        return await OrganizationUnitRepository.GetListAsync(
-            user.OrganizationUnits.Select(t => t.OrganizationUnitId),
-            includeDetails,
-            cancellationToken: CancellationToken
-        );
+        return await OrganizationUnitRepository.GetListAsync(user.OrganizationUnits.Select(t => t.OrganizationUnitId), includeDetails, cancellationToken: CancellationToken);
     }
-
+    /// <summary>
+    /// 获取组织单元中的用户
+    /// </summary>
+    /// <param name="organizationUnit"></param>
+    /// <param name="includeChildren"></param>
+    /// <returns></returns>
     [UnitOfWork]
-    public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
-        OrganizationUnit organizationUnit,
-        bool includeChildren = false)
+    public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(OrganizationUnit organizationUnit, bool includeChildren = false)
     {
         if (includeChildren)
         {
-            return await UserRepository
-                .GetUsersInOrganizationUnitWithChildrenAsync(organizationUnit.Code, CancellationToken);
+            return await UserRepository.GetUsersInOrganizationUnitWithChildrenAsync(organizationUnit.Code, CancellationToken);
         }
         else
         {
-            return await UserRepository
-                .GetUsersInOrganizationUnitAsync(organizationUnit.Id, CancellationToken);
+            return await UserRepository.GetUsersInOrganizationUnitAsync(organizationUnit.Id, CancellationToken);
         }
     }
-
+    /// <summary>
+    /// 添加默认的角色
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     public virtual async Task<IdentityResult> AddDefaultRolesAsync([NotNull] IdentityUser user)
     {
         await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, CancellationToken);
@@ -293,7 +400,11 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return await UpdateUserAsync(user);
     }
-
+    /// <summary>
+    /// 应定期更改密码
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     public virtual async Task<bool> ShouldPeriodicallyChangePasswordAsync(IdentityUser user)
     {
         Check.NotNull(user, nameof(user));
@@ -314,7 +425,12 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < DateTime.UtcNow;
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    /// <exception cref="AbpException"></exception>
     public virtual async Task ResetRecoveryCodesAsync(IdentityUser user)
     {
         if (!(Store is IdentityUserStore identityUserStore))
@@ -324,15 +440,17 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         await identityUserStore.SetTokenAsync(user, await identityUserStore.GetInternalLoginProviderAsync(), await identityUserStore.GetRecoveryCodeTokenNameAsync(), string.Empty, CancellationToken);
     }
-
-    public async override Task<IdentityResult> SetEmailAsync(IdentityUser user, string email)
+    /// <summary>
+    /// 设置邮箱
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="email"></param>
+    /// <returns></returns>
+    public async override Task<IdentityResult> SetEmailAsync(IdentityUser user, string? email)
     {
         var oldMail = user.Email;
-
         var result = await base.SetEmailAsync(user, email);
-
         result.CheckErrors();
-
         if (!string.IsNullOrEmpty(oldMail) && !oldMail.Equals(email, StringComparison.OrdinalIgnoreCase))
         {
             await DistributedEventBus.PublishAsync(
@@ -348,14 +466,17 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return result;
     }
 
-    public async override Task<IdentityResult> SetUserNameAsync(IdentityUser user, string userName)
+    /// <summary>
+    /// 设置用户名
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="userName"></param>
+    /// <returns></returns>
+    public async override Task<IdentityResult> SetUserNameAsync(IdentityUser user, string? userName)
     {
         var oldUserName = user.UserName;
-
         var result = await base.SetUserNameAsync(user, userName);
-
         result.CheckErrors();
-
         if (!string.IsNullOrEmpty(oldUserName) && oldUserName != userName)
         {
             await DistributedEventBus.PublishAsync(
@@ -370,51 +491,61 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return result;
     }
-
+    /// <summary>
+    /// 更新角色
+    /// </summary>
+    /// <param name="sourceRoleId"></param>
+    /// <param name="targetRoleId"></param>
+    /// <returns></returns>
     public virtual async Task UpdateRoleAsync(Guid sourceRoleId, Guid? targetRoleId)
     {
         var sourceRole = await RoleRepository.GetAsync(sourceRoleId, cancellationToken: CancellationToken);
 
-        Logger.LogDebug($"Remove dynamic claims cache for users of role: {sourceRoleId}");
+        Logger.LogDebug($"删除角色为 {sourceRoleId} 的用户的动态声明缓存");
         var userIdList = await UserRepository.GetUserIdListByRoleIdAsync(sourceRoleId, cancellationToken: CancellationToken);
         await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, sourceRole.TenantId)), token: CancellationToken);
-
         var targetRole = targetRoleId.HasValue ? await RoleRepository.GetAsync(targetRoleId.Value, cancellationToken: CancellationToken) : null;
         if (targetRole != null)
         {
-            Logger.LogDebug($"Remove dynamic claims cache for users of role: {targetRoleId}");
-            userIdList = await UserRepository.GetUserIdListByRoleIdAsync(targetRoleId.Value, cancellationToken: CancellationToken);
+            Logger.LogDebug($"删除角色为 {targetRoleId} 的用户的动态声明缓存");
+            userIdList = await UserRepository.GetUserIdListByRoleIdAsync(targetRole.Id, cancellationToken: CancellationToken);
             await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, targetRole.TenantId)), token: CancellationToken);
         }
-
         await UserRepository.UpdateRoleAsync(sourceRoleId, targetRoleId, CancellationToken);
     }
 
+    /// <summary>
+    /// 更新组织
+    /// </summary>
+    /// <param name="sourceOrganizationId"></param>
+    /// <param name="targetOrganizationId"></param>
+    /// <returns></returns>
     public virtual async Task UpdateOrganizationAsync(Guid sourceOrganizationId, Guid? targetOrganizationId)
     {
         var sourceOrganization = await OrganizationUnitRepository.GetAsync(sourceOrganizationId, cancellationToken: CancellationToken);
 
-        Logger.LogDebug($"Remove dynamic claims cache for users of organization: {sourceOrganizationId}");
+        Logger.LogDebug($"删除组织 {sourceOrganizationId} 用户的动态声明缓存");
         var userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(sourceOrganizationId, cancellationToken: CancellationToken);
         await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, sourceOrganization.TenantId)), token: CancellationToken);
-
         var targetOrganization = targetOrganizationId.HasValue ? await OrganizationUnitRepository.GetAsync(targetOrganizationId.Value, cancellationToken: CancellationToken) : null;
         if (targetOrganization != null)
         {
-            Logger.LogDebug($"Remove dynamic claims cache for users of organization: {targetOrganizationId}");
-            userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(targetOrganizationId.Value, cancellationToken: CancellationToken);
+            Logger.LogDebug($"删除组织用户的动态声明缓存：{targetOrganizationId}");
+            userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(targetOrganization.Id, cancellationToken: CancellationToken);
             await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, targetOrganization.TenantId)), token: CancellationToken);
         }
 
         await UserRepository.UpdateOrganizationAsync(sourceOrganizationId, targetOrganizationId, CancellationToken);
     }
-
+    /// <summary>
+    /// 验证用户名
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     public virtual async Task<bool> ValidateUserNameAsync(string userName, Guid? userId = null)
     {
-        if (string.IsNullOrWhiteSpace(userName))
-        {
-            return false;
-        }
+        if (string.IsNullOrWhiteSpace(userName)) return false;
 
         if (!string.IsNullOrEmpty(Options.User.AllowedUserNameCharacters) && userName.Any(c => !Options.User.AllowedUserNameCharacters.Contains(c)))
         {
@@ -429,7 +560,11 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return true;
     }
-
+    /// <summary>
+    /// 获取一个随机的用户名
+    /// </summary>
+    /// <param name="length"></param>
+    /// <returns></returns>
     public virtual Task<string> GetRandomUserNameAsync(int length)
     {
         var allowedUserNameCharacters = Options.User.AllowedUserNameCharacters;
@@ -447,7 +582,12 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         return Task.FromResult(randomUserName);
     }
-
+    /// <summary>
+    /// 根据邮箱获取用户名
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
+    /// <exception cref="StarshineIdentityResultException"></exception>
     public virtual async Task<string> GetUserNameFromEmailAsync(string email)
     {
         const int maxTryCount = 20;
@@ -463,7 +603,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         if (Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace())
         {
-            // The AllowedUserNameCharacters is not set. So, we are generating a random username.
+            // AllowedUserNameCharacters 未设置。因此，我们生成一个随机用户名。
             tryCount = 0;
             do
             {
@@ -477,7 +617,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
         else if (!userName.All(Options.User.AllowedUserNameCharacters.Contains))
         {
-            // The username contains not allowed characters. So, we are generating a random username.
+            // 用户名包含不允许的字符。因此，我们将生成一个随机用户名。
             do
             {
                 var randomUserName = await GetRandomUserNameAsync(userName.Length);
@@ -527,7 +667,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
             } while (tryCount < maxTryCount);
         }
 
-        Logger.LogError($"Could not get a valid user name for the given email address: {email}, allowed characters: {Options.User.AllowedUserNameCharacters}, tried {maxTryCount} times.");
-        throw new AbpIdentityResultException(IdentityResult.Failed(new IdentityErrorDescriber().InvalidUserName(userName)));
+        Logger.LogError($"无法获取给定电子邮件地址的有效用户名：{email}，允许的字符：{Options.User.AllowedUserNameCharacters}，已尝试 {maxTryCount} 次。");
+        throw new StarshineIdentityResultException(IdentityResult.Failed(new IdentityErrorDescriber().InvalidUserName(userName)));
     }
 }

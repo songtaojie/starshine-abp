@@ -16,7 +16,7 @@ public interface IExternalUserLookupServiceProvider
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IUserData> FindByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IUserData?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 根据用户名获取用户信息
@@ -24,7 +24,7 @@ public interface IExternalUserLookupServiceProvider
     /// <param name="userName"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IUserData> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default);
+    Task<IUserData?> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 搜索用户信息
