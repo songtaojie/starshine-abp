@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Starshine.Abp.IdentityServer.ApiScopes;
@@ -11,11 +12,11 @@ public class ApiScope : FullAuditedAggregateRoot<Guid>
     public virtual bool Enabled { get; set; }
 
     [NotNull]
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = null!;
 
-    public virtual string DisplayName { get; set; }
+    public virtual string? DisplayName { get; set; }
 
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
 
     public virtual bool Required { get; set; }
 
@@ -23,9 +24,9 @@ public class ApiScope : FullAuditedAggregateRoot<Guid>
 
     public virtual bool ShowInDiscoveryDocument { get; set; }
 
-    public virtual List<ApiScopeClaim> UserClaims { get; protected set; }
+    public virtual List<ApiScopeClaim> UserClaims { get; protected set; } = [];
 
-    public virtual List<ApiScopeProperty> Properties { get; protected set; }
+    public virtual List<ApiScopeProperty> Properties { get; protected set; } = [];
 
     protected ApiScope()
     {
@@ -35,8 +36,8 @@ public class ApiScope : FullAuditedAggregateRoot<Guid>
     public ApiScope(
         Guid id,
         [NotNull] string name,
-        string displayName = null,
-        string description = null,
+        string? displayName = null,
+        string? description = null,
         bool required = false,
         bool emphasize = false,
         bool showInDiscoveryDocument = true,
@@ -52,9 +53,6 @@ public class ApiScope : FullAuditedAggregateRoot<Guid>
         Emphasize = emphasize;
         ShowInDiscoveryDocument = showInDiscoveryDocument;
         Enabled = enabled;
-
-        UserClaims = new List<ApiScopeClaim>();
-        Properties = new List<ApiScopeProperty>();
     }
 
     public virtual void AddUserClaim([NotNull] string type)
@@ -72,7 +70,7 @@ public class ApiScope : FullAuditedAggregateRoot<Guid>
         UserClaims.RemoveAll(r => r.Type == type);
     }
 
-    public virtual ApiScopeClaim FindClaim(string type)
+    public virtual ApiScopeClaim? FindClaim(string type)
     {
         return UserClaims.FirstOrDefault(r => r.Type == type);
     }
@@ -100,7 +98,7 @@ public class ApiScope : FullAuditedAggregateRoot<Guid>
         Properties.RemoveAll(r => r.Key == key);
     }
 
-    public virtual ApiScopeProperty FindProperty(string key)
+    public virtual ApiScopeProperty? FindProperty(string key)
     {
         return Properties.FirstOrDefault(r => r.Key == key);
     }

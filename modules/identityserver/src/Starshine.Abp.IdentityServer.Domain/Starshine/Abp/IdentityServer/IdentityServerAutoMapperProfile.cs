@@ -40,7 +40,7 @@ public class IdentityServerAutoMapperProfile : Profile
         CreateMap<ClientProperty, KeyValuePair<string, string>>()
          .ReverseMap();
 
-        CreateMap<Client, IdentityServer4.Models.Client>()
+        CreateMap<Client, Starshine.IdentityServer.Models.Client>()
             .ForMember(dest => dest.ProtocolType, opt => opt.Condition(srs => srs != null))
             .ForMember(x => x.AllowedIdentityTokenSigningAlgorithms, opts => opts.ConvertUsing(AllowedSigningAlgorithmsConverter.Converter, x => x.AllowedIdentityTokenSigningAlgorithms))
             .ReverseMap()
@@ -60,8 +60,8 @@ public class IdentityServerAutoMapperProfile : Profile
             .ConstructUsing(src => new Claim(src.Type, src.Value))
             .ReverseMap();
 
-        CreateMap<ClientClaim, IdentityServer4.Models.ClientClaim>(MemberList.None)
-            .ConstructUsing(src => new IdentityServer4.Models.ClientClaim(src.Type, src.Value, ClaimValueTypes.String))
+        CreateMap<ClientClaim, Starshine.IdentityServer.Models.ClientClaim>(MemberList.None)
+            .ConstructUsing(src => new Starshine.IdentityServer.Models.ClientClaim(src.Type, src.Value, ClaimValueTypes.String))
             .ReverseMap();
 
         CreateMap<ClientScope, string>()
@@ -84,7 +84,7 @@ public class IdentityServerAutoMapperProfile : Profile
             .ReverseMap()
             .ForMember(dest => dest.GrantType, opt => opt.MapFrom(src => src));
 
-        CreateMap<ClientSecret, IdentityServer4.Models.Secret>(MemberList.Destination)
+        CreateMap<ClientSecret, Starshine.IdentityServer.Models.Secret>(MemberList.Destination)
             .ForMember(dest => dest.Type, opt => opt.Condition(srs => srs != null))
             .ReverseMap();
 
@@ -93,11 +93,11 @@ public class IdentityServerAutoMapperProfile : Profile
 
     private void CreateApiResourceMap()
     {
-        CreateMap<ApiResource, IdentityServer4.Models.ApiResource>()
+        CreateMap<ApiResource, Starshine.IdentityServer.Models.ApiResource>()
             .ForMember(dest => dest.ApiSecrets, opt => opt.MapFrom(src => src.Secrets))
             .ForMember(x => x.AllowedAccessTokenSigningAlgorithms, opts => opts.ConvertUsing(AllowedSigningAlgorithmsConverter.Converter, x => x.AllowedAccessTokenSigningAlgorithms));
 
-        CreateMap<ApiResourceSecret, IdentityServer4.Models.Secret>();
+        CreateMap<ApiResourceSecret, Starshine.IdentityServer.Models.Secret>();
 
         CreateMap<ApiResourceScope, string>()
             .ConstructUsing(x => x.Scope)
@@ -120,15 +120,15 @@ public class IdentityServerAutoMapperProfile : Profile
             .ReverseMap()
             .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src));
 
-        CreateMap<ApiScope, IdentityServer4.Models.ApiScope>(MemberList.Destination)
-            .ConstructUsing(src => new IdentityServer4.Models.ApiScope())
+        CreateMap<ApiScope, Starshine.IdentityServer.Models.ApiScope>(MemberList.Destination)
+            .ConstructUsing(src => new Starshine.IdentityServer.Models.ApiScope())
             .ReverseMap();
     }
 
     private void CreateIdentityResourceMap()
     {
-        CreateMap<IdentityResource, IdentityServer4.Models.IdentityResource>()
-            .ConstructUsing(src => new IdentityServer4.Models.IdentityResource());
+        CreateMap<IdentityResource, Starshine.IdentityServer.Models.IdentityResource>()
+            .ConstructUsing(src => new Starshine.IdentityServer.Models.IdentityResource());
 
         CreateMap<IdentityResourceClaim, string>()
             .ConstructUsing(x => x.Type)
@@ -144,7 +144,7 @@ public class IdentityServerAutoMapperProfile : Profile
     private void CreatePersistedGrantMap()
     {
         //TODO: Why PersistedGrant mapping is in this profile?
-        CreateMap<PersistedGrant, IdentityServer4.Models.PersistedGrant>().ReverseMap();
+        CreateMap<PersistedGrant, Starshine.IdentityServer.Models.PersistedGrant>().ReverseMap();
         CreateMap<PersistedGrant, PersistedGrantEto>();
     }
 

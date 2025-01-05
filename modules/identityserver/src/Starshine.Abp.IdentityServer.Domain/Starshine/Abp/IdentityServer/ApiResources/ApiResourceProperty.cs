@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.IdentityServer.ApiResources;
@@ -8,9 +9,9 @@ public class ApiResourceProperty : Entity
 {
     public virtual Guid ApiResourceId { get; protected set; }
 
-    public virtual string Key { get; set; }
+    public virtual string Key { get; set; } = null!;
 
-    public virtual string Value { get; set; }
+    public virtual string Value { get; set; } = null!;
 
     protected ApiResourceProperty()
     {
@@ -33,6 +34,6 @@ public class ApiResourceProperty : Entity
 
     public override object[] GetKeys()
     {
-        return new object[] { ApiResourceId, Key };
+        return [ApiResourceId, Key];
     }
 }

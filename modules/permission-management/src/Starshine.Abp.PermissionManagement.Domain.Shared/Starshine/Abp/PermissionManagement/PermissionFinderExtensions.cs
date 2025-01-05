@@ -13,9 +13,9 @@ public static class PermissionFinderExtensions
     /// <summary>
     /// 是否已授权
     /// </summary>
-    /// <param name="permissionFinder"></param>
-    /// <param name="userId"></param>
-    /// <param name="permissionName"></param>
+    /// <param name="permissionFinder">权限查找器</param>
+    /// <param name="userId">用户id</param>
+    /// <param name="permissionName">权限名称</param>
     /// <returns></returns>
     public async static Task<bool> IsGrantedAsync(this IPermissionFinder permissionFinder, Guid userId, string permissionName)
     {
@@ -25,19 +25,19 @@ public static class PermissionFinderExtensions
     /// <summary>
     /// 是否已授权
     /// </summary>
-    /// <param name="permissionFinder"></param>
-    /// <param name="userId"></param>
-    /// <param name="permissionNames"></param>
+    /// <param name="permissionFinder">权限查找器</param>
+    /// <param name="userId">用户id</param>
+    /// <param name="permissionNames">权限名称</param>
     /// <returns></returns>
     public async static Task<bool> IsGrantedAsync(this IPermissionFinder permissionFinder, Guid userId, string[] permissionNames)
     {
-        return (await permissionFinder.IsGrantedAsync(new List<IsGrantedRequest>
-        {
+        return (await permissionFinder.IsGrantedAsync(
+        [
             new IsGrantedRequest
             {
                 UserId = userId,
                 PermissionNames = permissionNames
             }
-        })).Any(x => x.UserId == userId && x.Permissions != null && x.Permissions.All(p => permissionNames.Contains(p.Key) && p.Value));
+        ])).Any(x => x.UserId == userId && x.Permissions.All(p => permissionNames.Contains(p.Key) && p.Value));
     }
 }

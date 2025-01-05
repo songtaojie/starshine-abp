@@ -18,7 +18,7 @@ public class ApiScopeRepository : EfCoreRepository<IIdentityServerDbContext, Api
     {
     }
 
-    public virtual async Task<ApiScope> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
+    public virtual async Task<ApiScope?> FindByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
@@ -36,25 +36,25 @@ public class ApiScopeRepository : EfCoreRepository<IIdentityServerDbContext, Api
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<ApiScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, bool includeDetails = false, CancellationToken cancellationToken = default)
+    public virtual async Task<List<ApiScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string? filter = null, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
-                                                        x.Description.Contains(filter) ||
-                                                        x.DisplayName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter!) ||
+                                                        (!string.IsNullOrEmpty(x.Description) && x.Description.Contains(filter!)) ||
+                                                        (!string.IsNullOrEmpty(x.DisplayName) && x.DisplayName.Contains(filter!)))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(ApiScope.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string? filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(),
-                x => x.Name.Contains(filter) ||
-                     x.Description.Contains(filter) ||
-                     x.DisplayName.Contains(filter))
+                x => x.Name.Contains(filter!) ||
+                     (!string.IsNullOrEmpty(x.Description) && x.Description.Contains(filter!)) ||
+                     (!string.IsNullOrEmpty(x.DisplayName) && x.DisplayName.Contains(filter!)))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 

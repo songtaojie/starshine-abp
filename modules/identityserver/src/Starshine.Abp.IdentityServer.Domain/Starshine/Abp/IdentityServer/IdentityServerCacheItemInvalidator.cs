@@ -30,7 +30,7 @@ public class IdentityServerCacheItemInvalidator :
 
     public virtual async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
     {
-        var clientCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Client>>();
+        var clientCache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.Client>>();
         await clientCache.RemoveAsync(eventData.Entity.ClientId, considerUow: true);
 
         var corsCache = ServiceProvider.GetRequiredService<IDistributedCache<AllowedCorsOriginsCacheItem>>();
@@ -45,29 +45,29 @@ public class IdentityServerCacheItemInvalidator :
 
     public virtual async Task HandleEventAsync(EntityChangedEventData<IdentityResource> eventData)
     {
-        var cache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.IdentityResource>>();
+        var cache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.IdentityResource>>();
         await cache.RemoveAsync(eventData.Entity.Name);
 
-        var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Resources>>();
+        var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.Resources>>();
         await resourcesCache.RemoveAsync(ResourceStore.AllResourcesKey);
     }
 
     public virtual async Task HandleEventAsync(EntityChangedEventData<ApiResource> eventData)
     {
-        var cache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.ApiResource>>();
+        var cache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.ApiResource>>();
         await cache.RemoveAsync(ResourceStore.ApiResourceNameCacheKeyPrefix + eventData.Entity.Name);
         await cache.RemoveManyAsync(eventData.Entity.Scopes.Select(x => ResourceStore.ApiResourceScopeNameCacheKeyPrefix + x.Scope));
 
-        var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Resources>>();
+        var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.Resources>>();
         await resourcesCache.RemoveAsync(ResourceStore.AllResourcesKey);
     }
 
     public virtual async Task HandleEventAsync(EntityChangedEventData<ApiScope> eventData)
     {
-        var cache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.ApiScope>>();
+        var cache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.ApiScope>>();
         await cache.RemoveAsync(eventData.Entity.Name);
 
-        var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<IdentityServer4.Models.Resources>>();
+        var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.Resources>>();
         await resourcesCache.RemoveAsync(ResourceStore.AllResourcesKey);
     }
 }

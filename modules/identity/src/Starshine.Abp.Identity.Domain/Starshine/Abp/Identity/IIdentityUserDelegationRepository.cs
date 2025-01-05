@@ -18,10 +18,7 @@ public interface IIdentityUserDelegationRepository : IBasicRepository<IdentityUs
     /// <param name="targetUserId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<List<IdentityUserDelegation>> GetListAsync(
-        Guid? sourceUserId,
-        Guid? targetUserId,
-        CancellationToken cancellationToken = default);
+    Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId,Guid? targetUserId,CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 获取可用的委托
@@ -29,9 +26,7 @@ public interface IIdentityUserDelegationRepository : IBasicRepository<IdentityUs
     /// <param name="targetUserId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(
-        Guid targetUserId,
-        CancellationToken cancellationToken = default);
+    Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUserId,CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 
@@ -39,7 +34,5 @@ public interface IIdentityUserDelegationRepository : IBasicRepository<IdentityUs
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default);
+    Task<IdentityUserDelegation?> FindActiveDelegationByIdAsync(Guid id,CancellationToken cancellationToken = default);
 }

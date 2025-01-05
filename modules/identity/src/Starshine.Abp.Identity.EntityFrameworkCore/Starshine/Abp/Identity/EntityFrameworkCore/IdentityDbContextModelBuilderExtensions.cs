@@ -1,25 +1,30 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.Users.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
-using Starshine.Abp.Identity;
-using Volo.Abp.Users.EntityFrameworkCore;
 
 namespace Starshine.Abp.Identity.EntityFrameworkCore;
 
+/// <summary>
+/// 
+/// </summary>
 public static class IdentityDbContextModelBuilderExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="builder"></param>
     public static void ConfigureIdentity([NotNull] this ModelBuilder builder)
     {
         Check.NotNull(builder, nameof(builder));
 
         builder.Entity<IdentityUser>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "Users", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
-            b.ConfigureAbpUser();
+            b.ConfigureStarshineAbpUser();
 
             b.Property(u => u.NormalizedUserName).IsRequired()
                 .HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength)
@@ -59,7 +64,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityUserClaim>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserClaims", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserClaims", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -75,7 +80,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityUserRole>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserRoles", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserRoles", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -91,7 +96,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityUserLogin>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserLogins", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserLogins", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -111,7 +116,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityUserToken>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserTokens", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserTokens", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -126,7 +131,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityRole>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Roles", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "Roles", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -145,7 +150,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityRoleClaim>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "RoleClaims", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "RoleClaims", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -163,7 +168,7 @@ public static class IdentityDbContextModelBuilderExtensions
         {
             builder.Entity<IdentityClaimType>(b =>
             {
-                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "ClaimTypes", AbpIdentityDbProperties.DbSchema);
+                b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "ClaimTypes", StarshineIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -179,7 +184,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<OrganizationUnit>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "OrganizationUnits", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "OrganizationUnits", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -198,7 +203,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<OrganizationUnitRole>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "OrganizationUnitRoles", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "OrganizationUnitRoles", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -213,7 +218,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityUserOrganizationUnit>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserOrganizationUnits", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserOrganizationUnits", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -228,7 +233,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentitySecurityLog>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "SecurityLogs", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "SecurityLogs", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -257,7 +262,7 @@ public static class IdentityDbContextModelBuilderExtensions
         {
             builder.Entity<IdentityLinkUser>(b =>
             {
-                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "LinkUsers", AbpIdentityDbProperties.DbSchema);
+                b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "LinkUsers", StarshineIdentityDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -275,7 +280,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityUserDelegation>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserDelegations", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserDelegations", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -284,7 +289,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentitySession>(b =>
         {
-            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Sessions", AbpIdentityDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "Sessions", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Starshine.Abp.PermissionManagement.EntityFrameworkCore\Starshine.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\Starshine.Abp.PermissionManagement.Domain.Tests\Starshine.Abp.PermissionManagement.Domain.Tests.csproj" />
     <ProjectReference Include="..\Starshine.Abp.PermissionManagement.TestBase\Starshine.Abp.PermissionManagement.TestBase.csproj" />
   </ItemGroup>
 

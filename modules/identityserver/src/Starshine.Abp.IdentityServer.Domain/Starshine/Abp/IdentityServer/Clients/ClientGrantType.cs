@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.IdentityServer.Clients;
@@ -8,7 +9,7 @@ public class ClientGrantType : Entity
 {
     public virtual Guid ClientId { get; protected set; }
 
-    public virtual string GrantType { get; protected set; }
+    public virtual string GrantType { get; protected set; } = null!;
 
     protected ClientGrantType()
     {
@@ -30,6 +31,6 @@ public class ClientGrantType : Entity
 
     public override object[] GetKeys()
     {
-        return new object[] { ClientId, GrantType };
+        return [ClientId, GrantType];
     }
 }

@@ -8,12 +8,12 @@ namespace Starshine.Abp.IdentityServer.Devices;
 
 public interface IDeviceFlowCodesRepository : IBasicRepository<DeviceFlowCodes, Guid>
 {
-    Task<DeviceFlowCodes> FindByUserCodeAsync(
+    Task<DeviceFlowCodes?> FindByUserCodeAsync(
         string userCode,
         CancellationToken cancellationToken = default
     );
 
-    Task<DeviceFlowCodes> FindByDeviceCodeAsync(
+    Task<DeviceFlowCodes?> FindByDeviceCodeAsync(
         string deviceCode,
         CancellationToken cancellationToken = default
     );

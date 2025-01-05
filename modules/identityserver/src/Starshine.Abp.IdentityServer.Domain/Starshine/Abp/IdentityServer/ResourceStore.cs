@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IdentityServer4.Configuration;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
+using Starshine.IdentityServer.Configuration;
+using Starshine.IdentityServer.Models;
+using Starshine.IdentityServer.Stores;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Caching;
@@ -27,23 +27,23 @@ public class ResourceStore : IResourceStore
     protected IIdentityResourceRepository IdentityResourceRepository { get; }
     protected IApiResourceRepository ApiResourceRepository { get; }
     protected IApiScopeRepository ApiScopeRepository { get; }
-    protected IObjectMapper<AbpIdentityServerDomainModule> ObjectMapper { get; }
-    protected IDistributedCache<IdentityServer4.Models.IdentityResource> IdentityResourceCache { get; }
-    protected IDistributedCache<IdentityServer4.Models.ApiScope> ApiScopeCache { get; }
-    protected IDistributedCache<IdentityServer4.Models.ApiResource> ApiResourceCache { get; }
-    protected IDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>> ApiResourcesCache { get; }
-    protected IDistributedCache<IdentityServer4.Models.Resources> ResourcesCache { get; }
+    protected IObjectMapper<StarshineIdentityServerDomainModule> ObjectMapper { get; }
+    protected IDistributedCache<Starshine.IdentityServer.Models.IdentityResource> IdentityResourceCache { get; }
+    protected IDistributedCache<Starshine.IdentityServer.Models.ApiScope> ApiScopeCache { get; }
+    protected IDistributedCache<Starshine.IdentityServer.Models.ApiResource> ApiResourceCache { get; }
+    protected IDistributedCache<IEnumerable<Starshine.IdentityServer.Models.ApiResource>> ApiResourcesCache { get; }
+    protected IDistributedCache<Starshine.IdentityServer.Models.Resources> ResourcesCache { get; }
     protected IdentityServerOptions Options { get; }
 
     public ResourceStore(
         IIdentityResourceRepository identityResourceRepository,
-        IObjectMapper<AbpIdentityServerDomainModule> objectMapper,
+        IObjectMapper<StarshineIdentityServerDomainModule> objectMapper,
         IApiResourceRepository apiResourceRepository,
         IApiScopeRepository apiScopeRepository,
-        IDistributedCache<IdentityServer4.Models.IdentityResource> identityResourceCache,
-        IDistributedCache<IdentityServer4.Models.ApiScope> apiScopeCache,
-        IDistributedCache<IdentityServer4.Models.ApiResource> apiResourceCache,
-        IDistributedCache<IEnumerable<IdentityServer4.Models.ApiResource>> apiResourcesCache,
+        IDistributedCache<Starshine.IdentityServer.Models.IdentityResource> identityResourceCache,
+        IDistributedCache<Starshine.IdentityServer.Models.ApiScope> apiScopeCache,
+        IDistributedCache<Starshine.IdentityServer.Models.ApiResource> apiResourceCache,
+        IDistributedCache<IEnumerable<Starshine.IdentityServer.Models.ApiResource>> apiResourcesCache,
         IDistributedCache<Resources> resourcesCache,
         IOptions<IdentityServerOptions> options)
     {
@@ -62,75 +62,75 @@ public class ResourceStore : IResourceStore
     /// <summary>
     /// Gets identity resources by scope name.
     /// </summary>
-    public virtual async Task<IEnumerable<IdentityServer4.Models.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
+    public virtual async Task<IEnumerable<Starshine.IdentityServer.Models.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
     {
         return (await GetCacheItemsAsync(
             IdentityResourceCache,
             scopeNames,
             async keys => await IdentityResourceRepository.GetListByScopeNameAsync(keys, includeDetails: true),
-            (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.IdentityResource>>>
+            (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, Starshine.IdentityServer.Models.IdentityResource>>>
             {
-                    models.Select(x => new KeyValuePair<string, IdentityServer4.Models.IdentityResource>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
+                    models.Select(x => new KeyValuePair<string, Starshine.IdentityServer.Models.IdentityResource>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
             })).DistinctBy(x => x.Name);
     }
 
     /// <summary>
     /// Gets API scopes by scope name.
     /// </summary>
-    public virtual async Task<IEnumerable<IdentityServer4.Models.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
+    public virtual async Task<IEnumerable<Starshine.IdentityServer.Models.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
     {
         return (await GetCacheItemsAsync(
             ApiScopeCache,
             scopeNames,
             async keys => await ApiScopeRepository.GetListByNameAsync(keys, includeDetails: true),
-            (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiScope>>>
+            (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, Starshine.IdentityServer.Models.ApiScope>>>
             {
-                    models.Select(x => new KeyValuePair<string, IdentityServer4.Models.ApiScope>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
+                    models.Select(x => new KeyValuePair<string, Starshine.IdentityServer.Models.ApiScope>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
             })).DistinctBy(x => x.Name);
     }
 
     /// <summary>
     /// Gets API resources by scope name.
     /// </summary>
-    public virtual async Task<IEnumerable<IdentityServer4.Models.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
+    public virtual async Task<IEnumerable<Starshine.IdentityServer.Models.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
     {
         var cacheItems = await ApiResourcesCache.GetManyAsync(AddCachePrefix(scopeNames, ApiResourceScopeNameCacheKeyPrefix));
         if (cacheItems.All(x => x.Value != null))
         {
-            return cacheItems.SelectMany(x => x.Value).DistinctBy(x => x.Name);
+            return cacheItems.SelectMany(x => x.Value!).DistinctBy(x => x.Name);
         }
 
         var otherKeys = RemoveCachePrefix(cacheItems.Where(x => x.Value == null).Select(x => x.Key), ApiResourceScopeNameCacheKeyPrefix).ToArray();
-        var otherModels = ObjectMapper.Map<List<ApiResource>, List<IdentityServer4.Models.ApiResource>>(await ApiResourceRepository.GetListByScopesAsync(otherKeys, includeDetails: true));
+        var otherModels = ObjectMapper.Map<List<ApiResource>, List<Starshine.IdentityServer.Models.ApiResource>>(await ApiResourceRepository.GetListByScopesAsync(otherKeys, includeDetails: true));
 
-        var otherCacheItems = otherKeys.Select(otherKey => new KeyValuePair<string, IEnumerable<IdentityServer4.Models.ApiResource>>(AddCachePrefix(otherKey, ApiResourceScopeNameCacheKeyPrefix), otherModels)).ToList();
+        var otherCacheItems = otherKeys.Select(otherKey => new KeyValuePair<string, IEnumerable<Starshine.IdentityServer.Models.ApiResource>>(AddCachePrefix(otherKey, ApiResourceScopeNameCacheKeyPrefix), otherModels)).ToList();
         await ApiResourcesCache.SetManyAsync(otherCacheItems, new DistributedCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = Options.Caching.ClientStoreExpiration
         });
 
-        return cacheItems.Where(x => x.Value != null).SelectMany(x => x.Value).Concat(otherModels).DistinctBy(x => x.Name);
+        return cacheItems.Where(x => x.Value != null).SelectMany(x => x.Value!).Concat(otherModels).DistinctBy(x => x.Name);
     }
 
     /// <summary>
     /// Gets API resources by API resource name.
     /// </summary>
-    public virtual async Task<IEnumerable<IdentityServer4.Models.ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
+    public virtual async Task<IEnumerable<Starshine.IdentityServer.Models.ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
     {
         return (await GetCacheItemsAsync(
             ApiResourceCache,
             apiResourceNames,
             async keys => await ApiResourceRepository.FindByNameAsync(keys, includeDetails: true),
-            (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiResource>>>
+            (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, Starshine.IdentityServer.Models.ApiResource>>>
             {
-                    models.Select(x => new KeyValuePair<string, IdentityServer4.Models.ApiResource>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
+                    models.Select(x => new KeyValuePair<string, Starshine.IdentityServer.Models.ApiResource>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
             }, ApiResourceNameCacheKeyPrefix)).DistinctBy(x => x.Name);
     }
 
     /// <summary>
     /// Gets all resources.
     /// </summary>
-    public virtual async Task<IdentityServer4.Models.Resources> GetAllResourcesAsync()
+    public virtual async Task<Starshine.IdentityServer.Models.Resources?> GetAllResourcesAsync()
     {
         return await ResourcesCache.GetOrAddAsync(AllResourcesKey, async () =>
         {
@@ -139,9 +139,9 @@ public class ResourceStore : IResourceStore
             var apiScopes = await ApiScopeRepository.GetListAsync(includeDetails: true);
 
             return new Resources(
-                ObjectMapper.Map<List<Starshine.Abp.IdentityServer.IdentityResources.IdentityResource>, List<IdentityServer4.Models.IdentityResource>>(identityResources),
-                ObjectMapper.Map<List<Starshine.Abp.IdentityServer.ApiResources.ApiResource>, List<IdentityServer4.Models.ApiResource>>(apiResources),
-                ObjectMapper.Map<List<Starshine.Abp.IdentityServer.ApiScopes.ApiScope>, List<IdentityServer4.Models.ApiScope>>(apiScopes));
+                ObjectMapper.Map<List<Starshine.Abp.IdentityServer.IdentityResources.IdentityResource>, List<Starshine.IdentityServer.Models.IdentityResource>>(identityResources),
+                ObjectMapper.Map<List<Starshine.Abp.IdentityServer.ApiResources.ApiResource>, List<Starshine.IdentityServer.Models.ApiResource>>(apiResources),
+                ObjectMapper.Map<List<Starshine.Abp.IdentityServer.ApiScopes.ApiScope>, List<Starshine.IdentityServer.Models.ApiScope>>(apiScopes));
         }, () => new DistributedCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = Options.Caching.ClientStoreExpiration
@@ -152,14 +152,14 @@ public class ResourceStore : IResourceStore
         IDistributedCache<TModel> cache,
         IEnumerable<string> keys,
         Func<string[], Task<List<TEntity>>> entityFactory,
-        Func<List<TModel>, string, List<IEnumerable<KeyValuePair<string, TModel>>>> cacheItemsFactory,
-        string cacheKeyPrefix = null)
+        Func<List<TModel>, string?, List<IEnumerable<KeyValuePair<string, TModel>>>> cacheItemsFactory,
+        string? cacheKeyPrefix = null)
         where TModel : class
     {
         var cacheItems = await cache.GetManyAsync(AddCachePrefix(keys, cacheKeyPrefix));
         if (cacheItems.All(x => x.Value != null))
         {
-            return cacheItems.Select(x => x.Value);
+            return cacheItems.Select(x => x.Value!);
         }
 
         var otherKeys = RemoveCachePrefix(cacheItems.Where(x => x.Value == null).Select(x => x.Key), cacheKeyPrefix).ToArray();
@@ -173,20 +173,20 @@ public class ResourceStore : IResourceStore
             });
         }
 
-        return cacheItems.Where(x => x.Value != null).Select(x => x.Value).Concat(otherModels);
+        return cacheItems.Where(x => x.Value != null).Select(x => x.Value!).Concat(otherModels);
     }
 
-    protected virtual IEnumerable<string> AddCachePrefix(IEnumerable<string> keys, string prefix)
+    protected virtual IEnumerable<string> AddCachePrefix(IEnumerable<string> keys, string? prefix)
     {
         return prefix == null ? keys : keys.Select(x => AddCachePrefix(x, prefix));
     }
 
-    protected virtual string AddCachePrefix(string key, string prefix)
+    protected virtual string AddCachePrefix(string key, string? prefix)
     {
         return prefix == null ? key : prefix + key;
     }
 
-    protected virtual IEnumerable<string> RemoveCachePrefix(IEnumerable<string> keys, string prefix)
+    protected virtual IEnumerable<string> RemoveCachePrefix(IEnumerable<string> keys, string? prefix)
     {
         return prefix == null ? keys : keys.Select(x => RemoveCachePrefix(x, prefix));
     }

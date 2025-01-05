@@ -14,7 +14,7 @@ public interface IPersistentGrantRepository : IBasicRepository<PersistedGrant, G
         string clientId,
         string type, bool includeDetails = false, CancellationToken cancellationToken = default);
 
-    Task<PersistedGrant> FindByKeyAsync(
+    Task<PersistedGrant?> FindByKeyAsync(
         string key,
         CancellationToken cancellationToken = default
     );
@@ -36,10 +36,10 @@ public interface IPersistentGrantRepository : IBasicRepository<PersistedGrant, G
     );
 
     Task DeleteAsync(
-        string subjectId = null,
-        string sessionId = null,
-        string clientId = null,
-        string type = null,
+        string? subjectId = null,
+        string? sessionId = null,
+        string? clientId = null,
+        string? type = null,
         CancellationToken cancellationToken = default
     );
 }

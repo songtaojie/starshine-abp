@@ -1,20 +1,21 @@
 ﻿using System;
-using IdentityServer4;
-using IdentityServer4.Models;
+using Starshine.IdentityServer;
+using Starshine.IdentityServer.Models;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp;
 
 namespace Starshine.Abp.IdentityServer;
 
 public abstract class Secret : Entity
 {
-    public virtual string Type { get; protected set; }
+    public virtual string Type { get; protected set; } = null!;
 
-    public virtual string Value { get; set; }
+    public virtual string Value { get; set; } = null!;
 
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
 
-    public virtual DateTime? Expiration { get; set; }
+    public virtual DateTimeOffset? Expiration { get; set; }
 
     protected Secret()
     {
@@ -23,9 +24,9 @@ public abstract class Secret : Entity
 
     protected Secret(
         [NotNull] string value,
-        DateTime? expiration = null,
+        DateTimeOffset? expiration = null,
         string type = IdentityServerConstants.SecretTypes.SharedSecret,
-        string description = null)
+        string? description = null)
     {
         Check.NotNull(value, nameof(value));
 

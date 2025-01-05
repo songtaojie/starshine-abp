@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.IdentityServer.IdentityResources;
@@ -8,9 +9,9 @@ public class IdentityResourceProperty : Entity
 {
     public virtual Guid IdentityResourceId { get; set; }
 
-    public virtual string Key { get; set; }
+    public virtual string Key { get; set; } = null!;
 
-    public virtual string Value { get; set; }
+    public virtual string Value { get; set; } = null!;
 
     protected IdentityResourceProperty()
     {
@@ -33,6 +34,6 @@ public class IdentityResourceProperty : Entity
 
     public override object[] GetKeys()
     {
-        return new object[] { IdentityResourceId, Key };
+        return [IdentityResourceId, Key];
     }
 }

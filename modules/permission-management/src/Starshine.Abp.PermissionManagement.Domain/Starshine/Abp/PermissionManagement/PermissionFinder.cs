@@ -12,14 +12,14 @@ namespace Starshine.Abp.PermissionManagement;
 public class PermissionFinder : IPermissionFinder, ITransientDependency
 {
     /// <summary>
-    /// 权限
+    /// 权限管理器
     /// </summary>
     protected IPermissionManager PermissionManager { get; }
 
     /// <summary>
-    /// 
+    /// 权限查找器
     /// </summary>
-    /// <param name="permissionManager"></param>
+    /// <param name="permissionManager">权限管理器</param>
     public PermissionFinder(IPermissionManager permissionManager)
     {
         PermissionManager = permissionManager;
@@ -28,7 +28,7 @@ public class PermissionFinder : IPermissionFinder, ITransientDependency
     /// <summary>
     /// 是否授权
     /// </summary>
-    /// <param name="requests"></param>
+    /// <param name="requests">是否授予请求</param>
     /// <returns></returns>
     public virtual async Task<List<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> requests)
     {
@@ -36,11 +36,11 @@ public class PermissionFinder : IPermissionFinder, ITransientDependency
         foreach (var item in requests)
         {
             if (item.PermissionNames == null) continue;
+            var permissionWithGrantedProviders = await PermissionManager.GetAsync(item.PermissionNames, UserPermissionValueProvider.ProviderName, item.UserId.ToString());
             result.Add(new IsGrantedResponse
             {
                 UserId = item.UserId,
-                Permissions = (await PermissionManager.GetAsync(item.PermissionNames, UserPermissionValueProvider.ProviderName, item.UserId.ToString())).Result
-                    .ToDictionary(x => x.Name, x => x.IsGranted)
+                Permissions = permissionWithGrantedProviders.Result.ToDictionary(x => x.Name, x => x.IsGranted)
             });
         }
 

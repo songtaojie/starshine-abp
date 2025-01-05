@@ -22,10 +22,10 @@ public class IdentityRoleNameChangedEto : IMultiTenant
     /// <summary>
     /// 名称
     /// </summary>
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// 旧名称
     /// </summary>
-    public string? OldName { get; set; }
+    public required string OldName { get; set; }
 }

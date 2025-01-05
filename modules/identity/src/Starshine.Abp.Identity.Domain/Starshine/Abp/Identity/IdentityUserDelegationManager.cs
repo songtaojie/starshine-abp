@@ -50,7 +50,7 @@ public class IdentityUserDelegationManager : DomainService
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<IdentityUserDelegation?> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await IdentityUserDelegationRepository.FindActiveDelegationByIdAsync(id, cancellationToken: cancellationToken);
     }

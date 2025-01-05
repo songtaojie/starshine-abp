@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.IdentityServer.Clients;
@@ -8,7 +9,7 @@ public class ClientRedirectUri : Entity
 {
     public virtual Guid ClientId { get; protected set; }
 
-    public virtual string RedirectUri { get; protected set; }
+    public virtual string RedirectUri { get; protected set; } = null!;
 
     protected ClientRedirectUri()
     {
@@ -30,6 +31,6 @@ public class ClientRedirectUri : Entity
 
     public override object[] GetKeys()
     {
-        return new object[] { ClientId, RedirectUri };
+        return [ClientId, RedirectUri];
     }
 }

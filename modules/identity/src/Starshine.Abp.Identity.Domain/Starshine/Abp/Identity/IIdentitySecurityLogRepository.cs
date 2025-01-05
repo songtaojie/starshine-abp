@@ -79,7 +79,7 @@ public interface IIdentitySecurityLogRepository : IBasicRepository<IdentitySecur
     /// <param name="includeDetails"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IdentitySecurityLog> GetByUserIdAsync(
+    Task<IdentitySecurityLog?> GetByUserIdAsync(
         Guid id,
         Guid userId,
         bool includeDetails = false,

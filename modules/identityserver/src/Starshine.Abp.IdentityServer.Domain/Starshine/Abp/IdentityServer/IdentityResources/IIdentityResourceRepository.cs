@@ -18,17 +18,17 @@ public interface IIdentityResourceRepository : IBasicRepository<IdentityResource
         string sorting,
         int skipCount,
         int maxResultCount,
-        string filter = null,
+        string? filter = null,
         bool includeDetails = false,
         CancellationToken cancellationToken = default
     );
 
     Task<long> GetCountAsync(
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default
     );
 
-    Task<IdentityResource> FindByNameAsync(
+    Task<IdentityResource?> FindByNameAsync(
         string name,
         bool includeDetails = true,
         CancellationToken cancellationToken = default

@@ -4,26 +4,56 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectExtending;
 
 namespace Starshine.Abp.Identity;
-
+/// <summary>
+/// 
+/// </summary>
+[Authorize(IdentityPermissions.Users.Default)]
 public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppService
 {
+    /// <summary>
+    /// 
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected IIdentityUserRepository UserRepository { get; }
+    /// <summary>
+    /// /
+    /// </summary>
     protected IIdentityRoleRepository RoleRepository { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected IOptions<IdentityOptions> IdentityOptions { get; }
+    /// <summary>
+    /// 
+    /// </summary>
     protected IPermissionChecker PermissionChecker { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userManager"></param>
+    /// <param name="userRepository"></param>
+    /// <param name="roleRepository"></param>
+    /// <param name="identityOptions"></param>
+    /// <param name="permissionChecker"></param>
+    /// <param name="abpLazyServiceProvider"></param>
     public IdentityUserAppService(
         IdentityUserManager userManager,
         IIdentityUserRepository userRepository,
         IIdentityRoleRepository roleRepository,
         IOptions<IdentityOptions> identityOptions,
-        IPermissionChecker permissionChecker)
+        IPermissionChecker permissionChecker,
+        IAbpLazyServiceProvider abpLazyServiceProvider):base(abpLazyServiceProvider)
     {
         UserManager = userManager;
         UserRepository = userRepository;
@@ -32,47 +62,65 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         PermissionChecker = permissionChecker;
     }
 
-    //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
-    [Authorize(IdentityPermissions.Users.Default)]
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public virtual async Task<IdentityUserDto> GetAsync(Guid id)
     {
-        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
-            await UserManager.GetByIdAsync(id)
-        );
+        return (await UserManager.GetByIdAsync(id)).ToIdentityUserDto();
     }
 
-    [Authorize(IdentityPermissions.Users.Default)]
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
     {
         var count = await UserRepository.GetCountAsync(input.Filter);
         var list = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
-
-        return new PagedResultDto<IdentityUserDto>(
-            count,
-            ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(list)
-        );
+        return new PagedResultDto<IdentityUserDto>(count,list.ConvertAll(DtoExtensions.ToIdentityUserDto));
     }
-
-    [Authorize(IdentityPermissions.Users.Default)]
+   
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
     {
-        //TODO: Should also include roles of the related OUs.
-
+        //TODO: 还应包括相关 OU 的角色。
         var roles = await UserRepository.GetRolesAsync(id);
-
-        return new ListResultDto<IdentityRoleDto>(
-            ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
-        );
+        var identityRoleDtos = roles.ConvertAll(role => new IdentityRoleDto
+        {
+            ConcurrencyStamp = role.ConcurrencyStamp,
+            Id = role.Id,
+            Name = role.Name,
+            IsDefault = role.IsDefault,
+            IsPublic = role.IsPublic,
+            IsStatic = role.IsStatic
+        });
+        return new ListResultDto<IdentityRoleDto>(identityRoleDtos);
     }
 
-    [Authorize(IdentityPermissions.Users.Default)]
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public virtual async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync()
     {
         var list = await RoleRepository.GetListAsync();
-        return new ListResultDto<IdentityRoleDto>(
-            ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list));
+        return new ListResultDto<IdentityRoleDto>(list.ConvertAll(DtoExtensions.ToIdentityRoleDto));
     }
 
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     [Authorize(IdentityPermissions.Users.Create)]
     public virtual async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
     {
@@ -90,12 +138,17 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
         await UpdateUserByInput(user, input);
         (await UserManager.UpdateAsync(user)).CheckErrors();
+        if(CurrentUnitOfWork != null) await CurrentUnitOfWork.SaveChangesAsync();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
-
-        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        return user.ToIdentityUserDto();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="input"></param>
+    /// <returns></returns>
     [Authorize(IdentityPermissions.Users.Update)]
     public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
     {
@@ -117,12 +170,17 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
             (await UserManager.RemovePasswordAsync(user)).CheckErrors();
             (await UserManager.AddPasswordAsync(user, input.Password)).CheckErrors();
         }
+        if(CurrentUnitOfWork != null) await CurrentUnitOfWork.SaveChangesAsync();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
-
-        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        return user.ToIdentityUserDto();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="BusinessException"></exception>
     [Authorize(IdentityPermissions.Users.Delete)]
     public virtual async Task DeleteAsync(Guid id)
     {
@@ -140,6 +198,12 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         (await UserManager.DeleteAsync(user)).CheckErrors();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="input"></param>
+    /// <returns></returns>
     [Authorize(IdentityPermissions.Users.Update)]
     public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
     {
@@ -149,22 +213,34 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         await UserRepository.UpdateAsync(user);
     }
 
-    [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<IdentityUserDto> FindByUsernameAsync(string userName)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <returns></returns>
+    public virtual async Task<IdentityUserDto?> FindByUsernameAsync(string userName)
     {
-        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
-            await UserManager.FindByNameAsync(userName)
-        );
+        var identityUser = await UserManager.FindByNameAsync(userName);
+        if (identityUser == null) return null;
+        return identityUser.ToIdentityUserDto();
     }
-
-    [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<IdentityUserDto> FindByEmailAsync(string email)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
+    public virtual async Task<IdentityUserDto?> FindByEmailAsync(string email)
     {
-        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
-            await UserManager.FindByEmailAsync(email)
-        );
+        var identityUser = await UserManager.FindByEmailAsync(email);
+        if (identityUser == null) return null;
+        return identityUser.ToIdentityUserDto();
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="input"></param>
+    /// <returns></returns>
     protected virtual async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
     {
         if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))

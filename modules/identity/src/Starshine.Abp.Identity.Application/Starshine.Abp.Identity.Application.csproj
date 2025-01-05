@@ -1,24 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <Import Project="..\..\..\..\configureawait.props" />
-  <Import Project="..\..\..\..\common.props" />
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <AssemblyName>Starshine.Abp.Identity.Application</AssemblyName>
-    <PackageId>Starshine.Abp.Identity.Application</PackageId>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace />
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Starshine.Abp.Identity.Application.Contracts\Starshine.Abp.Identity.Application.Contracts.csproj" />
-    <ProjectReference Include="..\Starshine.Abp.Identity.Domain\Starshine.Abp.Identity.Domain.csproj" />
-    <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Application\Volo.Abp.PermissionManagement.Application.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-  </ItemGroup>
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.Identity.Application</AssemblyName>
+		<PackageId>Starshine.Abp.Identity.Application</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Starshine.Abp.Identity.Domain\Starshine.Abp.Identity.Domain.csproj" />
+		<ProjectReference Include="..\Starshine.Abp.Identity.Application.Contracts\Starshine.Abp.Identity.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\..\permission-management\src\Starshine.Abp.PermissionManagement.Application\Starshine.Abp.PermissionManagement.Application.csproj" />
+	</ItemGroup>
 </Project>

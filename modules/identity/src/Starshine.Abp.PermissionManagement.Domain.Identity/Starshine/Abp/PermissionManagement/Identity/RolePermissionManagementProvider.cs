@@ -6,15 +6,32 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Guids;
 using Starshine.Abp.Identity;
 using Volo.Abp.MultiTenancy;
+using Starshine.Abp.PermissionManagement;
 
 namespace Volo.Abp.PermissionManagement.Identity;
 
+/// <summary>
+/// 角色权限管理提供者
+/// </summary>
 public class RolePermissionManagementProvider : PermissionManagementProvider
 {
+    /// <summary>
+    /// 提供者名称
+    /// </summary>
     public override string Name => RolePermissionValueProvider.ProviderName;
 
+    /// <summary>
+    /// 用户角色查找器
+    /// </summary>
     protected IUserRoleFinder UserRoleFinder { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="permissionGrantRepository"></param>
+    /// <param name="guidGenerator"></param>
+    /// <param name="currentTenant"></param>
+    /// <param name="userRoleFinder"></param>
     public RolePermissionManagementProvider(
         IPermissionGrantRepository permissionGrantRepository,
         IGuidGenerator guidGenerator,
@@ -28,6 +45,13 @@ public class RolePermissionManagementProvider : PermissionManagementProvider
         UserRoleFinder = userRoleFinder;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="providerName"></param>
+    /// <param name="providerKey"></param>
+    /// <returns></returns>
     public async override Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
     {
         var multipleGrantInfo = await CheckAsync(new[] { name }, providerName, providerKey);
@@ -35,6 +59,13 @@ public class RolePermissionManagementProvider : PermissionManagementProvider
         return multipleGrantInfo.Result.Values.First();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="names"></param>
+    /// <param name="providerName"></param>
+    /// <param name="providerKey"></param>
+    /// <returns></returns>
     public async override Task<MultiplePermissionValueProviderGrantInfo> CheckAsync(string[] names, string providerName, string providerKey)
     {
         var multiplePermissionValueProviderGrantInfo = new MultiplePermissionValueProviderGrantInfo(names);

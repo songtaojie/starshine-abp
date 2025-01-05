@@ -10,7 +10,7 @@ public static class PermissionManagementDbProperties
     /// <summary>
     /// 数据库前缀
     /// </summary>
-    public static string DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
+    public static string DbTablePrefix { get; set; } = "Starshine";
 
     /// <summary>
     /// 数据库架构
@@ -20,5 +20,5 @@ public static class PermissionManagementDbProperties
     /// <summary>
     /// 数据库连接字符串
     /// </summary>
-    public const string ConnectionStringName = "Default";
+    public const string ConnectionStringName = "PermissionManagement";
 }

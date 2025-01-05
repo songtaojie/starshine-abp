@@ -9,7 +9,7 @@ namespace Starshine.Abp.IdentityServer.Clients;
 
 public interface IClientRepository : IBasicRepository<Client, Guid>
 {
-    Task<Client> FindByClientIdAsync(
+    Task<Client?> FindByClientIdAsync(
         [NotNull] string clientId,
         bool includeDetails = true,
         CancellationToken cancellationToken = default
@@ -19,13 +19,13 @@ public interface IClientRepository : IBasicRepository<Client, Guid>
         string sorting,
         int skipCount,
         int maxResultCount,
-        string filter = null,
+        string? filter = null,
         bool includeDetails = false,
         CancellationToken cancellationToken = default
     );
 
     Task<long> GetCountAsync(
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default
     );
 

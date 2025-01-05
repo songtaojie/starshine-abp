@@ -1,11 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using IdentityModel;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
-using IdentityServer4.Stores.Serialization;
+using Starshine.IdentityServer.Models;
+using Starshine.IdentityServer.Stores;
+using Starshine.IdentityServer.Stores.Serialization;
 using JetBrains.Annotations;
 using Volo.Abp.Guids;
+using Volo.Abp;
 
 namespace Starshine.Abp.IdentityServer.Devices;
 
@@ -46,7 +47,7 @@ public class DeviceFlowStore : IDeviceFlowStore
             );
     }
 
-    public virtual async Task<DeviceCode> FindByUserCodeAsync(string userCode)
+    public virtual async Task<DeviceCode?> FindByUserCodeAsync(string userCode)
     {
         Check.NotNull(userCode, nameof(userCode));
 
@@ -62,7 +63,7 @@ public class DeviceFlowStore : IDeviceFlowStore
         return DeserializeToDeviceCode(deviceCodes.Data);
     }
 
-    public virtual async Task<DeviceCode> FindByDeviceCodeAsync(string deviceCode)
+    public virtual async Task<DeviceCode?> FindByDeviceCodeAsync(string deviceCode)
     {
         Check.NotNull(deviceCode, nameof(deviceCode));
 
@@ -119,7 +120,7 @@ public class DeviceFlowStore : IDeviceFlowStore
             ;
     }
 
-    protected virtual string Serialize([CanBeNull] DeviceCode deviceCode)
+    protected virtual string? Serialize([CanBeNull] DeviceCode deviceCode)
     {
         if (deviceCode == null)
         {
@@ -129,7 +130,7 @@ public class DeviceFlowStore : IDeviceFlowStore
         return PersistentGrantSerializer.Serialize(deviceCode);
     }
 
-    protected virtual DeviceCode DeserializeToDeviceCode([CanBeNull] string data)
+    protected virtual DeviceCode? DeserializeToDeviceCode([CanBeNull] string? data)
     {
         if (data == null)
         {

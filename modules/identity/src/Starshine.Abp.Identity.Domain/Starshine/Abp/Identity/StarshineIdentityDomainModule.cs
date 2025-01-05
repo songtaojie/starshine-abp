@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Starshine.Abp.ObjectExtending;
 using Starshine.Abp.Users;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
@@ -17,9 +16,8 @@ namespace Starshine.Abp.Identity;
 /// </summary>
 [DependsOn(
     typeof(AbpDddDomainModule),
-    typeof(StarshineAbpIdentityDomainSharedModule),
-    typeof(StarshineAbpUsersDomainModule),
-    typeof(AbpAutoMapperModule)
+    typeof(StarshineIdentityDomainSharedModule),
+    typeof(StarshineUsersDomainModule)
     )]
 public class StarshineIdentityDomainModule : AbpModule
 {
@@ -43,13 +41,6 @@ public class StarshineIdentityDomainModule : AbpModule
     /// <param name="context"></param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<StarshineIdentityDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<IdentityDomainMappingProfile>(validate: true);
-        });
-
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
             options.EtoMappings.Add<IdentityUser, UserEto>(typeof(StarshineIdentityDomainModule));

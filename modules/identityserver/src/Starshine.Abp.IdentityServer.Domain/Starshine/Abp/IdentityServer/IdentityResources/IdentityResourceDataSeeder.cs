@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.Identity;
+using Starshine.Abp.Identity;
 
 namespace Starshine.Abp.IdentityServer.IdentityResources;
 
@@ -25,12 +25,12 @@ public class IdentityResourceDataSeeder : IIdentityResourceDataSeeder, ITransien
     {
         var resources = new[]
         {
-                new IdentityServer4.Models.IdentityResources.OpenId(),
-                new IdentityServer4.Models.IdentityResources.Profile(),
-                new IdentityServer4.Models.IdentityResources.Email(),
-                new IdentityServer4.Models.IdentityResources.Address(),
-                new IdentityServer4.Models.IdentityResources.Phone(),
-                new IdentityServer4.Models.IdentityResource("role", "Roles of the user", new[] {"role"})
+                new Starshine.IdentityServer.Models.IdentityResources.OpenId(),
+                new Starshine.IdentityServer.Models.IdentityResources.Profile(),
+                new Starshine.IdentityServer.Models.IdentityResources.Email(),
+                new Starshine.IdentityServer.Models.IdentityResources.Address(),
+                new Starshine.IdentityServer.Models.IdentityResources.Phone(),
+                new Starshine.IdentityServer.Models.IdentityResource("role", "Roles of the user", new[] {"role"})
             };
 
         foreach (var resource in resources)
@@ -44,7 +44,7 @@ public class IdentityResourceDataSeeder : IIdentityResourceDataSeeder, ITransien
         }
     }
 
-    protected virtual async Task AddIdentityResourceIfNotExistsAsync(IdentityServer4.Models.IdentityResource resource)
+    protected virtual async Task AddIdentityResourceIfNotExistsAsync(Starshine.IdentityServer.Models.IdentityResource resource)
     {
         if (await IdentityResourceRepository.CheckNameExistAsync(resource.Name))
         {

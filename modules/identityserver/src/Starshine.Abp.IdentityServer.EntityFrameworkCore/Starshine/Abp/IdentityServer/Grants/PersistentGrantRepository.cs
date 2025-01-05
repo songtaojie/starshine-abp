@@ -25,7 +25,7 @@ public class PersistentGrantRepository : EfCoreRepository<IIdentityServerDbConte
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<PersistedGrant> FindByKeyAsync(
+    public virtual async Task<PersistedGrant?> FindByKeyAsync(
         string key,
         CancellationToken cancellationToken = default)
     {
@@ -61,10 +61,10 @@ public class PersistentGrantRepository : EfCoreRepository<IIdentityServerDbConte
     }
 
     public virtual async Task DeleteAsync(
-        string subjectId = null,
-        string sessionId = null,
-        string clientId = null,
-        string type = null,
+        string? subjectId = null,
+        string? sessionId = null,
+        string? clientId = null,
+        string? type = null,
         CancellationToken cancellationToken = default)
     {
         var persistedGrants = await (await FilterAsync(subjectId, sessionId, clientId, type)).ToListAsync(GetCancellationToken(cancellationToken));
@@ -78,10 +78,10 @@ public class PersistentGrantRepository : EfCoreRepository<IIdentityServerDbConte
     }
 
     private async Task<IQueryable<PersistedGrant>> FilterAsync(
-        string subjectId,
-        string sessionId,
-        string clientId,
-        string type)
+        string? subjectId,
+        string? sessionId,
+        string? clientId,
+        string? type)
     {
         return (await GetDbSetAsync())
             .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)

@@ -4,7 +4,9 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Starshine.Abp.Identity;
-
+/// <summary>
+/// 
+/// </summary>
 public interface IIdentityRoleAppService
     : ICrudAppService<
         IdentityRoleDto,
@@ -13,5 +15,9 @@ public interface IIdentityRoleAppService
         IdentityRoleCreateDto,
         IdentityRoleUpdateDto>
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     Task<ListResultDto<IdentityRoleDto>> GetAllListAsync();
 }

@@ -11,7 +11,7 @@ public interface IPermissionFinder
     /// <summary>
     /// 是否授权
     /// </summary>
-    /// <param name="requests"></param>
+    /// <param name="requests">已授予请求</param>
     /// <returns></returns>
     Task<List<IsGrantedResponse>> IsGrantedAsync(List<IsGrantedRequest> requests);
 }

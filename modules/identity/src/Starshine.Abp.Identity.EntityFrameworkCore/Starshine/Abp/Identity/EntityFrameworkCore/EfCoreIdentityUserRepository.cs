@@ -7,19 +7,35 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Starshine.Abp.Identity.EntityFrameworkCore;
-
+/// <summary>
+/// 
+/// </summary>
 public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext, IdentityUser, Guid>, IIdentityUserRepository
 {
-    public EfCoreIdentityUserRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dbContextProvider"></param>
+    /// <param name="abpLazyServiceProvider"></param>
+    public EfCoreIdentityUserRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider,IAbpLazyServiceProvider abpLazyServiceProvider)
         : base(dbContextProvider)
     {
+        LazyServiceProvider = abpLazyServiceProvider;
     }
 
-    public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="normalizedUserName"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<IdentityUser?> FindByNormalizedUserNameAsync(
         string normalizedUserName,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
@@ -33,9 +49,13 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             );
     }
 
-    public virtual async Task<List<string>> GetRoleNamesAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<List<string>> GetRoleNamesAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
         var query = from userRole in dbContext.Set<IdentityUserRole>()
@@ -56,6 +76,12 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userIds"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
         IEnumerable<Guid> userIds,
         CancellationToken cancellationToken = default)
@@ -95,6 +121,12 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return userRoles.Concat(orgUnitRoles).GroupBy(x => x.Id).Select(x => new IdentityUserIdWithRoleNames { Id = x.Key, RoleNames = x.SelectMany(y => y.RoleNames).Distinct().ToArray() }).ToList();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
         Guid id,
         CancellationToken cancellationToken = default)
@@ -112,11 +144,15 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return result;
     }
 
-    public virtual async Task<IdentityUser> FindByLoginAsync(
-        string loginProvider,
-        string providerKey,
-        bool includeDetails = true,
-        CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="loginProvider"></param>
+    /// <param name="providerKey"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<IdentityUser?> FindByLoginAsync( string loginProvider,string providerKey, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
@@ -125,10 +161,14 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<IdentityUser> FindByNormalizedEmailAsync(
-        string normalizedEmail,
-        bool includeDetails = true,
-        CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="normalizedEmail"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<IdentityUser?> FindByNormalizedEmailAsync(string normalizedEmail, bool includeDetails = true,CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
@@ -136,10 +176,14 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<IdentityUser>> GetListByClaimAsync(
-        Claim claim,
-        bool includeDetails = false,
-        CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="claim"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<List<IdentityUser>> GetListByClaimAsync( Claim claim,bool includeDetails = false,CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
@@ -147,6 +191,13 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="claimType"></param>
+    /// <param name="autoSave"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task RemoveClaimFromAllUsersAsync(string claimType, bool autoSave, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
@@ -161,6 +212,13 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="normalizedRoleName"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
         string normalizedRoleName,
         bool includeDetails = false,
@@ -184,25 +242,56 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<Guid>> GetUserIdListByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default)
     {
         return await (await GetDbContextAsync()).Set<IdentityUserRole>().Where(x => x.RoleId == roleId)
             .Select(x => x.UserId).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sorting"></param>
+    /// <param name="maxResultCount"></param>
+    /// <param name="skipCount"></param>
+    /// <param name="filter"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="roleId"></param>
+    /// <param name="organizationUnitId"></param>
+    /// <param name="userName"></param>
+    /// <param name="phoneNumber"></param>
+    /// <param name="emailAddress"></param>
+    /// <param name="name"></param>
+    /// <param name="surname"></param>
+    /// <param name="isLockedOut"></param>
+    /// <param name="notActive"></param>
+    /// <param name="emailConfirmed"></param>
+    /// <param name="isExternal"></param>
+    /// <param name="maxCreationTime"></param>
+    /// <param name="minCreationTime"></param>
+    /// <param name="maxModifitionTime"></param>
+    /// <param name="minModifitionTime"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<IdentityUser>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
-        string filter = null,
+        string? filter = null,
         bool includeDetails = false,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        string userName = null,
-        string phoneNumber = null,
-        string emailAddress = null,
-        string name = null,
-        string surname = null,
+        string? userName = null,
+        string? phoneNumber = null,
+        string? emailAddress = null,
+        string? name = null,
+        string? surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
         bool? emailConfirmed = null,
@@ -239,6 +328,13 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<IdentityRole>> GetRolesAsync(
         Guid id,
         bool includeDetails = false,
@@ -270,15 +366,36 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="filter"></param>
+    /// <param name="roleId"></param>
+    /// <param name="organizationUnitId"></param>
+    /// <param name="userName"></param>
+    /// <param name="phoneNumber"></param>
+    /// <param name="emailAddress"></param>
+    /// <param name="name"></param>
+    /// <param name="surname"></param>
+    /// <param name="isLockedOut"></param>
+    /// <param name="notActive"></param>
+    /// <param name="emailConfirmed"></param>
+    /// <param name="isExternal"></param>
+    /// <param name="maxCreationTime"></param>
+    /// <param name="minCreationTime"></param>
+    /// <param name="maxModifitionTime"></param>
+    /// <param name="minModifitionTime"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<long> GetCountAsync(
-        string filter = null,
+        string? filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        string userName = null,
-        string phoneNumber = null,
-        string emailAddress = null,
-        string name = null,
-        string surname = null,
+        string? userName = null,
+        string? phoneNumber = null,
+        string? emailAddress = null,
+        string? name = null,
+        string? surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
         bool? emailConfirmed = null,
@@ -310,6 +427,13 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         )).LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
         Guid id,
         bool includeDetails = false,
@@ -325,6 +449,12 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="organizationUnitId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
         Guid organizationUnitId,
         CancellationToken cancellationToken = default
@@ -340,6 +470,12 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="organizationUnitIds"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
         List<Guid> organizationUnitIds,
         CancellationToken cancellationToken = default
@@ -355,6 +491,12 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="code"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
         string code,
         CancellationToken cancellationToken = default
@@ -371,18 +513,24 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    [Obsolete("Use WithDetailsAsync method.")]
-    public override IQueryable<IdentityUser> WithDetails()
-    {
-        return GetQueryable().IncludeDetails();
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override async Task<IQueryable<IdentityUser>> WithDetailsAsync()
     {
         return (await GetQueryableAsync()).IncludeDetails();
     }
 
-    public virtual async Task<IdentityUser> FindByTenantIdAndUserNameAsync(
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <param name="tenantId"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<IdentityUser?> FindByTenantIdAndUserNameAsync(
         [NotNull] string userName,
         Guid? tenantId,
         bool includeDetails = true,
@@ -396,6 +544,13 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ids"></param>
+    /// <param name="includeDetails"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task<List<IdentityUser>> GetListByIdsAsync(IEnumerable<Guid> ids, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -404,6 +559,13 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sourceRoleId"></param>
+    /// <param name="targetRoleId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task UpdateRoleAsync(Guid sourceRoleId, Guid? targetRoleId, CancellationToken cancellationToken = default)
     {
         if (targetRoleId != null)
@@ -418,6 +580,13 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sourceOrganizationId"></param>
+    /// <param name="targetOrganizationId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task UpdateOrganizationAsync(Guid sourceOrganizationId, Guid? targetOrganizationId, CancellationToken cancellationToken = default)
     {
         if (targetOrganizationId != null)
@@ -432,15 +601,36 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="filter"></param>
+    /// <param name="roleId"></param>
+    /// <param name="organizationUnitId"></param>
+    /// <param name="userName"></param>
+    /// <param name="phoneNumber"></param>
+    /// <param name="emailAddress"></param>
+    /// <param name="name"></param>
+    /// <param name="surname"></param>
+    /// <param name="isLockedOut"></param>
+    /// <param name="notActive"></param>
+    /// <param name="emailConfirmed"></param>
+    /// <param name="isExternal"></param>
+    /// <param name="maxCreationTime"></param>
+    /// <param name="minCreationTime"></param>
+    /// <param name="maxModifitionTime"></param>
+    /// <param name="minModifitionTime"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     protected virtual async Task<IQueryable<IdentityUser>> GetFilteredQueryableAsync(
-        string filter = null,
+        string? filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        string userName = null,
-        string phoneNumber = null,
-        string emailAddress = null,
-        string name = null,
-        string surname = null,
+        string? userName = null,
+        string? phoneNumber = null,
+        string? emailAddress = null,
+        string? name = null,
+        string? surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
         bool? emailConfirmed = null,
@@ -465,22 +655,22 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.NormalizedUserName.Contains(upperFilter) ||
-                    u.NormalizedEmail.Contains(upperFilter) ||
-                    (u.Name != null && u.Name.Contains(filter)) ||
-                    (u.Surname != null && u.Surname.Contains(filter)) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                    u.NormalizedUserName.Contains(upperFilter!) ||
+                    u.NormalizedEmail.Contains(upperFilter!) ||
+                    (u.Name != null && u.Name.Contains(filter!)) ||
+                    (u.Surname != null && u.Surname.Contains(filter!)) ||
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter!))
             )
-            .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
+            .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId!.Value))
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
             .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
             .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
-            .WhereIf(isLockedOut.HasValue, x => (x.LockoutEnabled && x.LockoutEnd.HasValue && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0) == isLockedOut.Value)
-            .WhereIf(notActive.HasValue, x => x.IsActive == !notActive.Value)
-            .WhereIf(emailConfirmed.HasValue, x => x.EmailConfirmed == emailConfirmed.Value)
-            .WhereIf(isExternal.HasValue, x => x.IsExternal == isExternal.Value)
+            .WhereIf(isLockedOut.HasValue, x => (x.LockoutEnabled && x.LockoutEnd.HasValue && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0) == isLockedOut!.Value)
+            .WhereIf(notActive.HasValue, x => x.IsActive == !notActive!.Value)
+            .WhereIf(emailConfirmed.HasValue, x => x.EmailConfirmed == emailConfirmed!.Value)
+            .WhereIf(isExternal.HasValue, x => x.IsExternal == isExternal!.Value)
             .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
             .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
             .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)

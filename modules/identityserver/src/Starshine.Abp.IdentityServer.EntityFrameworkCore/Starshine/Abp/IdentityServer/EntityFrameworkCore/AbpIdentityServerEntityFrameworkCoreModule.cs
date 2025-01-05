@@ -11,7 +11,7 @@ using Volo.Abp.Modularity;
 namespace Starshine.Abp.IdentityServer.EntityFrameworkCore;
 
 [DependsOn(
-    typeof(AbpIdentityServerDomainModule),
+    typeof(StarshineIdentityServerDomainModule),
     typeof(AbpEntityFrameworkCoreModule)
     )]
 public class AbpIdentityServerEntityFrameworkCoreModule : AbpModule

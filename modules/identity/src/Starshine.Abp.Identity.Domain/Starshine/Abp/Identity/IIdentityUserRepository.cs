@@ -260,7 +260,7 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
     /// <param name="includeDetails"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IdentityUser> FindByTenantIdAndUserNameAsync(
+    Task<IdentityUser?> FindByTenantIdAndUserNameAsync(
         [NotNull] string userName,
         Guid? tenantId,
         bool includeDetails = true,

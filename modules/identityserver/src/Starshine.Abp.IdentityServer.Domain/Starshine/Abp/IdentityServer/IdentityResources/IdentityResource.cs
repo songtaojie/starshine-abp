@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Starshine.Abp.IdentityServer.IdentityResources;
 
 public class IdentityResource : FullAuditedAggregateRoot<Guid>
 {
-    public virtual string Name { get; set; }
+    public virtual string Name { get; set; } = null!;
 
-    public virtual string DisplayName { get; set; }
+    public virtual string? DisplayName { get; set; }
 
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
 
     public virtual bool Enabled { get; set; }
 
@@ -22,9 +23,9 @@ public class IdentityResource : FullAuditedAggregateRoot<Guid>
 
     public virtual bool ShowInDiscoveryDocument { get; set; }
 
-    public virtual List<IdentityResourceClaim> UserClaims { get; set; }
+    public virtual List<IdentityResourceClaim> UserClaims { get; set; } = [];
 
-    public virtual List<IdentityResourceProperty> Properties { get; set; }
+    public virtual List<IdentityResourceProperty> Properties { get; set; } = [];
 
     protected IdentityResource()
     {
@@ -34,8 +35,8 @@ public class IdentityResource : FullAuditedAggregateRoot<Guid>
     public IdentityResource(
         Guid id,
         [NotNull] string name,
-        string displayName = null,
-        string description = null,
+        string? displayName = null,
+        string? description = null,
         bool enabled = true,
         bool required = false,
         bool emphasize = false,
@@ -51,12 +52,9 @@ public class IdentityResource : FullAuditedAggregateRoot<Guid>
         Required = required;
         Emphasize = emphasize;
         ShowInDiscoveryDocument = showInDiscoveryDocument;
-
-        UserClaims = new List<IdentityResourceClaim>();
-        Properties = new List<IdentityResourceProperty>();
     }
 
-    public IdentityResource(Guid id, IdentityServer4.Models.IdentityResource resource)
+    public IdentityResource(Guid id, Starshine.IdentityServer.Models.IdentityResource resource)
         : base(id)
     {
         Name = resource.Name;
@@ -85,7 +83,7 @@ public class IdentityResource : FullAuditedAggregateRoot<Guid>
         UserClaims.RemoveAll(c => c.Type == type);
     }
 
-    public virtual IdentityResourceClaim FindUserClaim(string type)
+    public virtual IdentityResourceClaim? FindUserClaim(string type)
     {
         return UserClaims.FirstOrDefault(c => c.Type == type);
     }
@@ -113,7 +111,7 @@ public class IdentityResource : FullAuditedAggregateRoot<Guid>
         Properties.RemoveAll(r => r.Key == key);
     }
 
-    public virtual IdentityResourceProperty FindProperty(string key)
+    public virtual IdentityResourceProperty? FindProperty(string key)
     {
         return Properties.FirstOrDefault(r => r.Key == key);
     }

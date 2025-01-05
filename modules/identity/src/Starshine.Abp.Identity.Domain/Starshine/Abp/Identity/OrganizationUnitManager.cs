@@ -231,7 +231,7 @@ public class OrganizationUnitManager : DomainService
         }
 
         var code = await GetCodeOrDefaultAsync(parentId.Value);
-
+        if (string.IsNullOrEmpty(code)) return [];
         return await OrganizationUnitRepository.GetAllChildrenWithParentCodeAsync(code, parentId, includeDetails: true);
     }
 

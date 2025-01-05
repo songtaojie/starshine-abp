@@ -594,6 +594,7 @@ public class IdentityUserStore :
     {
         cancellationToken.ThrowIfCancellationRequested();
         Check.NotNull(user, nameof(user));
+        Check.NotNull(normalizedEmail, nameof(normalizedEmail));
         user.NormalizedEmail = normalizedEmail;
         return Task.CompletedTask;
     }

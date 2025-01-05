@@ -1,23 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <Import Project="..\..\..\..\configureawait.props" />
-  <Import Project="..\..\..\..\common.props" />
-
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-    <AssemblyName>Volo.Abp.PermissionManagement.Domain.Identity</AssemblyName>
-    <PackageId>Volo.Abp.PermissionManagement.Domain.Identity</PackageId>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace />
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Starshine.Abp.Identity.Domain.Shared\Starshine.Abp.Identity.Domain.Shared.csproj" />
-    <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.Abstractions\Volo.Abp.Users.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Domain\Volo.Abp.PermissionManagement.Domain.csproj" />
-  </ItemGroup>
+	<Import Project="..\..\..\..\common.props" />
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.PermissionManagement.Domain.Identity</AssemblyName>
+		<PackageId>Starshine.Abp.PermissionManagement.Domain.Identity</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Starshine.Abp.Identity.Domain.Shared\Starshine.Abp.Identity.Domain.Shared.csproj" />
+		<ProjectReference Include="..\..\..\users\src\Starshine.Abp.Users.Abstractions\Starshine.Abp.Users.Abstractions.csproj" />
+		<ProjectReference Include="..\..\..\permission-management\src\Starshine.Abp.PermissionManagement.Domain\Starshine.Abp.PermissionManagement.Domain.csproj" />
+	</ItemGroup>
 
 </Project>

@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IdentityServer4;
-using IdentityServer4.Models;
+using Starshine.IdentityServer;
+using Starshine.IdentityServer.Models;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp;
 
 namespace Starshine.Abp.IdentityServer.Clients;
 
 public class Client : FullAuditedAggregateRoot<Guid>
 {
-    public virtual string ClientId { get; set; }
+    public virtual string ClientId { get; set; } = null!;
 
-    public virtual string ClientName { get; set; }
+    public virtual string? ClientName { get; set; }
 
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
 
-    public virtual string ClientUri { get; set; }
+    public virtual string? ClientUri { get; set; }
 
-    public virtual string LogoUri { get; set; }
+    public virtual string? LogoUri { get; set; }
 
     public virtual bool Enabled { get; set; } = true;
 
-    public virtual string ProtocolType { get; set; }
+    public virtual string? ProtocolType { get; set; }
 
     public virtual bool RequireClientSecret { get; set; }
 
@@ -40,11 +41,11 @@ public class Client : FullAuditedAggregateRoot<Guid>
 
     public virtual bool AllowAccessTokensViaBrowser { get; set; }
 
-    public virtual string FrontChannelLogoutUri { get; set; }
+    public virtual string? FrontChannelLogoutUri { get; set; }
 
     public virtual bool FrontChannelLogoutSessionRequired { get; set; }
 
-    public virtual string BackChannelLogoutUri { get; set; }
+    public virtual string? BackChannelLogoutUri { get; set; }
 
     public virtual bool BackChannelLogoutSessionRequired { get; set; }
 
@@ -52,7 +53,7 @@ public class Client : FullAuditedAggregateRoot<Guid>
 
     public virtual int IdentityTokenLifetime { get; set; }
 
-    public virtual string AllowedIdentityTokenSigningAlgorithms { get; set; }
+    public virtual string? AllowedIdentityTokenSigningAlgorithms { get; set; }
 
     public virtual int AccessTokenLifetime { get; set; }
 
@@ -78,33 +79,33 @@ public class Client : FullAuditedAggregateRoot<Guid>
 
     public virtual bool AlwaysSendClientClaims { get; set; }
 
-    public virtual string ClientClaimsPrefix { get; set; }
+    public virtual string? ClientClaimsPrefix { get; set; }
 
-    public virtual string PairWiseSubjectSalt { get; set; }
+    public virtual string? PairWiseSubjectSalt { get; set; }
 
     public virtual int? UserSsoLifetime { get; set; }
 
-    public virtual string UserCodeType { get; set; }
+    public virtual string? UserCodeType { get; set; }
 
     public virtual int DeviceCodeLifetime { get; set; } = 300;
 
-    public virtual List<ClientScope> AllowedScopes { get; set; }
+    public virtual List<ClientScope> AllowedScopes { get; set; } = [];
 
-    public virtual List<ClientSecret> ClientSecrets { get; set; }
+    public virtual List<ClientSecret> ClientSecrets { get; set; } = [];
 
-    public virtual List<ClientGrantType> AllowedGrantTypes { get; set; }
+    public virtual List<ClientGrantType> AllowedGrantTypes { get; set; } = [];
 
-    public virtual List<ClientCorsOrigin> AllowedCorsOrigins { get; set; }
+    public virtual List<ClientCorsOrigin> AllowedCorsOrigins { get; set; } = [];
 
-    public virtual List<ClientRedirectUri> RedirectUris { get; set; }
+    public virtual List<ClientRedirectUri> RedirectUris { get; set; } = [];
 
-    public virtual List<ClientPostLogoutRedirectUri> PostLogoutRedirectUris { get; set; }
+    public virtual List<ClientPostLogoutRedirectUri> PostLogoutRedirectUris { get; set; } = [];
 
-    public virtual List<ClientIdPRestriction> IdentityProviderRestrictions { get; set; }
+    public virtual List<ClientIdPRestriction> IdentityProviderRestrictions { get; set; } = [];
 
-    public virtual List<ClientClaim> Claims { get; set; }
+    public virtual List<ClientClaim> Claims { get; set; } = [];
 
-    public virtual List<ClientProperty> Properties { get; set; }
+    public virtual List<ClientProperty> Properties { get; set; } = [];
 
     protected Client()
     {
@@ -134,19 +135,9 @@ public class Client : FullAuditedAggregateRoot<Guid>
         SlidingRefreshTokenLifetime = 1296000;
         RefreshTokenUsage = (int)TokenUsage.OneTimeOnly;
         RefreshTokenExpiration = (int)TokenExpiration.Absolute;
-        AccessTokenType = (int)IdentityServer4.Models.AccessTokenType.Jwt;
+        AccessTokenType = (int)Starshine.IdentityServer.Models.AccessTokenType.Jwt;
         EnableLocalLogin = true;
         ClientClaimsPrefix = "client_";
-
-        AllowedScopes = new List<ClientScope>();
-        ClientSecrets = new List<ClientSecret>();
-        AllowedGrantTypes = new List<ClientGrantType>();
-        AllowedCorsOrigins = new List<ClientCorsOrigin>();
-        RedirectUris = new List<ClientRedirectUri>();
-        PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>();
-        IdentityProviderRestrictions = new List<ClientIdPRestriction>();
-        Claims = new List<ClientClaim>();
-        Properties = new List<ClientProperty>();
     }
 
     public virtual void AddGrantType([NotNull] string grantType)
@@ -164,12 +155,12 @@ public class Client : FullAuditedAggregateRoot<Guid>
         AllowedGrantTypes.RemoveAll(r => r.GrantType == grantType);
     }
 
-    public virtual ClientGrantType FindGrantType(string grantType)
+    public virtual ClientGrantType? FindGrantType(string grantType)
     {
         return AllowedGrantTypes.FirstOrDefault(r => r.GrantType == grantType);
     }
 
-    public virtual void AddSecret([NotNull] string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
+    public virtual void AddSecret([NotNull] string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string? description = null)
     {
         ClientSecrets.Add(new ClientSecret(Id, value, expiration, type, description));
     }
@@ -179,7 +170,7 @@ public class Client : FullAuditedAggregateRoot<Guid>
         ClientSecrets.RemoveAll(s => s.Value == value && s.Type == type);
     }
 
-    public virtual ClientSecret FindSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
+    public virtual ClientSecret? FindSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
     {
         return ClientSecrets.FirstOrDefault(s => s.Type == type && s.Value == value);
     }
@@ -199,7 +190,7 @@ public class Client : FullAuditedAggregateRoot<Guid>
         AllowedScopes.RemoveAll(r => r.Scope == scope);
     }
 
-    public virtual ClientScope FindScope(string scope)
+    public virtual ClientScope? FindScope(string scope)
     {
         return AllowedScopes.FirstOrDefault(r => r.Scope == scope);
     }
@@ -249,17 +240,17 @@ public class Client : FullAuditedAggregateRoot<Guid>
         PostLogoutRedirectUris.RemoveAll(p => p.PostLogoutRedirectUri == uri);
     }
 
-    public virtual ClientCorsOrigin FindCorsOrigin(string uri)
+    public virtual ClientCorsOrigin? FindCorsOrigin(string uri)
     {
         return AllowedCorsOrigins.FirstOrDefault(c => c.Origin == uri);
     }
 
-    public virtual ClientRedirectUri FindRedirectUri(string uri)
+    public virtual ClientRedirectUri? FindRedirectUri(string uri)
     {
         return RedirectUris.FirstOrDefault(r => r.RedirectUri == uri);
     }
 
-    public virtual ClientPostLogoutRedirectUri FindPostLogoutRedirectUri(string uri)
+    public virtual ClientPostLogoutRedirectUri? FindPostLogoutRedirectUri(string uri)
     {
         return PostLogoutRedirectUris.FirstOrDefault(p => p.PostLogoutRedirectUri == uri);
     }
@@ -287,7 +278,7 @@ public class Client : FullAuditedAggregateRoot<Guid>
         Properties.RemoveAll(c => c.Key == key);
     }
 
-    public virtual ClientProperty FindProperty(string key)
+    public virtual ClientProperty? FindProperty(string key)
     {
         return Properties.FirstOrDefault(c => c.Key == key);
     }
@@ -317,7 +308,7 @@ public class Client : FullAuditedAggregateRoot<Guid>
         return Claims.Where(c => c.Type == type).ToList();
     }
 
-    public virtual ClientClaim FindClaim(string type, string value)
+    public virtual ClientClaim? FindClaim(string type, string value)
     {
         return Claims.FirstOrDefault(c => c.Type == type && c.Value == value);
     }
@@ -337,7 +328,7 @@ public class Client : FullAuditedAggregateRoot<Guid>
         IdentityProviderRestrictions.RemoveAll(r => r.Provider == provider);
     }
 
-    public virtual ClientIdPRestriction FindIdentityProviderRestriction(string provider)
+    public virtual ClientIdPRestriction? FindIdentityProviderRestriction(string provider)
     {
         return IdentityProviderRestrictions.FirstOrDefault(r => r.Provider == provider);
     }

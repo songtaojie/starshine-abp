@@ -1,5 +1,5 @@
 ﻿using System;
-using IdentityServer4;
+using Starshine.IdentityServer;
 using JetBrains.Annotations;
 
 namespace Starshine.Abp.IdentityServer.ApiResources;
@@ -21,9 +21,9 @@ public class ApiResourceSecret : Secret
     protected internal ApiResourceSecret(
         Guid apiResourceId,
         [NotNull] string value,
-        DateTime? expiration = null,
+        DateTimeOffset? expiration = null,
         string type = IdentityServerConstants.SecretTypes.SharedSecret,
-        string description = null
+        string? description = null
         ) : base(
             value,
             expiration,

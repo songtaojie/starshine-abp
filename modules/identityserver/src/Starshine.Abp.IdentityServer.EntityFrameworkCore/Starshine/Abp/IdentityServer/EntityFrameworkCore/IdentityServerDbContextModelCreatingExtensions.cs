@@ -7,6 +7,7 @@ using Starshine.Abp.IdentityServer.Clients;
 using Starshine.Abp.IdentityServer.Devices;
 using Starshine.Abp.IdentityServer.Grants;
 using Starshine.Abp.IdentityServer.IdentityResources;
+using Volo.Abp;
 
 namespace Starshine.Abp.IdentityServer.EntityFrameworkCore;
 
@@ -26,7 +27,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<Client>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "Clients", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "Clients", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -60,7 +61,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ClientGrantType>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientGrantTypes", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ClientGrantTypes", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -73,7 +74,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ClientRedirectUri>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientRedirectUris", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ClientRedirectUris", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -91,7 +92,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ClientPostLogoutRedirectUri>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientPostLogoutRedirectUris", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ClientPostLogoutRedirectUris", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -111,7 +112,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ClientScope>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientScopes", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ClientScopes", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -124,7 +125,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ClientSecret>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientSecrets", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ClientSecrets", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -143,7 +144,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ClientClaim>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientClaims", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ClientClaims", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -157,7 +158,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ClientIdPRestriction>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientIdPRestrictions", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ClientIdPRestrictions", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -170,7 +171,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ClientCorsOrigin>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientCorsOrigins", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ClientCorsOrigins", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -183,7 +184,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ClientProperty>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ClientProperties", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ClientProperties", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -205,7 +206,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<IdentityResource>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "IdentityResources", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "IdentityResources", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -221,7 +222,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<IdentityResourceClaim>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "IdentityResourceClaims", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "IdentityResourceClaims", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -234,7 +235,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<IdentityResourceProperty>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "IdentityResourceProperties", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "IdentityResourceProperties", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -256,7 +257,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ApiResource>(b =>
        {
-           b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiResources", AbpIdentityServerDbProperties.DbSchema);
+           b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ApiResources", StarshineIdentityServerDbProperties.DbSchema);
 
            b.ConfigureByConvention();
 
@@ -275,7 +276,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ApiResourceSecret>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiResourceSecrets", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ApiResourceSecrets", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -296,7 +297,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ApiResourceClaim>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiResourceClaims", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ApiResourceClaims", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -309,7 +310,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ApiResourceScope>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiResourceScopes", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ApiResourceScopes", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -322,7 +323,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ApiResourceProperty>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiResourceProperties", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ApiResourceProperties", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -344,7 +345,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ApiScope>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiScopes", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ApiScopes", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -360,7 +361,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ApiScopeClaim>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiScopeClaims", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ApiScopeClaims", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -373,7 +374,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<ApiScopeProperty>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "ApiScopeProperties", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "ApiScopeProperties", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -395,7 +396,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<PersistedGrant>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "PersistedGrants", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "PersistedGrants", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 
@@ -429,7 +430,7 @@ public static class IdentityServerDbContextModelCreatingExtensions
 
         builder.Entity<DeviceFlowCodes>(b =>
         {
-            b.ToTable(AbpIdentityServerDbProperties.DbTablePrefix + "DeviceFlowCodes", AbpIdentityServerDbProperties.DbSchema);
+            b.ToTable(StarshineIdentityServerDbProperties.DbTablePrefix + "DeviceFlowCodes", StarshineIdentityServerDbProperties.DbSchema);
 
             b.ConfigureByConvention();
 

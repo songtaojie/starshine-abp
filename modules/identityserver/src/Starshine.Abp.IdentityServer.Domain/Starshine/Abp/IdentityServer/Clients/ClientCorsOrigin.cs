@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.IdentityServer.Clients;
@@ -8,7 +9,7 @@ public class ClientCorsOrigin : Entity
 {
     public virtual Guid ClientId { get; protected set; }
 
-    public virtual string Origin { get; protected set; }
+    public virtual string Origin { get; protected set; } = null!;
 
     protected ClientCorsOrigin()
     {
@@ -30,6 +31,6 @@ public class ClientCorsOrigin : Entity
 
     public override object[] GetKeys()
     {
-        return new object[] { ClientId, Origin };
+        return [ClientId, Origin];
     }
 }

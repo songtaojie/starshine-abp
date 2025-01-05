@@ -3,9 +3,15 @@ using Starshine.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 
 namespace Starshine.Abp.Identity;
-
+/// <summary>
+/// 身份许可定义提供者
+/// </summary>
 public class IdentityPermissionDefinitionProvider : PermissionDefinitionProvider
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="context"></param>
     public override void Define(IPermissionDefinitionContext context)
     {
         var identityGroup = context.AddGroup(IdentityPermissions.GroupName, L("Permission:IdentityManagement"));

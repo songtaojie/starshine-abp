@@ -15,5 +15,5 @@ public class IdentityUserIdWithRoleNames
     /// <summary>
     /// ½ÇÉ«Ãû³Æ
     /// </summary>
-    public IEnumerable<string>? RoleNames { get; set; }
+    public IEnumerable<string> RoleNames { get; set; } = [];
 }

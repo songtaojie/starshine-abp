@@ -8,7 +8,7 @@ namespace Starshine.Abp.IdentityServer.ApiResources;
 
 public interface IApiResourceRepository : IBasicRepository<ApiResource, Guid>
 {
-    Task<ApiResource> FindByNameAsync(
+    Task<ApiResource?> FindByNameAsync(
         string apiResourceName,
         bool includeDetails = true,
         CancellationToken cancellationToken = default
@@ -30,13 +30,13 @@ public interface IApiResourceRepository : IBasicRepository<ApiResource, Guid>
         string sorting,
         int skipCount,
         int maxResultCount,
-        string filter = null,
+        string? filter = null,
         bool includeDetails = false,
         CancellationToken cancellationToken = default
     );
 
     Task<long> GetCountAsync(
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default
     );
 

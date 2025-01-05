@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.IdentityServer.ApiScopes;
@@ -8,9 +9,9 @@ public class ApiScopeProperty : Entity
 {
     public virtual Guid ApiScopeId { get; set; }
 
-    public virtual string Key { get; set; }
+    public virtual string Key { get; set; } = null!;
 
-    public virtual string Value { get; set; }
+    public virtual string Value { get; set; } = null!;
 
     protected ApiScopeProperty()
     {
@@ -33,6 +34,6 @@ public class ApiScopeProperty : Entity
 
     public override object[] GetKeys()
     {
-        return new object[] { ApiScopeId, Key };
+        return [ApiScopeId, Key];
     }
 }

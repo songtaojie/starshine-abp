@@ -19,7 +19,7 @@ public class DeviceFlowCodesRepository : EfCoreRepository<IIdentityServerDbConte
 
     }
 
-    public virtual async Task<DeviceFlowCodes> FindByUserCodeAsync(
+    public virtual async Task<DeviceFlowCodes?> FindByUserCodeAsync(
         string userCode,
         CancellationToken cancellationToken = default)
     {
@@ -28,7 +28,7 @@ public class DeviceFlowCodesRepository : EfCoreRepository<IIdentityServerDbConte
             .FirstOrDefaultAsync(d => d.UserCode == userCode, GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<DeviceFlowCodes> FindByDeviceCodeAsync(
+    public virtual async Task<DeviceFlowCodes?> FindByDeviceCodeAsync(
         string deviceCode,
         CancellationToken cancellationToken = default)
     {

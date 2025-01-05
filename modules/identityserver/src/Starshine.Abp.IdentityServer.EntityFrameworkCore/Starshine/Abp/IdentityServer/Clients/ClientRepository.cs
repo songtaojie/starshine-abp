@@ -18,7 +18,7 @@ public class ClientRepository : EfCoreRepository<IIdentityServerDbContext, Clien
 
     }
 
-    public virtual async Task<Client> FindByClientIdAsync(
+    public virtual async Task<Client?> FindByClientIdAsync(
         string clientId,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
@@ -30,21 +30,21 @@ public class ClientRepository : EfCoreRepository<IIdentityServerDbContext, Clien
     }
 
     public virtual async Task<List<Client>> GetListAsync(
-        string sorting, int skipCount, int maxResultCount, string filter, bool includeDetails = false,
+        string sorting, int skipCount, int maxResultCount, string? filter = null, bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter!))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(Client.ClientName) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string? filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 

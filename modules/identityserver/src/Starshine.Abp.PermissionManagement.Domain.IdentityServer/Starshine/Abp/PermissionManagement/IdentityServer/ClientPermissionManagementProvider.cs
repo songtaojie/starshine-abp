@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Starshine.Abp.PermissionManagement;
+using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;

@@ -12,10 +12,10 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Starshine.Abp.Identity.Domain.Shared\Starshine.Abp.Identity.Domain.Shared.csproj" />
+		<ProjectReference Include="..\..\..\permission-management\src\Starshine.Abp.PermissionManagement.Application.Contracts\Starshine.Abp.PermissionManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\..\users\src\Starshine.Abp.Users.Abstractions\Starshine.Abp.Users.Abstractions.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Users.Abstractions" Version="$(AbpVersion)" />
 		<PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
 	</ItemGroup>
 </Project>

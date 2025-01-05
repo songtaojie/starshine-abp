@@ -1,41 +1,42 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IdentityServer4;
+using Starshine.IdentityServer;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp;
 
 namespace Starshine.Abp.IdentityServer.ApiResources;
 
 public class ApiResource : FullAuditedAggregateRoot<Guid>
 {
     [NotNull]
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = string.Empty;
 
-    public virtual string DisplayName { get; set; }
+    public virtual string? DisplayName { get; set; }
 
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
 
     public virtual bool Enabled { get; set; }
 
-    public virtual string AllowedAccessTokenSigningAlgorithms { get; set; }
+    public virtual string? AllowedAccessTokenSigningAlgorithms { get; set; }
 
     public virtual bool ShowInDiscoveryDocument { get; set; } = true;
 
-    public virtual List<ApiResourceSecret> Secrets { get; protected set; }
+    public virtual List<ApiResourceSecret> Secrets { get; protected set; } = [];
 
-    public virtual List<ApiResourceScope> Scopes { get; protected set; }
+    public virtual List<ApiResourceScope> Scopes { get; protected set; } = [];
 
-    public virtual List<ApiResourceClaim> UserClaims { get; protected set; }
+    public virtual List<ApiResourceClaim> UserClaims { get; protected set; } = [];
 
-    public virtual List<ApiResourceProperty> Properties { get; protected set; }
+    public virtual List<ApiResourceProperty> Properties { get; protected set; } = [];
 
     protected ApiResource()
     {
 
     }
 
-    public ApiResource(Guid id, [NotNull] string name, string displayName = null, string description = null)
+    public ApiResource(Guid id, [NotNull] string name, string? displayName = null, string? description = null)
         : base(id)
     {
         Check.NotNull(name, nameof(name));
@@ -46,20 +47,14 @@ public class ApiResource : FullAuditedAggregateRoot<Guid>
         Description = description;
 
         Enabled = true;
-
-        Secrets = new List<ApiResourceSecret>();
-        Scopes = new List<ApiResourceScope>();
-        UserClaims = new List<ApiResourceClaim>();
-        Properties = new List<ApiResourceProperty>();
-
-        Scopes.Add(new ApiResourceScope(id, name));
+        Scopes = [new ApiResourceScope(id, name)];
     }
 
     public virtual void AddSecret(
         [NotNull] string value,
         DateTime? expiration = null,
         string type = IdentityServerConstants.SecretTypes.SharedSecret,
-        string description = null)
+        string? description = null)
     {
         Secrets.Add(new ApiResourceSecret(Id, value, expiration, type, description));
     }
@@ -69,7 +64,7 @@ public class ApiResource : FullAuditedAggregateRoot<Guid>
         Secrets.RemoveAll(s => s.Value == value && s.Type == type);
     }
 
-    public virtual ApiResourceSecret FindSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
+    public virtual ApiResourceSecret? FindSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
     {
         return Secrets.FirstOrDefault(s => s.Type == type && s.Value == value);
     }
@@ -96,7 +91,7 @@ public class ApiResource : FullAuditedAggregateRoot<Guid>
         UserClaims.RemoveAll(c => c.Type == type);
     }
 
-    public virtual ApiResourceClaim FindClaim(string type)
+    public virtual ApiResourceClaim? FindClaim(string type)
     {
         return UserClaims.FirstOrDefault(c => c.Type == type);
     }
@@ -116,7 +111,7 @@ public class ApiResource : FullAuditedAggregateRoot<Guid>
         Scopes.RemoveAll(r => r.Scope == scope);
     }
 
-    public virtual ApiResourceScope FindScope(string scope)
+    public virtual ApiResourceScope? FindScope(string scope)
     {
         return Scopes.FirstOrDefault(r => r.Scope == scope);
     }
@@ -144,7 +139,7 @@ public class ApiResource : FullAuditedAggregateRoot<Guid>
         Properties.RemoveAll(r => r.Key == key);
     }
 
-    public virtual ApiResourceProperty FindProperty(string key)
+    public virtual ApiResourceProperty? FindProperty(string key)
     {
         return Properties.FirstOrDefault(r => r.Key == key);
     }

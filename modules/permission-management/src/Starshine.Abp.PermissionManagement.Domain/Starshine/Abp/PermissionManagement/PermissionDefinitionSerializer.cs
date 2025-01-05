@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -20,25 +17,24 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
     /// 状态检查序列化
     /// </summary>
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
+
     /// <summary>
     /// guid生成器
     /// </summary>
     protected IGuidGenerator GuidGenerator { get; }
+
     /// <summary>
     /// 本地化
     /// </summary>
     protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
     /// <summary>
-    /// 
+    /// 权限定义序列化
     /// </summary>
     /// <param name="guidGenerator"></param>
-    /// <param name="stateCheckerSerializer"></param>
-    /// <param name="localizableStringSerializer"></param>
-    public PermissionDefinitionSerializer(
-        IGuidGenerator guidGenerator,
-        ISimpleStateCheckerSerializer stateCheckerSerializer,
-        ILocalizableStringSerializer localizableStringSerializer)
+    /// <param name="stateCheckerSerializer">状态检查序列化</param>
+    /// <param name="localizableStringSerializer">本地化</param>
+    public PermissionDefinitionSerializer(IGuidGenerator guidGenerator, ISimpleStateCheckerSerializer stateCheckerSerializer, ILocalizableStringSerializer localizableStringSerializer)
     {
         StateCheckerSerializer = stateCheckerSerializer;
         LocalizableStringSerializer = localizableStringSerializer;
@@ -48,11 +44,11 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
     /// <summary>
     /// 序列化
     /// </summary>
-    /// <param name="permissionGroups"></param>
+    /// <param name="permissionGroups">权限组定义</param>
     /// <returns></returns>
-    public async Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])>SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups)
+    public async Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])> SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups)
     {
-        var permissionGroupRecords = new List<PermissionGroupDefinitionRecord>();
+        var permissionGroupRecords = new List<PermissionGroupDefinitionRecord>(permissionGroups.Count());
         var permissionRecords = new List<PermissionDefinitionRecord>();
 
         foreach (var permissionGroup in permissionGroups)
@@ -71,13 +67,13 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
     /// <summary>
     /// 序列化
     /// </summary>
-    /// <param name="permissionGroup"></param>
+    /// <param name="permissionGroup">权限组定义</param>
     /// <returns></returns>
     public Task<PermissionGroupDefinitionRecord> SerializeAsync(PermissionGroupDefinition permissionGroup)
     {
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
         {
-            var permissionGroupRecord = new PermissionGroupDefinitionRecord( 
+            var permissionGroupRecord = new PermissionGroupDefinitionRecord(
                 GuidGenerator.Create(),
                 permissionGroup.Name,
                 LocalizableStringSerializer.Serialize(permissionGroup.DisplayName));
@@ -92,14 +88,12 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
     }
 
     /// <summary>
-    /// 
+    /// 序列化
     /// </summary>
-    /// <param name="permission"></param>
-    /// <param name="permissionGroup"></param>
-    /// <returns></returns>
-    public Task<PermissionDefinitionRecord> SerializeAsync(
-        PermissionDefinition permission,
-        PermissionGroupDefinition permissionGroup)
+    /// <param name="permission">权限定义</param>
+    /// <param name="permissionGroup">权限组定义</param>
+    /// <returns>权限定义记录</returns>
+    public Task<PermissionDefinitionRecord> SerializeAsync(PermissionDefinition permission, PermissionGroupDefinition? permissionGroup)
     {
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
         {
@@ -125,15 +119,13 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
     }
 
     /// <summary>
-    /// 序列化
+    /// 序列化提供程序
     /// </summary>
-    /// <param name="providers"></param>
+    /// <param name="providers">提供商</param>
     /// <returns></returns>
     protected virtual string? SerializeProviders(ICollection<string> providers)
     {
-        return providers.Count != 0
-            ? providers.JoinAsString(",")
-            : null;
+        return providers.Count != 0 ? providers.JoinAsString(",")  : null;
     }
 
     /// <summary>

@@ -8,7 +8,7 @@ public class ClientScope : Entity
 {
     public virtual Guid ClientId { get; protected set; }
 
-    public virtual string Scope { get; protected set; }
+    public virtual string Scope { get; protected set; } = null!;
 
     protected ClientScope()
     {
@@ -28,6 +28,6 @@ public class ClientScope : Entity
 
     public override object[] GetKeys()
     {
-        return new object[] { ClientId, Scope };
+        return [ClientId, Scope];
     }
 }

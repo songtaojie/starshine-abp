@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.IdentityServer.Clients;
@@ -8,7 +9,7 @@ public class ClientIdPRestriction : Entity
 {
     public virtual Guid ClientId { get; set; }
 
-    public virtual string Provider { get; set; }
+    public virtual string Provider { get; set; } = null!;
 
     protected ClientIdPRestriction()
     {
@@ -30,6 +31,6 @@ public class ClientIdPRestriction : Entity
 
     public override object[] GetKeys()
     {
-        return new object[] { ClientId, Provider };
+        return [ClientId, Provider];
     }
 }

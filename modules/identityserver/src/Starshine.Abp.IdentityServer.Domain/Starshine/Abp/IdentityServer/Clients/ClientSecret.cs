@@ -1,5 +1,5 @@
 ﻿using System;
-using IdentityServer4;
+using Starshine.IdentityServer;
 using JetBrains.Annotations;
 
 namespace Starshine.Abp.IdentityServer.Clients;
@@ -18,7 +18,7 @@ public class ClientSecret : Secret
         [NotNull] string value,
         DateTime? expiration = null,
         string type = IdentityServerConstants.SecretTypes.SharedSecret,
-        string description = null
+        string? description = null
         ) : base(
               value,
               expiration,

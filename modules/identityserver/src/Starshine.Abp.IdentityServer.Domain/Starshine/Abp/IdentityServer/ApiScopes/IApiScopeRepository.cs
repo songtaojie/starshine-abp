@@ -8,7 +8,7 @@ namespace Starshine.Abp.IdentityServer.ApiScopes;
 
 public interface IApiScopeRepository : IBasicRepository<ApiScope, Guid>
 {
-    Task<ApiScope> FindByNameAsync(
+    Task<ApiScope?> FindByNameAsync(
         string scopeName,
         bool includeDetails = true,
         CancellationToken cancellationToken = default
@@ -24,13 +24,13 @@ public interface IApiScopeRepository : IBasicRepository<ApiScope, Guid>
         string sorting,
         int skipCount,
         int maxResultCount,
-        string filter = null,
+        string? filter = null,
         bool includeDetails = false,
         CancellationToken cancellationToken = default
     );
 
     Task<long> GetCountAsync(
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default
     );
 

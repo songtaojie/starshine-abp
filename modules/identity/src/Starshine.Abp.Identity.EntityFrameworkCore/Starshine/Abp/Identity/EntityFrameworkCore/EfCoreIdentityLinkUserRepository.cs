@@ -4,20 +4,36 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Starshine.Abp.Identity.EntityFrameworkCore;
 
+/// <summary>
+/// 
+/// </summary>
 public class EfCoreIdentityLinkUserRepository : EfCoreRepository<IIdentityDbContext, IdentityLinkUser, Guid>, IIdentityLinkUserRepository
 {
-    public EfCoreIdentityLinkUserRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dbContextProvider"></param>
+    /// <param name="abpLazyServiceProvider"></param>
+    public EfCoreIdentityLinkUserRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider,IAbpLazyServiceProvider abpLazyServiceProvider)
         : base(dbContextProvider)
     {
-
+        LazyServiceProvider = abpLazyServiceProvider;
     }
 
-    public virtual async Task<IdentityLinkUser> FindAsync(IdentityLinkUserInfo sourceLinkUserInfo, IdentityLinkUserInfo targetLinkUserInfo, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sourceLinkUserInfo"></param>
+    /// <param name="targetLinkUserInfo"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<IdentityLinkUser?> FindAsync(IdentityLinkUserInfo sourceLinkUserInfo, IdentityLinkUserInfo targetLinkUserInfo, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .AsNoTracking()
@@ -29,8 +45,14 @@ public class EfCoreIdentityLinkUserRepository : EfCoreRepository<IIdentityDbCont
             , cancellationToken: GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, List<IdentityLinkUserInfo> excludes = null,
-        CancellationToken cancellationToken = default)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="linkUserInfo"></param>
+    /// <param name="excludes"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, List<IdentityLinkUserInfo>? excludes = null,CancellationToken cancellationToken = default)
     {
         var query = (await GetDbSetAsync())
             .AsNoTracking()
@@ -40,7 +62,7 @@ public class EfCoreIdentityLinkUserRepository : EfCoreRepository<IIdentityDbCont
 
         if (!excludes.IsNullOrEmpty())
         {
-            foreach (var userInfo in excludes)
+            foreach (var userInfo in excludes!)
             {
                 query = query.Where(x =>
                     (x.SourceTenantId != userInfo.TenantId || x.SourceUserId != userInfo.UserId) &&
@@ -50,7 +72,12 @@ public class EfCoreIdentityLinkUserRepository : EfCoreRepository<IIdentityDbCont
 
         return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="linkUserInfo"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual async Task DeleteAsync(IdentityLinkUserInfo linkUserInfo, CancellationToken cancellationToken = default)
     {
         var linkUsers = await (await GetDbSetAsync()).AsNoTracking().Where(x =>

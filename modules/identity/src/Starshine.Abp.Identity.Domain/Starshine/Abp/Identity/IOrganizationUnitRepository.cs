@@ -33,7 +33,7 @@ public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(
-        string? code,
+        string code,
         Guid? parentId,
         bool includeDetails = false,
         CancellationToken cancellationToken = default
@@ -46,7 +46,7 @@ public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit
     /// <param name="includeDetails"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<OrganizationUnit> GetAsync(
+    Task<OrganizationUnit?> GetAsync(
         string displayName,
         bool includeDetails = true,
         CancellationToken cancellationToken = default

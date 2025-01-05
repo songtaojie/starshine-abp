@@ -12,7 +12,7 @@ using Volo.Abp.MultiTenancy;
 namespace Starshine.Abp.IdentityServer.EntityFrameworkCore;
 
 [IgnoreMultiTenancy]
-[ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
+[ConnectionStringName(StarshineIdentityServerDbProperties.ConnectionStringName)]
 public class IdentityServerDbContext : AbpDbContext<IdentityServerDbContext>, IIdentityServerDbContext
 {
     #region ApiResource

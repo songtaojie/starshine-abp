@@ -23,7 +23,7 @@ public class IdentityRoleEto : IMultiTenant, IHasEntityVersion
     /// <summary>
     /// 名字
     /// </summary>
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// 是否默认

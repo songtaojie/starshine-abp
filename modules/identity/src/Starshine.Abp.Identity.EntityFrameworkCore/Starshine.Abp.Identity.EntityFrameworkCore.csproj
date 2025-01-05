@@ -11,8 +11,8 @@
 		<RootNamespace />
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="Starshine.Abp.Identity.Domain" Version="8.3.4" />
-	  <PackageReference Include="Volo.Abp.Users.EntityFrameworkCore" Version="8.3.4" />
+		<ProjectReference Include="..\Starshine.Abp.Identity.Domain\Starshine.Abp.Identity.Domain.csproj" />
+		<ProjectReference Include="..\..\..\users\src\Starshine.Abp.Users.EntityFrameworkCore\Starshine.Abp.Users.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
 </Project>

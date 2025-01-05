@@ -1,4 +1,4 @@
-﻿using IdentityServer4.Stores;
+﻿using Starshine.IdentityServer.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Starshine.Abp.IdentityServer.Clients;
 using Starshine.Abp.IdentityServer.Devices;
@@ -16,6 +16,6 @@ public static class IdentityServerBuilderExtensions
         return builder
             .AddClientStore<ClientStore>()
             .AddResourceStore<ResourceStore>()
-            .AddCorsPolicyService<AbpCorsPolicyService>();
+            .AddCorsPolicyService<StarshineCorsPolicyService>();
     }
 }
