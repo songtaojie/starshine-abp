@@ -34,6 +34,6 @@ public class PermissionManagementOptions
     public PermissionManagementOptions()
     {
         ManagementProviders = new TypeList<IPermissionManagementProvider>();
-        ProviderPolicies = new Dictionary<string, string>();
+        ProviderPolicies = [];
     }
 }

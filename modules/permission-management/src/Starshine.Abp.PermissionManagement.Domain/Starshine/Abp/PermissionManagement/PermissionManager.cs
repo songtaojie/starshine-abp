@@ -308,7 +308,7 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
         foreach (var permission in permissions
                                     .Where(x => x.IsEnabled)
                                     .Where(x => x.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
-                                    .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName)))
+                                    .Where(x => x.Providers.Count == 0 || x.Providers.Contains(providerName)))
         {
             if (await SimpleStateCheckerManager.IsEnabledAsync(permission))
             {
@@ -316,7 +316,7 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
             }
         }
 
-        if (!neededCheckPermissions.Any())
+        if (neededCheckPermissions.Count == 0)
         {
             return multiplePermissionWithGrantedProviders;
         }
