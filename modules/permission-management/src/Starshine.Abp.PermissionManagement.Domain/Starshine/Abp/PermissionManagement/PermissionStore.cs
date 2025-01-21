@@ -65,55 +65,42 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     }
 
     /// <summary>
-    /// 
+    /// 获取权限缓存项
     /// </summary>
     /// <param name="name"></param>
     /// <param name="providerName"></param>
     /// <param name="providerKey"></param>
     /// <returns></returns>
-    protected virtual async Task<PermissionGrantCacheItem> GetCacheItemAsync(
-        string name,
-        string providerName,
-        string providerKey)
+    protected virtual async Task<PermissionGrantCacheItem> GetCacheItemAsync(string name,string providerName,string providerKey)
     {
         var cacheKey = CalculateCacheKey(name, providerName, providerKey);
-
-        Logger.LogDebug($"PermissionStore.GetCacheItemAsync: {cacheKey}");
-
+        Logger.LogDebug($"权限存储.GetCacheItemAsync: {cacheKey}");
         var cacheItem = await Cache.GetAsync(cacheKey);
 
         if (cacheItem != null)
         {
-            Logger.LogDebug($"Found in the cache: {cacheKey}");
+            Logger.LogDebug($"在缓存中找到: {cacheKey}");
             return cacheItem;
         }
-
-        Logger.LogDebug($"Not found in the cache: {cacheKey}");
-
+        Logger.LogDebug($"缓存中未找到: {cacheKey}");
         cacheItem = new PermissionGrantCacheItem(false);
-
         await SetCacheItemsAsync(providerName, providerKey, name, cacheItem);
-
         return cacheItem;
     }
 
     /// <summary>
-    /// 
+    /// 设置权限缓存项
     /// </summary>
     /// <param name="providerName"></param>
     /// <param name="providerKey"></param>
     /// <param name="currentName"></param>
     /// <param name="currentCacheItem"></param>
     /// <returns></returns>
-    protected virtual async Task SetCacheItemsAsync(
-        string providerName,
-        string providerKey,
-        string currentName,
-        PermissionGrantCacheItem currentCacheItem)
+    protected virtual async Task SetCacheItemsAsync(string providerName,string providerKey,string currentName, PermissionGrantCacheItem currentCacheItem)
     {
         var permissions = await PermissionDefinitionManager.GetPermissionsAsync();
 
-        Logger.LogDebug($"Getting all granted permissions from the repository for this provider name,key: {providerName},{providerKey}");
+        Logger.LogDebug($"从存储库中获取此提供商名称的所有已授予的权限,key: {providerName},{providerKey}");
 
         var grantedPermissionsHashSet = new HashSet<string>(
             (await PermissionGrantRepository.GetListAsync(providerName, providerKey)).Select(p => p.Name)
@@ -140,7 +127,7 @@ public class PermissionStore : IPermissionStore, ITransientDependency
 
         await Cache.SetManyAsync(cacheItems);
 
-        Logger.LogDebug($"Finished setting the cache items. Count: {permissions.Count}");
+        Logger.LogDebug($"完成缓存项的设置. 数量: {permissions.Count}");
     }
 
     /// <summary>
@@ -192,18 +179,18 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     {
         var cacheKeys = names.Select(x => CalculateCacheKey(x, providerName, providerKey)).ToList();
 
-        Logger.LogDebug($"PermissionStore.GetCacheItemAsync: {string.Join(",", cacheKeys)}");
+        Logger.LogDebug($"权限存储.GetCacheItemAsync: {string.Join(",", cacheKeys)}");
 
         var cacheItems = (await Cache.GetManyAsync(cacheKeys)).ToList();
         if (cacheItems.All(x => x.Value != null))
         {
-            Logger.LogDebug($"Found in the cache: {string.Join(",", cacheKeys)}");
+            Logger.LogDebug($"在缓存中找到: {string.Join(",", cacheKeys)}");
             return cacheItems!;
         }
 
         var notCacheKeys = cacheItems.Where(x => x.Value == null).Select(x => x.Key).ToList();
 
-        Logger.LogDebug($"Not found in the cache: {string.Join(",", notCacheKeys)}");
+        Logger.LogDebug($"缓存中未找到: {string.Join(",", notCacheKeys)}");
 
         var newCacheItems = await SetCacheItemsAsync(providerName, providerKey, notCacheKeys);
 
@@ -236,14 +223,11 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     {
         var permissions = (await PermissionDefinitionManager.GetPermissionsAsync())
             .Where(x => notCacheKeys.Any(k => GetPermissionNameFormCacheKeyOrNull(k) == x.Name)).ToList();
-
-        Logger.LogDebug($"Getting not cache granted permissions from the repository for this provider name,key: {providerName},{providerKey}");
-
+        Logger.LogDebug($"从存储库中获取此提供商名称未缓存授予的权限,key: {providerName},{providerKey}");
         var grantedPermissionsHashSet = new HashSet<string>(
             (await PermissionGrantRepository.GetListAsync(notCacheKeys.Select(GetPermissionNameFormCacheKeyOrNull).ToArray()!, providerName, providerKey)).Select(p => p.Name)
         );
-
-        Logger.LogDebug($"Setting the cache items. Count: {permissions.Count}");
+        Logger.LogDebug($"设置缓存项. 数量: {permissions.Count}");
 
         var cacheItems = new List<KeyValuePair<string, PermissionGrantCacheItem>>();
 
@@ -258,9 +242,7 @@ public class PermissionStore : IPermissionStore, ITransientDependency
         }
 
         await Cache.SetManyAsync(cacheItems);
-
-        Logger.LogDebug($"Finished setting the cache items. Count: {permissions.Count}");
-
+        Logger.LogDebug($"完成缓存项的设置. 数量: {permissions.Count}");
         return cacheItems;
     }
 
@@ -283,7 +265,7 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     /// <returns></returns>
     protected virtual string? GetPermissionNameFormCacheKeyOrNull(string key)
     {
-        //TODO: throw ex when name is null?
+        //TODO: 当名称为空时抛出 ex？
         return PermissionGrantCacheItem.GetPermissionNameFormCacheKeyOrNull(key);
     }
 }

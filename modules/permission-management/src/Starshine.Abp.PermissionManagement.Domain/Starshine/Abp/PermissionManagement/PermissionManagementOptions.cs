@@ -19,11 +19,13 @@ public class PermissionManagementOptions
     public Dictionary<string, string> ProviderPolicies { get; }
 
     /// <summary>
+    /// 将静态权限保存到数据库
     /// Default: true.
     /// </summary>
     public bool SaveStaticPermissionsToDatabase { get; set; } = true;
 
     /// <summary>
+    /// 是否启用动态权限存储
     /// Default: false.
     /// </summary>
     public bool IsDynamicPermissionStoreEnabled { get; set; }

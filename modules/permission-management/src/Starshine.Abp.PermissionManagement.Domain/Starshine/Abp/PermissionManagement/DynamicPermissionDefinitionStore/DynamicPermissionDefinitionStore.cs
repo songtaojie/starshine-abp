@@ -136,7 +136,7 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
     {
         if (!PermissionManagementOptions.IsDynamicPermissionStoreEnabled)
         {
-            return Array.Empty<PermissionGroupDefinition>();
+            return [];
         }
 
         using (await StoreCache.SyncSemaphore.LockAsync())
@@ -200,8 +200,7 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
             return stampInDistributedCache;
         }
 
-        await using (var commonLockHandle = await DistributedLock
-                         .TryAcquireAsync(GetCommonDistributedLockKey(), TimeSpan.FromMinutes(2)))
+        await using (var commonLockHandle = await DistributedLock.TryAcquireAsync(GetCommonDistributedLockKey(), TimeSpan.FromMinutes(1)))
         {
             if (commonLockHandle == null)
             {
@@ -217,8 +216,7 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
 
             stampInDistributedCache = Guid.NewGuid().ToString();
 
-            await DistributedCache.SetStringAsync(
-                cacheKey,
+            await DistributedCache.SetStringAsync(cacheKey,
                 stampInDistributedCache,
                 new DistributedCacheEntryOptions
                 {

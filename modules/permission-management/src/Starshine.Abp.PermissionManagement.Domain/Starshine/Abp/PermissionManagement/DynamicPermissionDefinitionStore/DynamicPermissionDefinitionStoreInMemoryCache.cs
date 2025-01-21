@@ -80,10 +80,7 @@ public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionD
 
         foreach (var permissionGroupRecord in permissionGroupRecords)
         {
-            var permissionGroup = context.AddGroup(
-                permissionGroupRecord.Name,
-                LocalizableStringSerializer.Deserialize(permissionGroupRecord.DisplayName!)
-            );
+            var permissionGroup = context.AddGroup(permissionGroupRecord.Name,LocalizableStringSerializer.Deserialize(permissionGroupRecord.DisplayName));
 
             PermissionGroupDefinitions[permissionGroup.Name] = permissionGroup;
 
@@ -92,8 +89,7 @@ public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionD
                 permissionGroup[property.Key] = property.Value;
             }
 
-            var permissionRecordsInThisGroup = permissionRecords
-                .Where(p => p.GroupName == permissionGroup.Name);
+            var permissionRecordsInThisGroup = permissionRecords.Where(p => p.GroupName == permissionGroup.Name);
 
             foreach (var permissionRecord in permissionRecordsInThisGroup.Where(x => x.ParentName == null))
             {
@@ -120,7 +116,7 @@ public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionD
     /// <returns></returns>
     public IReadOnlyList<PermissionDefinition> GetPermissions()
     {
-        return PermissionDefinitions.Values.ToList();
+        return [.. PermissionDefinitions.Values];
     }
 
     /// <summary>
@@ -129,34 +125,34 @@ public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionD
     /// <returns></returns>
     public IReadOnlyList<PermissionGroupDefinition> GetGroups()
     {
-        return PermissionGroupDefinitions.Values.ToList();
+        return [.. PermissionGroupDefinitions.Values];
     }
 
-    private void AddPermissionRecursively(ICanAddChildPermission permissionContainer,
-        PermissionDefinitionRecord permissionRecord,
-        List<PermissionDefinitionRecord> allPermissionRecords)
+    /// <summary>
+    /// 递归添加权限
+    /// </summary>
+    /// <param name="permissionContainer">父级权限</param>
+    /// <param name="permissionRecord">子级权限</param>
+    /// <param name="allPermissionRecords">所有权限数据</param>
+    private void AddPermissionRecursively(ICanAddChildPermission permissionContainer,PermissionDefinitionRecord permissionRecord,List<PermissionDefinitionRecord> allPermissionRecords)
     {
         var permission = permissionContainer.AddPermission(
             permissionRecord.Name,
-            LocalizableStringSerializer.Deserialize(permissionRecord.DisplayName!),
+            LocalizableStringSerializer.Deserialize(permissionRecord.DisplayName),
             permissionRecord.MultiTenancySide,
             permissionRecord.IsEnabled
         );
 
         PermissionDefinitions[permission.Name] = permission;
 
-        if (!permissionRecord.Providers.IsNullOrWhiteSpace())
+        if (!string.IsNullOrWhiteSpace(permissionRecord.Providers))
         {
             permission.Providers.AddRange(permissionRecord.Providers.Split(','));
         }
 
-        if (!permissionRecord.StateCheckers.IsNullOrWhiteSpace())
+        if (!string.IsNullOrWhiteSpace(permissionRecord.StateCheckers))
         {
-            var checkers = StateCheckerSerializer
-                .DeserializeArray(
-                    permissionRecord.StateCheckers,
-                    permission
-                );
+            var checkers = StateCheckerSerializer.DeserializeArray(permissionRecord.StateCheckers, permission);
             permission.StateCheckers.AddRange(checkers);
         }
 

@@ -84,12 +84,13 @@ public class StarshinePermissionManagementDomainModule : AbpModule
         return _initializeDynamicPermissionsTask ?? Task.CompletedTask;
     }
 
+    /// <summary>
+    /// 初始化权限数据
+    /// </summary>
+    /// <param name="context"></param>
     private void InitializeDynamicPermissions(ApplicationInitializationContext context)
     {
-        var options = context
-            .ServiceProvider
-            .GetRequiredService<IOptions<PermissionManagementOptions>>()
-            .Value;
+        var options = context.ServiceProvider.GetRequiredService<IOptions<PermissionManagementOptions>>().Value;
 
         if (!options.SaveStaticPermissionsToDatabase && !options.IsDynamicPermissionStoreEnabled)
         {
@@ -129,10 +130,7 @@ public class StarshinePermissionManagementDomainModule : AbpModule
         });
     }
 
-    private async static Task SaveStaticPermissionsToDatabaseAsync(
-        PermissionManagementOptions options,
-        IServiceScope scope,
-        ICancellationTokenProvider cancellationTokenProvider)
+    private async static Task SaveStaticPermissionsToDatabaseAsync(PermissionManagementOptions options, IServiceScope scope,ICancellationTokenProvider cancellationTokenProvider)
     {
         if (!options.SaveStaticPermissionsToDatabase)
         {
@@ -143,15 +141,13 @@ public class StarshinePermissionManagementDomainModule : AbpModule
             .Handle<Exception>()
             .WaitAndRetryAsync(
                 8,
-                retryAttempt => TimeSpan.FromSeconds( RandomHelper.GetRandom((int)Math.Pow(2, retryAttempt) * 8,(int)Math.Pow(2, retryAttempt) * 12) )
+                retryAttempt => TimeSpan.FromSeconds(RandomHelper.GetRandom((int)Math.Pow(2, retryAttempt) * 8,(int)Math.Pow(2, retryAttempt) * 12) )
             )
             .ExecuteAsync(async _ =>
             {
                 try
                 {
-                    await scope
-                        .ServiceProvider
-                        .GetRequiredService<IStaticPermissionSaver>()
+                    await scope.ServiceProvider.GetRequiredService<IStaticPermissionSaver>()
                         .SaveAsync();
                 }
                 catch (Exception ex)
@@ -174,17 +170,15 @@ public class StarshinePermissionManagementDomainModule : AbpModule
 
         try
         {
-            // Pre-cache permissions, so first request doesn't wait
-            await scope
-                .ServiceProvider
+            // 预先缓存权限，因此第一个请求无需等待
+            await scope.ServiceProvider
                 .GetRequiredService<IDynamicPermissionDefinitionStore>()
                 .GetGroupsAsync();
         }
         catch (Exception ex)
         {
             // ReSharper disable once AccessToDisposedClosure
-            scope
-                .ServiceProvider
+            scope.ServiceProvider
                 .GetService<ILogger<StarshinePermissionManagementDomainModule>>()?
                 .LogException(ex);
 
