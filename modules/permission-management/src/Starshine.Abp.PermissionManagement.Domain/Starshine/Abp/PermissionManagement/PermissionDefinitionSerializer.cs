@@ -125,7 +125,7 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
     /// <returns></returns>
     protected virtual string? SerializeProviders(ICollection<string> providers)
     {
-        return providers.Count != 0 ? providers.JoinAsString(",")  : null;
+        return providers == null || providers.Count == 0 ?  null : providers.JoinAsString(",");
     }
 
     /// <summary>

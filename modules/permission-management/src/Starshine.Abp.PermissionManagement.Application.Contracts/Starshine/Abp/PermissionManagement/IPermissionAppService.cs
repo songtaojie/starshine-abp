@@ -5,7 +5,7 @@ using Volo.Abp.Application.Services;
 namespace Starshine.Abp.PermissionManagement;
 
 /// <summary>
-/// 权限appService
+/// 权限应用服务
 /// </summary>
 public interface IPermissionAppService : IApplicationService
 {

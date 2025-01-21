@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
@@ -128,10 +124,7 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     /// <param name="providerName"></param>
     /// <param name="providerKey"></param>
     /// <returns></returns>
-    public virtual async Task<MultiplePermissionWithGrantedProviders> GetAsync(
-        string[] permissionNames,
-        string providerName,
-        string providerKey)
+    public virtual async Task<MultiplePermissionWithGrantedProviders> GetAsync(string[] permissionNames, string providerName, string providerKey)
     {
         var permissions = new List<PermissionDefinition>();
         var undefinedPermissions = new List<string>();
@@ -149,7 +142,7 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
             }
         }
 
-        if (!permissions.Any())
+        if (permissions.Count == 0)
         {
             return new MultiplePermissionWithGrantedProviders(undefinedPermissions.ToArray());
         }

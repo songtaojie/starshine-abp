@@ -5,7 +5,7 @@ using Volo.Abp.Modularity;
 namespace Starshine.Abp.PermissionManagement;
 
 /// <summary>
-/// 
+/// 权限管理应用契约
 /// </summary>
 [DependsOn(typeof(AbpDddApplicationContractsModule))]
 [DependsOn(typeof(StarshinePermissionManagementDomainSharedModule))]

@@ -8,7 +8,7 @@ using Volo.Abp.MultiTenancy;
 namespace Starshine.Abp.PermissionManagement;
 
 /// <summary>
-/// 权限缓存
+/// 权限授予缓存项无效器本地事件处理程序
 /// </summary>
 public class PermissionGrantCacheItemInvalidator :ILocalEventHandler<EntityChangedEventData<PermissionGrant>>,ITransientDependency
 {
@@ -23,10 +23,10 @@ public class PermissionGrantCacheItemInvalidator :ILocalEventHandler<EntityChang
     protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
 
     /// <summary>
-    /// 
+    /// 构造函数
     /// </summary>
-    /// <param name="cache"></param>
-    /// <param name="currentTenant"></param>
+    /// <param name="cache">分布式缓存</param>
+    /// <param name="currentTenant">当前租户</param>
     public PermissionGrantCacheItemInvalidator(IDistributedCache<PermissionGrantCacheItem> cache, ICurrentTenant currentTenant)
     {
         Cache = cache;
@@ -34,7 +34,7 @@ public class PermissionGrantCacheItemInvalidator :ILocalEventHandler<EntityChang
     }
 
     /// <summary>
-    /// 
+    /// 事件处理
     /// </summary>
     /// <param name="eventData"></param>
     /// <returns></returns>
@@ -49,11 +49,11 @@ public class PermissionGrantCacheItemInvalidator :ILocalEventHandler<EntityChang
     }
 
     /// <summary>
-    /// 
+    /// 获取缓存的key
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
+    /// <param name="name">权限名称</param>
+    /// <param name="providerName">提供者名称</param>
+    /// <param name="providerKey">提供者key</param>
     /// <returns></returns>
     protected virtual string CalculateCacheKey(string name, string providerName, string? providerKey)
     {
