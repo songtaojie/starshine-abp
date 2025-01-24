@@ -20,7 +20,7 @@ public interface IUserData : IHasExtraProperties
     /// <summary>
     /// 用户名
     /// </summary>
-    string? UserName { get; }
+    string UserName { get; }
 
     /// <summary>
     /// 用户名字
@@ -40,7 +40,7 @@ public interface IUserData : IHasExtraProperties
     /// <summary>
     /// 邮箱
     /// </summary>
-    string? Email { get; }
+    string Email { get; }
 
     /// <summary>
     /// 邮箱是否确认

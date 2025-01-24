@@ -13,12 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starshine.Abp.IdentityServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starshine.Abp.PermissionManagement.Domain.IdentityServer", "src\Starshine.Abp.PermissionManagement.Domain.IdentityServer\Starshine.Abp.PermissionManagement.Domain.IdentityServer.csproj", "{072BD630-FB89-45FC-BA2D-12A9745AAB93}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starshine.IdentityServer", "..\..\..\startshine-identityserver\framework\src\Starshine.IdentityServer\Starshine.IdentityServer.csproj", "{6368F537-C8C1-4B50-BF6C-EB084B0223B6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starshine.IdentityServer.AspNetIdentity", "..\..\..\startshine-identityserver\framework\src\Starshine.IdentityServer.AspNetIdentity\Starshine.IdentityServer.AspNetIdentity.csproj", "{3CCAC964-0264-4288-8045-455CE2EA86F9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starshine.IdentityServer.Storage", "..\..\..\startshine-identityserver\framework\src\Starshine.IdentityServer.Storage\Starshine.IdentityServer.Storage.csproj", "{97DCFC5A-4F5C-4717-BC22-AB0B6D134192}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,18 +35,6 @@ Global
 		{072BD630-FB89-45FC-BA2D-12A9745AAB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{072BD630-FB89-45FC-BA2D-12A9745AAB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{072BD630-FB89-45FC-BA2D-12A9745AAB93}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6368F537-C8C1-4B50-BF6C-EB084B0223B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6368F537-C8C1-4B50-BF6C-EB084B0223B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6368F537-C8C1-4B50-BF6C-EB084B0223B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6368F537-C8C1-4B50-BF6C-EB084B0223B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3CCAC964-0264-4288-8045-455CE2EA86F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3CCAC964-0264-4288-8045-455CE2EA86F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3CCAC964-0264-4288-8045-455CE2EA86F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3CCAC964-0264-4288-8045-455CE2EA86F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97DCFC5A-4F5C-4717-BC22-AB0B6D134192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97DCFC5A-4F5C-4717-BC22-AB0B6D134192}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97DCFC5A-4F5C-4717-BC22-AB0B6D134192}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97DCFC5A-4F5C-4717-BC22-AB0B6D134192}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

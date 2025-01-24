@@ -21,7 +21,7 @@ public class UserData : IUserData
     /// <summary>
     /// 用户昵称
     /// </summary>
-    public string? UserName { get; set; }
+    public string UserName { get; set; }
 
     /// <summary>
     /// 用户名称
@@ -41,7 +41,7 @@ public class UserData : IUserData
     /// <summary>
     /// 邮箱
     /// </summary>
-    public string? Email { get; set; }
+    public string Email { get; set; }
 
     /// <summary>
     /// 邮箱是否确认
@@ -68,6 +68,8 @@ public class UserData : IUserData
     /// </summary>
     public UserData()
     {
+        UserName = string.Empty;
+        Email = string.Empty;
         ExtraProperties = [];
     }
 
@@ -107,7 +109,7 @@ public class UserData : IUserData
     public UserData(
         Guid id,
         [NotNull] string userName,
-        [CanBeNull] string? email = null,
+        [NotNull] string email,
         [CanBeNull] string? name = null,
         [CanBeNull] string? surname = null,
         bool emailConfirmed = false,

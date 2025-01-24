@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
@@ -21,30 +18,27 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     protected ILogger<PermissionStore> Logger { get; }
 
     /// <summary>
-    /// 
+    /// 权限授予存储库
     /// </summary>
     protected IPermissionGrantRepository PermissionGrantRepository { get; }
 
     /// <summary>
-    /// 
+    /// 权限定义管理器
     /// </summary>
     protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
     /// <summary>
-    /// 
+    /// 分布式缓存
     /// </summary>
     protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="permissionGrantRepository"></param>
-    /// <param name="cache"></param>
-    /// <param name="permissionDefinitionManager"></param>
-    public PermissionStore(
-        IPermissionGrantRepository permissionGrantRepository,
-        IDistributedCache<PermissionGrantCacheItem> cache,
-        IPermissionDefinitionManager permissionDefinitionManager)
+    /// <param name="permissionGrantRepository">权限授予存储库</param>
+    /// <param name="cache">分布式缓存</param>
+    /// <param name="permissionDefinitionManager">权限定义管理器</param>
+    public PermissionStore(IPermissionGrantRepository permissionGrantRepository, IDistributedCache<PermissionGrantCacheItem> cache, IPermissionDefinitionManager permissionDefinitionManager)
     {
         PermissionGrantRepository = permissionGrantRepository;
         Cache = cache;
@@ -71,7 +65,7 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     /// <param name="providerName"></param>
     /// <param name="providerKey"></param>
     /// <returns></returns>
-    protected virtual async Task<PermissionGrantCacheItem> GetCacheItemAsync(string name,string providerName,string providerKey)
+    protected virtual async Task<PermissionGrantCacheItem> GetCacheItemAsync(string name, string providerName, string providerKey)
     {
         var cacheKey = CalculateCacheKey(name, providerName, providerKey);
         Logger.LogDebug($"权限存储.GetCacheItemAsync: {cacheKey}");
@@ -96,7 +90,7 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     /// <param name="currentName"></param>
     /// <param name="currentCacheItem"></param>
     /// <returns></returns>
-    protected virtual async Task SetCacheItemsAsync(string providerName,string providerKey,string currentName, PermissionGrantCacheItem currentCacheItem)
+    protected virtual async Task SetCacheItemsAsync(string providerName, string providerKey, string currentName, PermissionGrantCacheItem currentCacheItem)
     {
         var permissions = await PermissionDefinitionManager.GetPermissionsAsync();
 
@@ -172,10 +166,7 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     /// <param name="providerName"></param>
     /// <param name="providerKey"></param>
     /// <returns></returns>
-    protected virtual async Task<List<KeyValuePair<string, PermissionGrantCacheItem>>> GetCacheItemsAsync(
-        string[] names,
-        string providerName,
-        string providerKey)
+    protected virtual async Task<List<KeyValuePair<string, PermissionGrantCacheItem>>> GetCacheItemsAsync(string[] names, string providerName, string providerKey)
     {
         var cacheKeys = names.Select(x => CalculateCacheKey(x, providerName, providerKey)).ToList();
 
