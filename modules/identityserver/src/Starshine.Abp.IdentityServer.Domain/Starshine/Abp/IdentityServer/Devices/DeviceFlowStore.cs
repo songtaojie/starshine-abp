@@ -40,7 +40,7 @@ public class DeviceFlowStore : IDeviceFlowStore
                     UserCode = userCode,
                     ClientId = data.ClientId,
                     SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject)?.Value,
-                    CreationTime = data.CreationTime,
+                    CreationTime = data.CreationTime.DateTime,
                     Expiration = data.CreationTime.AddSeconds(data.Lifetime),
                     Data = Serialize(data)
                 }

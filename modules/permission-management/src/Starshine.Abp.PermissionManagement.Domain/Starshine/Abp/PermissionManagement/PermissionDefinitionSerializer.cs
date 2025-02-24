@@ -97,18 +97,17 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
     {
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
         {
-            var permissionRecord = new PermissionDefinitionRecord(
-                GuidGenerator.Create(),
-                permissionGroup?.Name,
-                permission.Name,
-                permission.Parent?.Name,
-                LocalizableStringSerializer.Serialize(permission.DisplayName),
-                permission.IsEnabled,
-                permission.MultiTenancySide,
-                SerializeProviders(permission.Providers),
-                SerializeStateCheckers(permission.StateCheckers)
-            );
-
+            var permissionRecord = new PermissionDefinitionRecord(GuidGenerator.Create())
+            { 
+                GroupName = permissionGroup?.Name ?? string.Empty,
+                DisplayName = LocalizableStringSerializer.Serialize(permission.DisplayName) ?? permission.Name,
+                Name = permission.Name,
+                ParentName = permission.Parent?.Name,
+                IsEnabled = permission.IsEnabled,
+                MultiTenancySide = permission.MultiTenancySide,
+                Providers = SerializeProviders(permission.Providers),
+                StateCheckers = SerializeStateCheckers(permission.StateCheckers)
+            };
             foreach (var property in permission.Properties)
             {
                 permissionRecord.SetProperty(property.Key, property.Value);

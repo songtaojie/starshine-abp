@@ -25,6 +25,9 @@ using Volo.Abp;
 
 namespace Starshine.Abp.IdentityServer;
 
+/// <summary>
+/// IdentityServer模块
+/// </summary>
 [DependsOn(
     typeof(StarshineIdentityServerDomainSharedModule),
     typeof(AbpAutoMapperModule),
@@ -38,6 +41,10 @@ public class StarshineIdentityServerDomainModule : AbpModule
 {
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
+    /// <summary>
+    /// 配置服务
+    /// </summary>
+    /// <param name="context"></param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddAutoMapperObjectMapper<StarshineIdentityServerDomainModule>();
@@ -135,6 +142,10 @@ public class StarshineIdentityServerDomainModule : AbpModule
         return identityServerBuilder;
     }
 
+    /// <summary>
+    /// 配置服务
+    /// </summary>
+    /// <param name="context"></param>
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         OneTimeRunner.Run(() =>
@@ -159,6 +170,11 @@ public class StarshineIdentityServerDomainModule : AbpModule
         });
     }
 
+    /// <summary>
+    /// 应用程序初始化
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<TokenCleanupOptions>>().Value;
@@ -173,6 +189,10 @@ public class StarshineIdentityServerDomainModule : AbpModule
         }
     }
 
+    /// <summary>
+    /// 应用程序初始化
+    /// </summary>
+    /// <param name="context"></param>
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));

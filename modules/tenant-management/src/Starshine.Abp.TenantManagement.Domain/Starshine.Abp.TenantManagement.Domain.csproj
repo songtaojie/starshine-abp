@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\..\common.props" />
+  <PropertyGroup>
+    <AssemblyName>Starshine.Abp.TenantManagement.Domain</AssemblyName>
+    <PackageId>Starshine.Abp.TenantManagement.Domain</PackageId>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace />
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Data" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.MultiTenancy" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Caching" Version="$(AbpVersion)" />
+	</ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\Starshine.Abp.TenantManagement.Domain.Shared\Starshine.Abp.TenantManagement.Domain.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -5,7 +5,7 @@ using Volo.Abp.Modularity;
 namespace Starshine.Abp.Identity.AspNetCore;
 
 /// <summary>
-/// 
+/// 认证模块
 /// </summary>
 [DependsOn(
     typeof(StarshineIdentityDomainModule)

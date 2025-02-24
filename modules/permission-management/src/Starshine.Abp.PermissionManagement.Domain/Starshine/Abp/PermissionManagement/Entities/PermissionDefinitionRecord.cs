@@ -14,7 +14,7 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
     /// <summary>
     /// 组名称
     /// </summary>
-    public string GroupName { get; set; }
+    public required string GroupName { get; set; }
 
     /// <summary>
     /// 权限名称
@@ -72,28 +72,9 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
     /// 权限定义记录
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="groupName">组名称</param>
-    /// <param name="name">权限名称</param>
-    /// <param name="parentName">父级权限名称</param>
-    /// <param name="displayName">显示名称</param>
-    /// <param name="isEnabled">是否启用</param>
-    /// <param name="multiTenancySide">多租户端</param>
-    /// <param name="providers">以逗号分隔的提供商名称列表</param>
-    /// <param name="stateCheckers">序列化字符串来存储有关状态检查器的信息</param>
-    public PermissionDefinitionRecord(Guid id,string? groupName, string name,string? parentName,string? displayName,
-        bool isEnabled = true, MultiTenancySides multiTenancySide = MultiTenancySides.Both,string? providers = null,
-        string? stateCheckers = null)
+    public PermissionDefinitionRecord(Guid id)
         : base(id)
     {
-        GroupName = Check.NotNullOrWhiteSpace(groupName, nameof(groupName), PermissionGroupDefinitionRecordConsts.MaxNameLength);
-        Name = Check.NotNullOrWhiteSpace(name, nameof(name), PermissionDefinitionRecordConsts.MaxNameLength);
-        ParentName = Check.Length(parentName, nameof(parentName), PermissionDefinitionRecordConsts.MaxNameLength);
-        DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), PermissionDefinitionRecordConsts.MaxDisplayNameLength);
-        IsEnabled = isEnabled;
-        MultiTenancySide = multiTenancySide;
-        Providers = providers;
-        StateCheckers = stateCheckers;
-
         ExtraProperties = [];
         this.SetDefaultsForExtraProperties();
     }

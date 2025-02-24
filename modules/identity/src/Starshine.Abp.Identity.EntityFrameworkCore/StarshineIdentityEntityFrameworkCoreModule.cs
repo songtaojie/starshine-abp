@@ -10,7 +10,7 @@ namespace Starshine.Abp.Identity.EntityFrameworkCore;
 [DependsOn(
     typeof(StarshineIdentityDomainModule),
     typeof(StarshineUsersEntityFrameworkCoreModule))]
-public class StarshineAbpIdentityEntityFrameworkCoreModule : AbpModule
+public class StarshineIdentityEntityFrameworkCoreModule : AbpModule
 {
     /// <summary>
     /// 配置服务

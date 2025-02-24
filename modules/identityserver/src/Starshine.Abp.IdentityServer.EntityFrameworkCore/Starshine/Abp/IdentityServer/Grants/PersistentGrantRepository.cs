@@ -18,7 +18,7 @@ public class PersistentGrantRepository : EfCoreRepository<IIdentityServerDbConte
 
     }
 
-    public virtual async Task<List<PersistedGrant>> GetListAsync(string subjectId, string sessionId, string clientId, string type, bool includeDetails = false,
+    public virtual async Task<List<PersistedGrant>> GetListAsync(string? subjectId, string? sessionId, string? clientId, string? type, bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         return await (await FilterAsync(subjectId, sessionId, clientId, type))
@@ -44,7 +44,7 @@ public class PersistentGrantRepository : EfCoreRepository<IIdentityServerDbConte
     }
 
     public virtual async Task<List<PersistedGrant>> GetListByExpirationAsync(
-        DateTime maxExpirationDate,
+        DateTimeOffset maxExpirationDate,
         int maxResultCount,
         CancellationToken cancellationToken = default)
     {
@@ -55,7 +55,7 @@ public class PersistentGrantRepository : EfCoreRepository<IIdentityServerDbConte
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task DeleteExpirationAsync(DateTime maxExpirationDate, CancellationToken cancellationToken = default)
+    public virtual async Task DeleteExpirationAsync(DateTimeOffset maxExpirationDate, CancellationToken cancellationToken = default)
     {
         await DeleteDirectAsync(x => x.Expiration != null && x.Expiration < maxExpirationDate, cancellationToken);
     }

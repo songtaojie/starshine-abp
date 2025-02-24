@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\..\common.props" />
+  <PropertyGroup>
+    <AssemblyName>Starshine.Abp.TenantManagement.Domain.Shared</AssemblyName>
+    <PackageId>Starshine.Abp.TenantManagement.Domain.Shared</PackageId>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <RootNamespace />
+  </PropertyGroup>
+	
+  <ItemGroup>
+    <EmbeddedResource Include="Starshine\Abp\TenantManagement\Localization\Resources\*.json" />
+  </ItemGroup>
+
+    <ItemGroup>
+	    <PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
+	    <PackageReference Include="Volo.Abp.Auditing.Contracts" Version="$(AbpVersion)" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.13" />
+    </ItemGroup>
+
+</Project>
