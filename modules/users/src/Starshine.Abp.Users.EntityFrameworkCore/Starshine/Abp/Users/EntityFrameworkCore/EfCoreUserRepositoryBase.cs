@@ -62,7 +62,7 @@ public abstract class EfCoreUserRepositoryBase<TDbContext, TUser> : EfCoreReposi
     {
         return await (await GetDbSetAsync())
             .WhereIf(!string.IsNullOrWhiteSpace(filter),
-                u =>u.UserName.Contains(filter!) || (u.Email != null && u.Email.Contains(filter!)) ||
+                u =>u.UserName.Contains(filter!) || u.Email.Contains(filter!) ||
                     (u.Name != null && u.Name.Contains(filter!)) || (u.Surname != null && u.Surname.Contains(filter!)))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IUser.UserName) : sorting)
             .PageBy(skipCount, maxResultCount)
@@ -80,7 +80,7 @@ public abstract class EfCoreUserRepositoryBase<TDbContext, TUser> : EfCoreReposi
         return await (await GetDbSetAsync())
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
-                u =>  u.UserName.Contains(filter!) || (u.Email != null && u.Email.Contains(filter!)) ||
+                u =>  u.UserName.Contains(filter!) || u.Email.Contains(filter!) ||
                     (u.Name != null && u.Name.Contains(filter!)) || (u.Surname != null && u.Surname.Contains(filter!))
             )
             .LongCountAsync(GetCancellationToken(cancellationToken));

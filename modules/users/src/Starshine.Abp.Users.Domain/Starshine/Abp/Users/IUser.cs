@@ -6,7 +6,7 @@ using Volo.Abp.MultiTenancy;
 namespace Starshine.Abp.Users;
 
 /// <summary>
-/// 
+/// 用户数据
 /// </summary>
 public interface IUser : IAggregateRoot<Guid>, IMultiTenant, IHasExtraProperties
 {
@@ -18,19 +18,16 @@ public interface IUser : IAggregateRoot<Guid>, IMultiTenant, IHasExtraProperties
     /// <summary>
     /// 邮箱
     /// </summary>
-    [CanBeNull]
-    string? Email { get; }
+    string Email { get; }
 
     /// <summary>
     /// 用户名字
     /// </summary>
-    [CanBeNull]
     string? Name { get; }
 
     /// <summary>
     /// 用户姓
     /// </summary>
-    [CanBeNull]
     string? Surname { get; }
 
     /// <summary>
@@ -46,7 +43,6 @@ public interface IUser : IAggregateRoot<Guid>, IMultiTenant, IHasExtraProperties
     /// <summary>
     /// 手机号码
     /// </summary>
-    [CanBeNull]
     string? PhoneNumber { get; }
 
     /// <summary>

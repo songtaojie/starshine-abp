@@ -13,7 +13,7 @@ public class UserEto : IUserData, IMultiTenant
     /// <summary>
     /// 用户主键id
     /// </summary>
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     /// <summary>
     /// 租户id
@@ -23,7 +23,7 @@ public class UserEto : IUserData, IMultiTenant
     /// <summary>
     /// 用户昵称
     /// </summary>
-    public string? UserName { get; set; }
+    public required string UserName { get; set; }
 
     /// <summary>
     /// 用户名字
@@ -43,7 +43,7 @@ public class UserEto : IUserData, IMultiTenant
     /// <summary>
     /// 邮箱
     /// </summary>
-    public string? Email { get; set; }
+    public required string Email { get; set; }
 
     /// <summary>
     /// 邮箱是否确认
