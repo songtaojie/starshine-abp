@@ -23,8 +23,4 @@
 		<ProjectReference Include="..\Starshine.Abp.Core\Starshine.Abp.Core.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Microsoft\AspNetCore\Builder\" />
-	</ItemGroup>
-
 </Project>

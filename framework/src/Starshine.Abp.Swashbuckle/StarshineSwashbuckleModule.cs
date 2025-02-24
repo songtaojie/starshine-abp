@@ -11,7 +11,7 @@ namespace Starshine.Abp.Swashbuckle
     [DependsOn(
     typeof(AbpVirtualFileSystemModule),
     typeof(AbpAspNetCoreMvcModule))]
-    public class StarshineAbpSwashbuckleModule : StarshineAbpModule
+    public class StarshineSwashbuckleModule : StarshineAbpModule
     {
         /// <summary>
         /// 配置服务
@@ -21,7 +21,7 @@ namespace Starshine.Abp.Swashbuckle
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<StarshineAbpSwashbuckleModule>();
+                options.FileSets.AddEmbedded<StarshineSwashbuckleModule>();
             });
         }
     }
