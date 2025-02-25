@@ -19,7 +19,7 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
     /// <summary>
     /// 权限名称
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// 父级权限名称
@@ -29,7 +29,7 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
     /// <summary>
     /// 显示名称
     /// </summary>
-    public string DisplayName { get; set; }
+    public required string DisplayName { get; set; }
 
     /// <summary>
     /// 是否启用
