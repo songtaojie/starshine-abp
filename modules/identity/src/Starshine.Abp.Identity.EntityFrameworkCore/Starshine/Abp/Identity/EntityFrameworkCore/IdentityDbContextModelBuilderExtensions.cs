@@ -7,7 +7,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 namespace Starshine.Abp.Identity.EntityFrameworkCore;
 
 /// <summary>
-/// 
+/// 身份验证数据库上下文
 /// </summary>
 public static class IdentityDbContextModelBuilderExtensions
 {
@@ -24,41 +24,27 @@ public static class IdentityDbContextModelBuilderExtensions
             b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "Users", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
-            b.ConfigureStarshineAbpUser();
+            b.ConfigureStarshineUser();
 
-            b.Property(u => u.NormalizedUserName).IsRequired()
-                .HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength)
-                .HasColumnName(nameof(IdentityUser.NormalizedUserName));
-            b.Property(u => u.NormalizedEmail).IsRequired()
-                .HasMaxLength(IdentityUserConsts.MaxNormalizedEmailLength)
-                .HasColumnName(nameof(IdentityUser.NormalizedEmail));
-            b.Property(u => u.PasswordHash).HasMaxLength(IdentityUserConsts.MaxPasswordHashLength)
-                .HasColumnName(nameof(IdentityUser.PasswordHash));
-            b.Property(u => u.SecurityStamp).IsRequired().HasMaxLength(IdentityUserConsts.MaxSecurityStampLength)
-                .HasColumnName(nameof(IdentityUser.SecurityStamp));
-            b.Property(u => u.TwoFactorEnabled).HasDefaultValue(false)
-                .HasColumnName(nameof(IdentityUser.TwoFactorEnabled));
-            b.Property(u => u.LockoutEnabled).HasDefaultValue(false)
-                .HasColumnName(nameof(IdentityUser.LockoutEnabled));
+            b.Property(u => u.NormalizedUserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength);
+            b.Property(u => u.NormalizedEmail).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedEmailLength);
+            b.Property(u => u.PasswordHash).HasMaxLength(IdentityUserConsts.MaxPasswordHashLength);
+            b.Property(u => u.SecurityStamp).IsRequired().HasMaxLength(IdentityUserConsts.MaxSecurityStampLength);
+            b.Property(u => u.TwoFactorEnabled).HasDefaultValue(false);
+            b.Property(u => u.LockoutEnabled).HasDefaultValue(false);
+            b.Property(u => u.IsExternal).IsRequired().HasDefaultValue(false);
+            b.Property(u => u.AccessFailedCount).If(!builder.IsUsingOracle(), p => p.HasDefaultValue(0));
 
-            b.Property(u => u.IsExternal).IsRequired().HasDefaultValue(false)
-                .HasColumnName(nameof(IdentityUser.IsExternal));
-
-            b.Property(u => u.AccessFailedCount)
-                .If(!builder.IsUsingOracle(), p => p.HasDefaultValue(0))
-                .HasColumnName(nameof(IdentityUser.AccessFailedCount));
-
-            b.HasMany(u => u.Claims).WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
-            b.HasMany(u => u.Logins).WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
-            b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
-            b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
-            b.HasMany(u => u.OrganizationUnits).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+            //b.HasMany(u => u.Claims).WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
+            //b.HasMany(u => u.Logins).WithOne().HasForeignKey(u => u.UserId).IsRequired();
+            //b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+            //b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+            //b.HasMany(u => u.OrganizationUnits).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
             b.HasIndex(u => u.NormalizedUserName);
             b.HasIndex(u => u.NormalizedEmail);
             b.HasIndex(u => u.UserName);
             b.HasIndex(u => u.Email);
-
             b.ApplyObjectExtensionMappings();
         });
 
@@ -67,14 +53,10 @@ public static class IdentityDbContextModelBuilderExtensions
             b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserClaims", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
-
             b.Property(x => x.Id).ValueGeneratedNever();
-
             b.Property(uc => uc.ClaimType).HasMaxLength(IdentityUserClaimConsts.MaxClaimTypeLength).IsRequired();
             b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityUserClaimConsts.MaxClaimValueLength);
-
             b.HasIndex(uc => uc.UserId);
-
             b.ApplyObjectExtensionMappings();
         });
 
@@ -83,68 +65,49 @@ public static class IdentityDbContextModelBuilderExtensions
             b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserRoles", StarshineIdentityDbProperties.DbSchema);
 
             b.ConfigureByConvention();
-
             b.HasKey(ur => new { ur.UserId, ur.RoleId });
 
-            b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
-            b.HasOne<IdentityUser>().WithMany(u => u.Roles).HasForeignKey(ur => ur.UserId).IsRequired();
+            //b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
+            //b.HasOne<IdentityUser>().WithMany(u => u.Roles).HasForeignKey(ur => ur.UserId).IsRequired();
 
             b.HasIndex(ur => new { ur.RoleId, ur.UserId });
-
             b.ApplyObjectExtensionMappings();
         });
 
         builder.Entity<IdentityUserLogin>(b =>
         {
             b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserLogins", StarshineIdentityDbProperties.DbSchema);
-
             b.ConfigureByConvention();
-
-            b.HasKey(x => new { x.UserId, x.LoginProvider });
-
-            b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserLoginConsts.MaxLoginProviderLength)
-                .IsRequired();
-            b.Property(ul => ul.ProviderKey).HasMaxLength(IdentityUserLoginConsts.MaxProviderKeyLength)
-                .IsRequired();
-            b.Property(ul => ul.ProviderDisplayName)
-                .HasMaxLength(IdentityUserLoginConsts.MaxProviderDisplayNameLength);
-
+            b.HasKey(u => new { u.UserId, u.LoginProvider });
+            b.Property(u => u.LoginProvider).HasMaxLength(IdentityUserLoginConsts.MaxLoginProviderLength).IsRequired();
+            b.Property(u => u.ProviderKey).HasMaxLength(IdentityUserLoginConsts.MaxProviderKeyLength).IsRequired();
+            b.Property(u => u.ProviderDisplayName).HasMaxLength(IdentityUserLoginConsts.MaxProviderDisplayNameLength);
             b.HasIndex(l => new { l.LoginProvider, l.ProviderKey });
-
             b.ApplyObjectExtensionMappings();
         });
 
         builder.Entity<IdentityUserToken>(b =>
         {
             b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserTokens", StarshineIdentityDbProperties.DbSchema);
-
             b.ConfigureByConvention();
-
-            b.HasKey(l => new { l.UserId, l.LoginProvider, l.Name });
-
-            b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength)
-                .IsRequired();
-            b.Property(ul => ul.Name).HasMaxLength(IdentityUserTokenConsts.MaxNameLength).IsRequired();
-
+            b.HasKey(u => new { u.UserId, u.LoginProvider, u.Name });
+            b.Property(u => u.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength).IsRequired();
+            b.Property(u => u.Name).HasMaxLength(IdentityUserTokenConsts.MaxNameLength).IsRequired();
             b.ApplyObjectExtensionMappings();
         });
 
         builder.Entity<IdentityRole>(b =>
         {
             b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "Roles", StarshineIdentityDbProperties.DbSchema);
-
             b.ConfigureByConvention();
-
-            b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
-            b.Property(r => r.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
-            b.Property(r => r.IsDefault).HasColumnName(nameof(IdentityRole.IsDefault));
-            b.Property(r => r.IsStatic).HasColumnName(nameof(IdentityRole.IsStatic));
-            b.Property(r => r.IsPublic).HasColumnName(nameof(IdentityRole.IsPublic));
-
-            b.HasMany(r => r.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
-
-            b.HasIndex(r => r.NormalizedName);
-
+            b.Property(u => u.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
+            b.Property(u => u.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
+            b.Property(u => u.IsDefault).HasColumnName(nameof(IdentityRole.IsDefault));
+            b.Property(u => u.IsStatic).HasColumnName(nameof(IdentityRole.IsStatic));
+            b.Property(u => u.IsPublic).HasColumnName(nameof(IdentityRole.IsPublic));
+            //b.HasMany(u => u.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
+            b.HasIndex(u => u.Name);
+            b.HasIndex(u => u.NormalizedName);
             b.ApplyObjectExtensionMappings();
         });
 

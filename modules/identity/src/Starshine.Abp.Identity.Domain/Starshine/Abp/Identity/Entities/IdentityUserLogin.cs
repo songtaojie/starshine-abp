@@ -24,7 +24,7 @@ public class IdentityUserLogin : Entity, IMultiTenant
     /// <summary>
     /// 获取或设置登录的登录提供商（例如 facebook、google）
     /// </summary>
-    public virtual string LoginProvider { get; protected set; } = string.Empty;
+    public virtual string LoginProvider { get; protected set; }
 
     /// <summary>
     /// 获取或设置此登录的唯一提供程序标识符。
@@ -35,22 +35,16 @@ public class IdentityUserLogin : Entity, IMultiTenant
     /// 获取或设置此登录在 UI 中使用的友好名称。
     /// </summary>
     public virtual string? ProviderDisplayName { get; protected set; }
+   
     /// <summary>
-    /// 
-    /// </summary>
-    protected IdentityUserLogin()
-    {
-
-    }
-    /// <summary>
-    /// 
+    /// 构造函数。
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="loginProvider"></param>
     /// <param name="providerKey"></param>
     /// <param name="providerDisplayName"></param>
     /// <param name="tenantId"></param>
-    protected internal IdentityUserLogin(Guid userId, [NotNull] string loginProvider, [NotNull] string providerKey, string? providerDisplayName, Guid? tenantId)
+    protected internal IdentityUserLogin(Guid userId, string loginProvider, string providerKey, string? providerDisplayName, Guid? tenantId)
     {
         Check.NotNull(loginProvider, nameof(loginProvider));
         Check.NotNull(providerKey, nameof(providerKey));
@@ -62,17 +56,18 @@ public class IdentityUserLogin : Entity, IMultiTenant
         TenantId = tenantId;
     }
     /// <summary>
-    /// 
+    /// 构造函数。
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="login"></param>
     /// <param name="tenantId"></param>
-    protected internal IdentityUserLogin(Guid userId, [NotNull] UserLoginInfo login, Guid? tenantId)
+    protected internal IdentityUserLogin(Guid userId, UserLoginInfo login, Guid? tenantId)
         : this(userId, login.LoginProvider, login.ProviderKey, login.ProviderDisplayName, tenantId)
     {
     }
+
     /// <summary>
-    /// 
+    /// 转换为 <see cref="UserLoginInfo"/>
     /// </summary>
     /// <returns></returns>
     public virtual UserLoginInfo ToUserLoginInfo()
@@ -80,7 +75,7 @@ public class IdentityUserLogin : Entity, IMultiTenant
         return new UserLoginInfo(LoginProvider, ProviderKey, ProviderDisplayName);
     }
     /// <summary>
-    /// 
+    /// 获取主键
     /// </summary>
     /// <returns></returns>
     public override object[] GetKeys()

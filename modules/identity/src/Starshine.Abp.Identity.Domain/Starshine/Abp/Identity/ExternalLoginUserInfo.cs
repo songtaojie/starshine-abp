@@ -49,7 +49,7 @@ public class ExternalLoginUserInfo
     public string ProviderKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// 
+    /// 构造函数
     /// </summary>
     /// <param name="email"></param>
     public ExternalLoginUserInfo([NotNull] string email)

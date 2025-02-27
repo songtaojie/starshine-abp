@@ -25,18 +25,18 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
     /// <summary>
     ///获取或设置此角色的名称。
     /// </summary>
-    public virtual string Name { get; protected internal set; } = string.Empty;
+    public virtual string Name { get; protected internal set; }
 
     /// <summary>
     /// 获取或设置此角色的规范化名称。
     /// </summary>
     [DisableAuditing]
-    public virtual string NormalizedName { get; protected internal set; } = string.Empty;
+    public virtual string NormalizedName { get; protected internal set; } 
 
     /// <summary>
     /// 此角色中声明的导航属性。
     /// </summary>
-    public virtual ICollection<IdentityRoleClaim> Claims { get; protected set; } = null!;
+    public virtual ICollection<IdentityRoleClaim> Claims { get; protected set; }
 
     /// <summary>
     /// 默认角色会自动分配给新用户
@@ -59,20 +59,14 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
     public virtual int EntityVersion { get; protected set; }
 
     /// <summary>
-    /// 初始化 <see cref="IdentityRole"/> 的新实例。
-    /// </summary>
-    protected IdentityRole() { }
-
-    /// <summary>
-    /// 
+    /// 构造函数
     /// </summary>
     /// <param name="id"></param>
     /// <param name="name"></param>
     /// <param name="tenantId"></param>
-    public IdentityRole(Guid id, [NotNull] string name, Guid? tenantId = null)
+    public IdentityRole(Guid id, string name, Guid? tenantId = null)
     {
         Check.NotNull(name, nameof(name));
-
         Id = id;
         Name = name;
         TenantId = tenantId;
@@ -80,24 +74,25 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
         ConcurrencyStamp = Guid.NewGuid().ToString("N");
         Claims = new Collection<IdentityRoleClaim>();
     }
+
     /// <summary>
     /// 添加声明
     /// </summary>
     /// <param name="guidGenerator"></param>
     /// <param name="claim"></param>
-    public virtual void AddClaim([NotNull] IGuidGenerator guidGenerator, [NotNull] Claim claim)
+    public virtual void AddClaim(IGuidGenerator guidGenerator, Claim claim)
     {
         Check.NotNull(guidGenerator, nameof(guidGenerator));
         Check.NotNull(claim, nameof(claim));
-
         Claims.Add(new IdentityRoleClaim(guidGenerator.Create(), Id, claim, TenantId));
     }
+
     /// <summary>
     /// 添加声明
     /// </summary>
     /// <param name="guidGenerator"></param>
     /// <param name="claims"></param>
-    public virtual void AddClaims([NotNull] IGuidGenerator guidGenerator, [NotNull] IEnumerable<Claim> claims)
+    public virtual void AddClaims(IGuidGenerator guidGenerator, IEnumerable<Claim> claims)
     {
         Check.NotNull(guidGenerator, nameof(guidGenerator));
         Check.NotNull(claims, nameof(claims));
@@ -106,15 +101,15 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
             AddClaim(guidGenerator, claim);
         }
     }
+
     /// <summary>
     /// 获取声明
     /// </summary>
     /// <param name="claim"></param>
     /// <returns></returns>
-    public virtual IdentityRoleClaim? FindClaim([NotNull] Claim claim)
+    public virtual IdentityRoleClaim? FindClaim(Claim claim)
     {
         Check.NotNull(claim, nameof(claim));
-
         return Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
     }
 
@@ -122,10 +117,9 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
     /// 移除声明
     /// </summary>
     /// <param name="claim"></param>
-    public virtual void RemoveClaim([NotNull] Claim claim)
+    public virtual void RemoveClaim(Claim claim)
     {
         Check.NotNull(claim, nameof(claim));
-
         Claims.RemoveAll(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
     }
 

@@ -25,15 +25,7 @@ public class IdentityUserRole : Entity, IMultiTenant
     public virtual Guid RoleId { get; protected set; }
 
     /// <summary>
-    /// 
-    /// </summary>
-    protected IdentityUserRole()
-    {
-
-    }
-
-    /// <summary>
-    /// 
+    /// 创建一个 <see cref="IdentityUserRole"/> 实例。
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="roleId"></param>

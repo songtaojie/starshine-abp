@@ -266,8 +266,8 @@ public class IdentityUserStore :
         cancellationToken.ThrowIfCancellationRequested();
         Check.NotNull(user, nameof(user));
         Check.NotNull(passwordHash, nameof(passwordHash));
-        user.PasswordHash = passwordHash;
-        user.SetLastPasswordChangeTime(DateTime.UtcNow);
+        user.SetPasswordHash(passwordHash)
+            .SetLastPasswordChangeTime(DateTimeOffset.Now);
         return Task.CompletedTask;
     }
 

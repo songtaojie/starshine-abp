@@ -24,12 +24,12 @@ public class IdentityUserToken : Entity, IMultiTenant
     /// <summary>
     /// 获取或设置此令牌所属的 LoginProvider。
     /// </summary>
-    public virtual string LoginProvider { get; protected set; } = string.Empty;
+    public virtual string LoginProvider { get; protected set; }
 
     /// <summary>
     /// 获取或设置令牌的名称。
     /// </summary>
-    public virtual string Name { get; protected set; } = string.Empty;
+    public virtual string Name { get; protected set; } 
 
     /// <summary>
     /// 获取或设置令牌值。
@@ -37,22 +37,14 @@ public class IdentityUserToken : Entity, IMultiTenant
     public virtual string? Value { get; set; }
 
     /// <summary>
-    /// 
-    /// </summary>
-    protected IdentityUserToken()
-    {
-
-    }
-
-    /// <summary>
-    /// 
+    /// 构造函数。
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="loginProvider"></param>
     /// <param name="name"></param>
     /// <param name="value"></param>
     /// <param name="tenantId"></param>
-    protected internal IdentityUserToken(Guid userId,[NotNull] string loginProvider,[NotNull] string name,string? value,Guid? tenantId)
+    protected internal IdentityUserToken(Guid userId,string loginProvider,string name,string? value,Guid? tenantId)
     {
         Check.NotNull(loginProvider, nameof(loginProvider));
         Check.NotNull(name, nameof(name));
@@ -64,7 +56,7 @@ public class IdentityUserToken : Entity, IMultiTenant
     }
 
     /// <summary>
-    /// 
+    /// 获取此实体的主键。
     /// </summary>
     /// <returns></returns>
     public override object[] GetKeys()

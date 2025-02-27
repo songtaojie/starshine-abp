@@ -20,41 +20,33 @@ public abstract class IdentityClaim : Entity<Guid>, IMultiTenant
     /// <summary>
     /// 获取或设置此声明的声明类型。
     /// </summary>
-    public virtual string ClaimType { get; protected set; } = string.Empty;
+    public virtual string ClaimType { get; protected set; } 
 
     /// <summary>
     ///获取或设置此声明的声明值。
     /// </summary>
-    public virtual string ClaimValue { get; protected set; } = string.Empty;
+    public virtual string? ClaimValue { get; protected set; }
 
     /// <summary>
-    /// 
-    /// </summary>
-    protected IdentityClaim()
-    {
-
-    }
-
-    /// <summary>
-    /// 
+    /// 构造函数
     /// </summary>
     /// <param name="id"></param>
     /// <param name="claim"></param>
     /// <param name="tenantId"></param>
-    protected internal IdentityClaim(Guid id, [NotNull] Claim claim, Guid? tenantId)
+    protected internal IdentityClaim(Guid id, Claim claim, Guid? tenantId)
         : this(id, claim.Type, claim.Value, tenantId)
     {
 
     }
 
     /// <summary>
-    /// 
+    /// 构造函数
     /// </summary>
     /// <param name="id"></param>
     /// <param name="claimType"></param>
     /// <param name="claimValue"></param>
     /// <param name="tenantId"></param>
-    protected internal IdentityClaim(Guid id, [NotNull] string claimType, string claimValue, Guid? tenantId)
+    protected internal IdentityClaim(Guid id, string claimType, string? claimValue, Guid? tenantId)
     {
         Check.NotNull(claimType, nameof(claimType));
         Id = id;
@@ -69,17 +61,16 @@ public abstract class IdentityClaim : Entity<Guid>, IMultiTenant
     /// <returns></returns>
     public virtual Claim ToClaim()
     {
-        return new Claim(ClaimType, ClaimValue);
+        return new Claim(ClaimType, ClaimValue ?? string.Empty);
     }
 
     /// <summary>
     /// 设置声明
     /// </summary>
     /// <param name="claim"></param>
-    public virtual void SetClaim([NotNull] Claim claim)
+    public virtual void SetClaim(Claim claim)
     {
         Check.NotNull(claim, nameof(claim));
-
         ClaimType = claim.Type;
         ClaimValue = claim.Value;
     }

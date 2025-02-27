@@ -76,7 +76,7 @@ namespace Starshine.Abp.AspNetCore.Cors
         public void PostConfigure(string? name, CorsSettingsOptions options)
         {
             PolicyName ??= "StarshineCors";
-            WithOrigins ??= Array.Empty<string>();
+            WithOrigins ??= [];
             AllowCredentials ??= true;
             FixedClientToken ??= true;
             EnabledSignalR ??= false;

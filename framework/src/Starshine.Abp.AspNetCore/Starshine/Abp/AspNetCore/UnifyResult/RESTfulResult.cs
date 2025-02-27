@@ -4,6 +4,8 @@
 //
 // 电话/微信：song977601042
 
+using Microsoft.AspNetCore.Http;
+
 namespace Starshine.Abp.AspNetCore;
 
 /// <summary>
@@ -35,6 +37,46 @@ public abstract class RESTfulResult
     /// 时间戳
     /// </summary>
     public long Timestamp { get; set; }
+
+    /// <summary>
+    /// 成功
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public static RESTfulResult<T> Successed<T>(T data)
+    {
+        return new RESTfulResult<T>
+        {
+            StatusCode = 200,
+            ErrorCode = null,
+            Succeeded = true,
+            Data = data,
+            Errors = null,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+        };
+    }
+
+    /// <summary>
+    /// 失败
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="errorCode"></param>
+    /// <param name="errors"></param>
+    /// <param name="statusCode"></param>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public static RESTfulResult<T> Failed<T>(string? errorCode,object? errors,int? statusCode = StatusCodes.Status400BadRequest, T? data = default)
+    {
+        return new RESTfulResult<T>
+        {
+            StatusCode = statusCode,
+            ErrorCode = errorCode,
+            Succeeded = false,
+            Data = data,
+            Errors = errors,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+        };
+    }
 }
 /// <summary>
 /// RESTful 风格结果集,泛型结果集
@@ -46,4 +88,6 @@ public class RESTfulResult<T>: RESTfulResult
     /// 数据
     /// </summary>
     public T? Data { get; set; }
+
+    
 }

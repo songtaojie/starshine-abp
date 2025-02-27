@@ -23,36 +23,34 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// <summary>
     /// 获取或设置此用户的用户名。
     /// </summary>
-    public virtual string UserName { get; protected internal set; } = null!;
+    public virtual string UserName { get; protected internal set; }
 
     /// <summary>
     ///获取或设置此用户的规范化用户名。
     /// </summary>
     [DisableAuditing]
-    public virtual string NormalizedUserName { get; protected internal set; } = null!;
+    public virtual string NormalizedUserName { get; protected internal set; }
 
     /// <summary>
     /// 获取或设置用户的名称。
     /// </summary>
-    [CanBeNull]
-    public virtual string Name { get; set; } = string.Empty;
+    public virtual string? Name { get; set; }
 
     /// <summary>
     /// 获取或设置用户的姓氏。
     /// </summary>
-    [CanBeNull]
     public virtual string? Surname { get; set; }
 
     /// <summary>
     /// 获取或设置此用户的电子邮件地址。
     /// </summary>
-    public virtual string Email { get; protected internal set; } = null!;
+    public virtual string Email { get; protected internal set; }
 
     /// <summary>
     /// 获取或设置此用户的规范化电子邮件地址。
     /// </summary>
     [DisableAuditing]
-    public virtual string NormalizedEmail { get; protected internal set; } = null!;
+    public virtual string NormalizedEmail { get; protected internal set; }
 
     /// <summary>
     ///获取或设置一个标志，指示用户是否已确认其电子邮件地址。
@@ -64,13 +62,13 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// 获取或设置此用户的密码的加盐和散列表示形式。
     /// </summary>
     [DisableAuditing]
-    public virtual string PasswordHash { get; protected internal set; } = null!;
+    public virtual string? PasswordHash { get; protected internal set; }
 
     /// <summary>
     /// 当用户凭证发生改变（密码更改、登录删除）时必须更改的随机值
     /// </summary>
     [DisableAuditing]
-    public virtual string SecurityStamp { get; protected internal set; } = null!;
+    public virtual string SecurityStamp { get; protected internal set; }
 
     /// <summary>
     /// 是否为外部
@@ -80,7 +78,6 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// <summary>
     /// 获取或设置用户的电话号码。
     /// </summary>
-    [CanBeNull]
     public virtual string? PhoneNumber { get; protected internal set; }
 
     /// <summary>
@@ -137,52 +134,40 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// <summary>
     /// 此用户所属角色的导航属性。
     /// </summary>
-    public virtual ICollection<IdentityUserRole> Roles { get; protected set; } = null!;
+    public virtual ICollection<IdentityUserRole> Roles { get; protected set; }
 
     /// <summary>
     ///此用户拥有的声明的导航属性。
     /// </summary>
-    public virtual ICollection<IdentityUserClaim> Claims { get; protected set; } = null!;
+    public virtual ICollection<IdentityUserClaim> Claims { get; protected set; }
 
     /// <summary>
     ///此用户登录帐户的导航属性。
     /// </summary>
-    public virtual ICollection<IdentityUserLogin> Logins { get; protected set; } = null!;
+    public virtual ICollection<IdentityUserLogin> Logins { get; protected set; }
 
     /// <summary>
     /// 此用户令牌的导航属性。
     /// </summary>
-    public virtual ICollection<IdentityUserToken> Tokens { get; protected set; } = null!;
+    public virtual ICollection<IdentityUserToken> Tokens { get; protected set; }
 
     /// <summary>
     ///此组织单位的导航属性。
     /// </summary>
-    public virtual ICollection<IdentityUserOrganizationUnit> OrganizationUnits { get; protected set; } = null!;
+    public virtual ICollection<IdentityUserOrganizationUnit> OrganizationUnits { get; protected set; }
 
     /// <summary>
-    /// 
-    /// </summary>
-    protected IdentityUser()
-    {
-    }
-
-    /// <summary>
-    /// 
+    /// 构造函数
     /// </summary>
     /// <param name="id"></param>
     /// <param name="userName"></param>
     /// <param name="email"></param>
-    /// <param name="tenantId"></param>
-    public IdentityUser( Guid id,[NotNull] string userName,[NotNull] string email, Guid? tenantId = null): base(id)
+    public IdentityUser(Guid id, string userName,string email): base(id)
     {
-        Check.NotNull(userName, nameof(userName));
-        Check.NotNull(email, nameof(email));
-
-        TenantId = tenantId;
         UserName = userName;
-        NormalizedUserName = userName.ToUpperInvariant();
+        NormalizedUserName = UserName.ToUpperInvariant();
         Email = email;
-        NormalizedEmail = email.ToUpperInvariant();
+        NormalizedEmail = Email.ToUpperInvariant();
         ConcurrencyStamp = Guid.NewGuid().ToString("N");
         SecurityStamp = Guid.NewGuid().ToString();
         IsActive = true;
@@ -434,18 +419,20 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// 使用 <see cref="UserManager{TUser}.ConfirmEmailAsync(TUser, string)"/> 进行常规电子邮件确认。
     /// 使用此项可跳过确认过程并直接设置 <see cref="EmailConfirmed"/>。
     /// </summary>
-    public virtual void SetEmailConfirmed(bool confirmed)
+    public virtual IdentityUser SetEmailConfirmed(bool confirmed)
     {
         EmailConfirmed = confirmed;
+        return this;
     }
 
     /// <summary>
     /// 设置电话号码确认
     /// </summary>
     /// <param name="confirmed"></param>
-    public virtual void SetPhoneNumberConfirmed(bool confirmed)
+    public virtual IdentityUser SetPhoneNumberConfirmed(bool confirmed)
     {
         PhoneNumberConfirmed = confirmed;
+        return this;
     }
 
     /// <summary>
@@ -454,37 +441,51 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// <param name="phoneNumber"></param>
     /// <param name="confirmed"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public void SetPhoneNumber(string? phoneNumber, bool confirmed)
+    public IdentityUser SetPhoneNumber(string? phoneNumber, bool confirmed)
     {
         PhoneNumber = phoneNumber;
         PhoneNumberConfirmed = !phoneNumber.IsNullOrWhiteSpace() && confirmed;
+        return this;
     }
 
     /// <summary>
     /// 激活状态
     /// </summary>
     /// <param name="isActive"></param>
-    public virtual void SetIsActive(bool isActive)
+    public virtual IdentityUser SetIsActive(bool isActive)
     {
         IsActive = isActive;
+        return this;
     }
 
     /// <summary>
     /// 设置下次登录时应更改密码
     /// </summary>
     /// <param name="shouldChangePasswordOnNextLogin"></param>
-    public virtual void SetShouldChangePasswordOnNextLogin(bool shouldChangePasswordOnNextLogin)
+    public virtual IdentityUser SetShouldChangePasswordOnNextLogin(bool shouldChangePasswordOnNextLogin)
     {
         ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin;
+        return this;
     }
 
     /// <summary>
     /// 设置上次密码更改时间
     /// </summary>
     /// <param name="lastPasswordChangeTime"></param>
-    public virtual void SetLastPasswordChangeTime(DateTimeOffset? lastPasswordChangeTime)
+    public virtual IdentityUser SetLastPasswordChangeTime(DateTimeOffset? lastPasswordChangeTime)
     {
         LastPasswordChangeTime = lastPasswordChangeTime;
+        return this;
+    }
+
+    /// <summary>
+    /// 设置密码哈希
+    /// </summary>
+    /// <param name="passwordHash"></param>
+    public virtual IdentityUser SetPasswordHash(string passwordHash)
+    {
+        PasswordHash = passwordHash;
+        return this;
     }
 
     /// <summary>

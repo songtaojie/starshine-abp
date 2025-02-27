@@ -15,7 +15,7 @@ namespace Starshine.Abp.AspNetCore
     [DependsOn(
     typeof(AbpAspNetCoreModule)
     )]
-    public class StarshineAbpAspNetCoreModule : StarshineAbpModule
+    public class StarshineAspNetCoreModule : StarshineAbpModule
     {
         /// <summary>
         /// 应用初始化

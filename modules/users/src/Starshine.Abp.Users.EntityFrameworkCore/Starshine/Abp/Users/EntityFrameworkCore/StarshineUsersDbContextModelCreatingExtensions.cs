@@ -13,7 +13,7 @@ public static class StarshineUsersDbContextModelCreatingExtensions
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <param name="b"></param>
-    public static void ConfigureStarshineAbpUser<TUser>(this EntityTypeBuilder<TUser> b)
+    public static void ConfigureStarshineUser<TUser>(this EntityTypeBuilder<TUser> b)
         where TUser : class, IUser
     {
         b.Property(u => u.TenantId);
