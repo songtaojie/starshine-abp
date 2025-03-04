@@ -1,6 +1,8 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.Identity.EntityFrameworkCore.EntityTypeConfigurations;
 using Starshine.Abp.Users.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
@@ -12,120 +14,20 @@ namespace Starshine.Abp.Identity.EntityFrameworkCore;
 public static class IdentityDbContextModelBuilderExtensions
 {
     /// <summary>
-    /// 
+    /// 配置身份验证数据库上下文
     /// </summary>
     /// <param name="builder"></param>
     public static void ConfigureIdentity([NotNull] this ModelBuilder builder)
     {
         Check.NotNull(builder, nameof(builder));
-
-        builder.Entity<IdentityUser>(b =>
-        {
-            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "Users", StarshineIdentityDbProperties.DbSchema);
-
-            b.ConfigureByConvention();
-            b.ConfigureStarshineUser();
-
-            b.Property(u => u.NormalizedUserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength);
-            b.Property(u => u.NormalizedEmail).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedEmailLength);
-            b.Property(u => u.PasswordHash).HasMaxLength(IdentityUserConsts.MaxPasswordHashLength);
-            b.Property(u => u.SecurityStamp).IsRequired().HasMaxLength(IdentityUserConsts.MaxSecurityStampLength);
-            b.Property(u => u.TwoFactorEnabled).HasDefaultValue(false);
-            b.Property(u => u.LockoutEnabled).HasDefaultValue(false);
-            b.Property(u => u.IsExternal).IsRequired().HasDefaultValue(false);
-            b.Property(u => u.AccessFailedCount).If(!builder.IsUsingOracle(), p => p.HasDefaultValue(0));
-
-            //b.HasMany(u => u.Claims).WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
-            //b.HasMany(u => u.Logins).WithOne().HasForeignKey(u => u.UserId).IsRequired();
-            //b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
-            //b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
-            //b.HasMany(u => u.OrganizationUnits).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
-
-            b.HasIndex(u => u.NormalizedUserName);
-            b.HasIndex(u => u.NormalizedEmail);
-            b.HasIndex(u => u.UserName);
-            b.HasIndex(u => u.Email);
-            b.ApplyObjectExtensionMappings();
-        });
-
-        builder.Entity<IdentityUserClaim>(b =>
-        {
-            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserClaims", StarshineIdentityDbProperties.DbSchema);
-
-            b.ConfigureByConvention();
-            b.Property(x => x.Id).ValueGeneratedNever();
-            b.Property(uc => uc.ClaimType).HasMaxLength(IdentityUserClaimConsts.MaxClaimTypeLength).IsRequired();
-            b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityUserClaimConsts.MaxClaimValueLength);
-            b.HasIndex(uc => uc.UserId);
-            b.ApplyObjectExtensionMappings();
-        });
-
-        builder.Entity<IdentityUserRole>(b =>
-        {
-            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserRoles", StarshineIdentityDbProperties.DbSchema);
-
-            b.ConfigureByConvention();
-            b.HasKey(ur => new { ur.UserId, ur.RoleId });
-
-            //b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
-            //b.HasOne<IdentityUser>().WithMany(u => u.Roles).HasForeignKey(ur => ur.UserId).IsRequired();
-
-            b.HasIndex(ur => new { ur.RoleId, ur.UserId });
-            b.ApplyObjectExtensionMappings();
-        });
-
-        builder.Entity<IdentityUserLogin>(b =>
-        {
-            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserLogins", StarshineIdentityDbProperties.DbSchema);
-            b.ConfigureByConvention();
-            b.HasKey(u => new { u.UserId, u.LoginProvider });
-            b.Property(u => u.LoginProvider).HasMaxLength(IdentityUserLoginConsts.MaxLoginProviderLength).IsRequired();
-            b.Property(u => u.ProviderKey).HasMaxLength(IdentityUserLoginConsts.MaxProviderKeyLength).IsRequired();
-            b.Property(u => u.ProviderDisplayName).HasMaxLength(IdentityUserLoginConsts.MaxProviderDisplayNameLength);
-            b.HasIndex(l => new { l.LoginProvider, l.ProviderKey });
-            b.ApplyObjectExtensionMappings();
-        });
-
-        builder.Entity<IdentityUserToken>(b =>
-        {
-            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "UserTokens", StarshineIdentityDbProperties.DbSchema);
-            b.ConfigureByConvention();
-            b.HasKey(u => new { u.UserId, u.LoginProvider, u.Name });
-            b.Property(u => u.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength).IsRequired();
-            b.Property(u => u.Name).HasMaxLength(IdentityUserTokenConsts.MaxNameLength).IsRequired();
-            b.ApplyObjectExtensionMappings();
-        });
-
-        builder.Entity<IdentityRole>(b =>
-        {
-            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "Roles", StarshineIdentityDbProperties.DbSchema);
-            b.ConfigureByConvention();
-            b.Property(u => u.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
-            b.Property(u => u.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
-            b.Property(u => u.IsDefault).HasColumnName(nameof(IdentityRole.IsDefault));
-            b.Property(u => u.IsStatic).HasColumnName(nameof(IdentityRole.IsStatic));
-            b.Property(u => u.IsPublic).HasColumnName(nameof(IdentityRole.IsPublic));
-            //b.HasMany(u => u.Claims).WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
-            b.HasIndex(u => u.Name);
-            b.HasIndex(u => u.NormalizedName);
-            b.ApplyObjectExtensionMappings();
-        });
-
-        builder.Entity<IdentityRoleClaim>(b =>
-        {
-            b.ToTable(StarshineIdentityDbProperties.DbTablePrefix + "RoleClaims", StarshineIdentityDbProperties.DbSchema);
-
-            b.ConfigureByConvention();
-
-            b.Property(x => x.Id).ValueGeneratedNever();
-
-            b.Property(uc => uc.ClaimType).HasMaxLength(IdentityRoleClaimConsts.MaxClaimTypeLength).IsRequired();
-            b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityRoleClaimConsts.MaxClaimValueLength);
-
-            b.HasIndex(uc => uc.RoleId);
-
-            b.ApplyObjectExtensionMappings();
-        });
+        
+        builder.ApplyConfiguration(new IdentityUserConfiguration(builder));
+        builder.ApplyConfiguration(new IdentityUserClaimConfiguration());
+        builder.ApplyConfiguration(new IdentityUserRoleConfiguration());
+        builder.ApplyConfiguration(new IdentityUserLoginConfiguration());
+        builder.ApplyConfiguration(new IdentityUserTokenConfiguration());
+        builder.ApplyConfiguration(new IdentityRoleConfiguration());
+        builder.ApplyConfiguration(new IdentityRoleClaimConfiguration());
 
         if (builder.IsHostDatabase())
         {
