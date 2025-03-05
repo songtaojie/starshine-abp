@@ -15,9 +15,7 @@ namespace Starshine.Abp.Identity.EntityFrameworkCore;
 /// <summary>
 /// 
 /// </summary>
-public class EfCoreOrganizationUnitRepository
-    : EfCoreRepository<IIdentityDbContext, OrganizationUnit, Guid>,
-        IOrganizationUnitRepository
+public class EfCoreOrganizationUnitRepository : EfCoreRepository<IIdentityDbContext, OrganizationUnit, Guid>, IOrganizationUnitRepository
 {
     /// <summary>
     /// 

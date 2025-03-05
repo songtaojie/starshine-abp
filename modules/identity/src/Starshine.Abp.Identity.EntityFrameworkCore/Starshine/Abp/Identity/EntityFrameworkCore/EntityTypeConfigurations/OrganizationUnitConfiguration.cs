@@ -21,17 +21,12 @@ namespace Starshine.Abp.Identity.EntityFrameworkCore
         public void Configure(EntityTypeBuilder<OrganizationUnit> builder)
         {
             builder.ToTable(StarshineIdentityDbProperties.DbTablePrefix + nameof(OrganizationUnit), StarshineIdentityDbProperties.DbSchema);
-
             builder.ConfigureByConvention();
-
             builder.Property(t => t.Code).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxCodeLength);
             builder.Property(t => t.DisplayName).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxDisplayNameLength);
-
-            builder.HasMany<OrganizationUnit>().WithOne().HasForeignKey(t => t.ParentId);
-            builder.HasMany(t => t.Roles).WithOne().HasForeignKey(our => our.OrganizationUnitId).IsRequired();
-
+            //builder.HasMany<OrganizationUnit>().WithOne().HasForeignKey(t => t.ParentId);
+            //builder.HasMany(t => t.Roles).WithOne().HasForeignKey(our => our.OrganizationUnitId).IsRequired();
             builder.HasIndex(t => t.Code);
-
             builder.ApplyObjectExtensionMappings();
         }
     }

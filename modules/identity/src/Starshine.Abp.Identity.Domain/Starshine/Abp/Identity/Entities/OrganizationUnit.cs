@@ -45,14 +45,6 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     public virtual ICollection<OrganizationUnitRole> Roles { get; protected set; } = [];
 
     /// <summary>
-    /// 初始化 <see cref="OrganizationUnit"/> 类的新实例。
-    /// </summary>
-    public OrganizationUnit()
-    {
-
-    }
-
-    /// <summary>
     ///  初始化 <see cref="OrganizationUnit"/> 类的新实例。
     /// </summary>
     /// <param name="id">id</param>

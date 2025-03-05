@@ -15,6 +15,6 @@ public class StarshineIdentityOptions
     /// </summary>
     public StarshineIdentityOptions()
     {
-        ExternalLoginProviders = new ExternalLoginProviderDictionary();
+        ExternalLoginProviders = [];
     }
 }

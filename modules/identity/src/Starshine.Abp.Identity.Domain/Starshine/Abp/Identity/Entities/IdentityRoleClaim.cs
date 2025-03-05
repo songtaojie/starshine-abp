@@ -13,16 +13,9 @@ public class IdentityRoleClaim : IdentityClaim
     /// 获取或设置与此声明相关角色的主键。
     /// </summary>
     public virtual Guid RoleId { get; protected set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    protected IdentityRoleClaim()
-    {
-
-    }
 
     /// <summary>
-    /// 
+    /// 初始化 <see cref="IdentityRoleClaim"/> 类的新实例。
     /// </summary>
     /// <param name="id"></param>
     /// <param name="roleId"></param>
@@ -35,7 +28,7 @@ public class IdentityRoleClaim : IdentityClaim
     }
 
     /// <summary>
-    /// 
+    /// 初始化 <see cref="IdentityRoleClaim"/> 类的新实例。
     /// </summary>
     /// <param name="id"></param>
     /// <param name="roleId"></param>
