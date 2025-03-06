@@ -4,7 +4,7 @@
 //
 // 电话/微信：song977601042
 
-using Volo.Abp.Application;
+using Starshine.Abp.Application;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Localization;
@@ -15,7 +15,7 @@ namespace Starshine.Abp.Ddd.Application.Contracts;
 /// Starshine Ddd模块
 /// </summary>
 [DependsOn(
-    typeof(AbpDddApplicationContractsModule)
+    typeof(Abp.Application.StarshineDddApplicationContractsModule)
     )]
 public class StarshineDddApplicationContractsModule : AbpModule
 {

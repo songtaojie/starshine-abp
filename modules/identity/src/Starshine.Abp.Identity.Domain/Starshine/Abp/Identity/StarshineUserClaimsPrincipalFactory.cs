@@ -21,6 +21,7 @@ public class StarshineUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<Id
     /// 当前主要访问者
     /// </summary>
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
+
     /// <summary>
     /// Abp 声明主要工厂
     /// </summary>
@@ -50,7 +51,7 @@ public class StarshineUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<Id
     }
 
     /// <summary>
-    /// 创建
+    /// 创建声明
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>

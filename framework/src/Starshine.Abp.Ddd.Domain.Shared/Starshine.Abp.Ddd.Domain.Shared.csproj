@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.Ddd.Application.Contracts</AssemblyName>
+		<PackageId>Starshine.Abp.Ddd.Application.Contracts</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.MultiTenancy.Abstractions" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.EventBus.Abstractions" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+</Project>

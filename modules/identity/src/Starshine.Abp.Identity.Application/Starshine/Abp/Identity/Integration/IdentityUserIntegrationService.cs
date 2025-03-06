@@ -19,7 +19,7 @@ public class IdentityUserIntegrationService : IdentityAppServiceBase, IIdentityU
     /// <summary>
     /// 
     /// </summary>
-    protected IdentityUserRepositoryExternalUserLookupServiceProvider UserLookupServiceProvider { get; }
+    protected ExternalUserLookupServiceProvider UserLookupServiceProvider { get; }
 
     /// <summary>
     /// 
@@ -29,7 +29,7 @@ public class IdentityUserIntegrationService : IdentityAppServiceBase, IIdentityU
     /// <param name="abpLazyServiceProvider"></param>
     public IdentityUserIntegrationService(
         IUserRoleFinder userRoleFinder,
-        IdentityUserRepositoryExternalUserLookupServiceProvider userLookupServiceProvider,
+        ExternalUserLookupServiceProvider userLookupServiceProvider,
         IAbpLazyServiceProvider abpLazyServiceProvider):base(abpLazyServiceProvider)
     {
         UserRoleFinder = userRoleFinder;

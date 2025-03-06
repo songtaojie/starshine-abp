@@ -1,7 +1,4 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
@@ -12,22 +9,20 @@ using Volo.Abp.Uow;
 namespace Starshine.Abp.Identity;
 
 /// <summary>
-/// 
+/// 用户实体更新或删除事件处理程序
 /// </summary>
 public class UserEntityUpdatedOrDeletedEventHandler :
     ILocalEventHandler<EntityUpdatedEventData<IdentityUser>>,
     ILocalEventHandler<EntityDeletedEventData<IdentityUser>>,
     ITransientDependency
 {
-    /// <summary>
-    /// 
-    /// </summary>
+    
     private readonly ILogger<UserEntityUpdatedOrDeletedEventHandler> _logger;
 
     private readonly IDistributedCache<AbpDynamicClaimCacheItem> _dynamicClaimCache;
 
     /// <summary>
-    /// 
+    /// 构造函数
     /// </summary>
     /// <param name="dynamicClaimCache"></param>
     /// <param name="logger"></param>
@@ -35,12 +30,11 @@ public class UserEntityUpdatedOrDeletedEventHandler :
         ILogger<UserEntityUpdatedOrDeletedEventHandler> logger)
     {
         _logger = logger;
-
         _dynamicClaimCache = dynamicClaimCache;
     }
 
     /// <summary>
-    /// 
+    /// 处理事件
     /// </summary>
     /// <param name="eventData"></param>
     /// <returns></returns>
@@ -49,8 +43,9 @@ public class UserEntityUpdatedOrDeletedEventHandler :
     {
         await RemoveDynamicClaimCacheAsync(eventData.Entity.Id, eventData.Entity.TenantId);
     }
+
     /// <summary>
-    /// 
+    /// 处理事件
     /// </summary>
     /// <param name="eventData"></param>
     /// <returns></returns>
@@ -61,7 +56,7 @@ public class UserEntityUpdatedOrDeletedEventHandler :
     }
 
     /// <summary>
-    /// 
+    /// 删除缓存
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="tenantId"></param>

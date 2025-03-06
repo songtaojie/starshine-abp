@@ -12,8 +12,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Localization.Resources.AbpDdd;
+using Starshine.Abp.Application.Dtos;
+using Starshine.Abp.Application.Localization.Resources.AbpDdd;
 
 namespace Starshine.Abp.Application.Dtos;
 
@@ -50,7 +50,7 @@ public class LimitedRequestDto : ILimitedRequest, IValidatableObject
     {
         if (PageSize > MaxPageSize)
         {
-            var localizer = validationContext.GetRequiredService<IStringLocalizer<AbpDddApplicationContractsResource>>();
+            var localizer = validationContext.GetRequiredService<IStringLocalizer<StarshineDddApplicationContractsResource>>();
 
             yield return new ValidationResult(
                 localizer[

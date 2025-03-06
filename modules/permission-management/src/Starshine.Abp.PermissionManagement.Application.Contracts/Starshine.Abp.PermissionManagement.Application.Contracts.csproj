@@ -14,10 +14,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\framework\src\Starshine.Abp.Ddd.Application.Contracts\Starshine.Abp.Ddd.Application.Contracts.csproj" />
 	  <ProjectReference Include="..\Starshine.Abp.PermissionManagement.Domain.Shared\Starshine.Abp.PermissionManagement.Domain.Shared.csproj" />
 	</ItemGroup>
 

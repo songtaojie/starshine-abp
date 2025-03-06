@@ -6,7 +6,7 @@ namespace Starshine.Abp.Identity;
 /// <summary>
 /// 身份用户存储库外部用户查找服务提供商
 /// </summary>
-public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
+public class ExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
 {
     /// <summary>
     /// 用户存储库
@@ -16,12 +16,13 @@ public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternal
     /// 查找规范器
     /// </summary>
     protected ILookupNormalizer LookupNormalizer { get; }
+
     /// <summary>
-    /// 
+    /// 构造函数
     /// </summary>
     /// <param name="userRepository"></param>
     /// <param name="lookupNormalizer"></param>
-    public IdentityUserRepositoryExternalUserLookupServiceProvider(IIdentityUserRepository userRepository, ILookupNormalizer lookupNormalizer)
+    public ExternalUserLookupServiceProvider(IIdentityUserRepository userRepository, ILookupNormalizer lookupNormalizer)
     {
         UserRepository = userRepository;
         LookupNormalizer = lookupNormalizer;

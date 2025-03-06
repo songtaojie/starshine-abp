@@ -162,21 +162,23 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// <param name="id"></param>
     /// <param name="userName"></param>
     /// <param name="email"></param>
-    public IdentityUser(Guid id, string userName,string email): base(id)
+    /// <param name="tenantId"></param>
+    public IdentityUser(Guid id, string userName,string email,Guid? tenantId) : base(id)
     {
         UserName = userName;
         NormalizedUserName = UserName.ToUpperInvariant();
         Email = email;
         NormalizedEmail = Email.ToUpperInvariant();
         ConcurrencyStamp = Guid.NewGuid().ToString("N");
-        SecurityStamp = Guid.NewGuid().ToString();
+        SecurityStamp = Guid.NewGuid().ToString("N");
+        TenantId = tenantId;
         IsActive = true;
 
-        Roles = new Collection<IdentityUserRole>();
-        Claims = new Collection<IdentityUserClaim>();
-        Logins = new Collection<IdentityUserLogin>();
-        Tokens = new Collection<IdentityUserToken>();
-        OrganizationUnits = new Collection<IdentityUserOrganizationUnit>();
+        Roles = [];
+        Claims = [];
+        Logins = [];
+        Tokens = [];
+        OrganizationUnits = [];
     }
 
     /// <summary>
@@ -186,12 +188,10 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual void AddRole(Guid roleId)
     {
         Check.NotNull(roleId, nameof(roleId));
-
         if (IsInRole(roleId))
         {
             return;
         }
-
         Roles.Add(new IdentityUserRole(Id, roleId, TenantId));
     }
 
@@ -202,12 +202,10 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual void RemoveRole(Guid roleId)
     {
         Check.NotNull(roleId, nameof(roleId));
-
         if (!IsInRole(roleId))
         {
             return;
         }
-
         Roles.RemoveAll(r => r.RoleId == roleId);
     }
 
@@ -219,7 +217,6 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual bool IsInRole(Guid roleId)
     {
         Check.NotNull(roleId, nameof(roleId));
-
         return Roles.Any(r => r.RoleId == roleId);
     }
 
@@ -232,7 +229,6 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     {
         Check.NotNull(guidGenerator, nameof(guidGenerator));
         Check.NotNull(claim, nameof(claim));
-
         Claims.Add(new IdentityUserClaim(guidGenerator.Create(), Id, claim, TenantId));
     }
 
@@ -245,7 +241,6 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     {
         Check.NotNull(guidGenerator, nameof(guidGenerator));
         Check.NotNull(claims, nameof(claims));
-
         foreach (var claim in claims)
         {
             AddClaim(guidGenerator, claim);
@@ -260,7 +255,6 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual IdentityUserClaim? FindClaim([NotNull] Claim claim)
     {
         Check.NotNull(claim, nameof(claim));
-
         return Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
     }
 
@@ -273,7 +267,6 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     {
         Check.NotNull(claim, nameof(claim));
         Check.NotNull(newClaim, nameof(newClaim));
-
         var userClaims = Claims.Where(uc => uc.ClaimValue == claim.Value && uc.ClaimType == claim.Type);
         foreach (var userClaim in userClaims)
         {
@@ -288,7 +281,6 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual void RemoveClaims([NotNull] IEnumerable<Claim> claims)
     {
         Check.NotNull(claims, nameof(claims));
-
         foreach (var claim in claims)
         {
             RemoveClaim(claim);
@@ -302,7 +294,6 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual void RemoveClaim([NotNull] Claim claim)
     {
         Check.NotNull(claim, nameof(claim));
-
         Claims.RemoveAll(c => c.ClaimValue == claim.Value && c.ClaimType == claim.Type);
     }
 
@@ -313,7 +304,6 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual void AddLogin([NotNull] UserLoginInfo login)
     {
         Check.NotNull(login, nameof(login));
-
         Logins.Add(new IdentityUserLogin(Id, login, TenantId));
     }
 
@@ -326,7 +316,6 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     {
         Check.NotNull(loginProvider, nameof(loginProvider));
         Check.NotNull(providerKey, nameof(providerKey));
-
         Logins.RemoveAll(userLogin =>
             userLogin.LoginProvider == loginProvider && userLogin.ProviderKey == providerKey);
     }
