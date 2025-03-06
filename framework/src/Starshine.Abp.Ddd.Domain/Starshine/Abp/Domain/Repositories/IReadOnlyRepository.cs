@@ -10,16 +10,17 @@ using Volo.Abp.Linq;
 
 namespace Starshine.Abp.Domain.Repositories;
 
+/// <summary>
+/// <typeparamref name="TEntity"/> 的只读存储库接口。
+/// </summary>
+/// <typeparam name="TEntity"></typeparam>
 public interface IReadOnlyRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     where TEntity : class, IEntity
 {
+    /// <summary>
+    /// 异步执行器
+    /// </summary>
     IAsyncQueryableExecuter AsyncExecuter { get; }
-
-    [Obsolete("Use WithDetailsAsync method.")]
-    IQueryable<TEntity> WithDetails();
-
-    [Obsolete("Use WithDetailsAsync method.")]
-    IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors);
 
     Task<IQueryable<TEntity>> WithDetailsAsync(); //TODO: CancellationToken
 

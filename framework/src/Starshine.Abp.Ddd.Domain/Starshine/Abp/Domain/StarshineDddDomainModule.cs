@@ -13,7 +13,9 @@ using Volo.Abp.Specifications;
 using Volo.Abp.Timing;
 
 namespace Starshine.Abp.Domain;
-
+/// <summary>
+/// 领域模块
+/// </summary>
 [DependsOn(
     typeof(AbpAuditingModule),
     typeof(AbpDataModule),
@@ -24,10 +26,14 @@ namespace Starshine.Abp.Domain;
     typeof(AbpExceptionHandlingModule),
     typeof(AbpSpecificationsModule),
     typeof(AbpCachingModule),
-    typeof(AbpDddDomainSharedModule)
+    typeof(StarshineDddDomainSharedModule)
     )]
-public class AbpDddDomainModule : AbpModule
+public class StarshineDddDomainModule : AbpModule
 {
+    /// <summary>
+    /// 注册所有仓储
+    /// </summary>
+    /// <param name="context"></param>
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddConventionalRegistrar(new AbpRepositoryConventionalRegistrar());

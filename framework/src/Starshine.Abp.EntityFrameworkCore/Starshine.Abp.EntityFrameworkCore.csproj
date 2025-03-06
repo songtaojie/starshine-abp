@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.Ddd.Domain.Shared</AssemblyName>
+		<PackageId>Starshine.Abp.Ddd.Domain.Shared</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Json" Version="$(AbpVersion)" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.14" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Starshine.Abp.Ddd.Domain\Starshine.Abp.Ddd.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

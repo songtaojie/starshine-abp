@@ -10,9 +10,13 @@ using Volo.Abp.Data;
 using Starshine.Abp.Domain.Entities;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Uow;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp;
 
 namespace Starshine.Abp.Domain.Repositories;
-
+/// <summary>
+/// 仓储扩展方法
+/// </summary>
 public static class RepositoryExtensions
 {
     public async static Task EnsureCollectionLoadedAsync<TEntity, TProperty>(

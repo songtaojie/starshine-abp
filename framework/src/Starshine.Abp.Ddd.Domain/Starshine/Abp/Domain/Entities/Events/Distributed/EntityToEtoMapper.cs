@@ -11,10 +11,10 @@ public class EntityToEtoMapper : IEntityToEtoMapper, ITransientDependency
 {
     protected IServiceScopeFactory HybridServiceScopeFactory { get; }
 
-    protected AbpDistributedEntityEventOptions Options { get; }
+    protected DistributedEntityEventOptions Options { get; }
 
     public EntityToEtoMapper(
-        IOptions<AbpDistributedEntityEventOptions> options,
+        IOptions<DistributedEntityEventOptions> options,
         IServiceScopeFactory hybridServiceScopeFactory)
     {
         HybridServiceScopeFactory = hybridServiceScopeFactory;

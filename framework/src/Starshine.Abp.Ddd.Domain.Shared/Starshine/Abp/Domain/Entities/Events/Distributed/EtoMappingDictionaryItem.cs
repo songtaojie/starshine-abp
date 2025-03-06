@@ -1,16 +1,24 @@
 using System;
 
-namespace Starshine.Abp.Domain.Entities.Events.Distributed;
+namespace Starshine.Abp.Domain;
 
-public class EtoMappingDictionaryItem
+/// <summary>
+/// Eto映射字典项
+/// </summary>
+/// <remarks>
+/// 构造函数
+/// </remarks>
+/// <param name="etoType"></param>
+/// <param name="objectMappingContextType"></param>
+public class EtoMappingDictionaryItem(Type etoType, Type? objectMappingContextType = null)
 {
-    public Type EtoType { get; }
+    /// <summary>
+    /// Eto类型
+    /// </summary>
+    public Type EtoType { get; } = etoType;
 
-    public Type? ObjectMappingContextType { get; }
-
-    public EtoMappingDictionaryItem(Type etoType, Type? objectMappingContextType = null)
-    {
-        EtoType = etoType;
-        ObjectMappingContextType = objectMappingContextType;
-    }
+    /// <summary>
+    /// 对象映射上下文类型
+    /// </summary>
+    public Type? ObjectMappingContextType { get; } = objectMappingContextType;
 }

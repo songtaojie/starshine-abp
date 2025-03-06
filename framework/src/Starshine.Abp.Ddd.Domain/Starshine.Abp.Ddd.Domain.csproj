@@ -1,32 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\common.props" />
 
-  <Import Project="..\..\..\configureawait.props" />
-  <Import Project="..\..\..\common.props" />
-
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-    <Nullable>enable</Nullable>
-    <WarningsAsErrors>Nullable</WarningsAsErrors>
-    <AssemblyName>Volo.Abp.Ddd.Domain</AssemblyName>
-    <PackageId>Volo.Abp.Ddd.Domain</PackageId>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace />
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Ddd.Domain.Shared\Volo.Abp.Ddd.Domain.Shared.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
-    <ProjectReference Include="..\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
-    <ProjectReference Include="..\Volo.Abp.ExceptionHandling\Volo.Abp.ExceptionHandling.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Guids\Volo.Abp.Guids.csproj" />
-    <ProjectReference Include="..\Volo.Abp.ObjectMapping\Volo.Abp.ObjectMapping.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Specifications\Volo.Abp.Specifications.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Volo.Abp.Ddd.Domain</AssemblyName>
+		<PackageId>Volo.Abp.Ddd.Domain</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Auditing" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Caching" Version="$(AbpVersion)" />
+	<PackageReference Include="Volo.Abp.Data" Version="$(AbpVersion)" />
+	<PackageReference Include="Volo.Abp.EventBus" Version="$(AbpVersion)" />
+<PackageReference Include="Volo.Abp.ExceptionHandling" Version="$(AbpVersion)" />
+<PackageReference Include="Volo.Abp.Guids" Version="$(AbpVersion)" />
+	<PackageReference Include="Volo.Abp.ObjectMapping" Version="$(AbpVersion)" />
+	<PackageReference Include="Volo.Abp.Specifications" Version="$(AbpVersion)" />
+	<PackageReference Include="Volo.Abp.Timing" Version="$(AbpVersion)" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Starshine.Abp.Ddd.Domain.Shared\Starshine.Abp.Ddd.Domain.Shared.csproj" />
+	</ItemGroup>
 
 </Project>

@@ -5,7 +5,10 @@ using JetBrains.Annotations;
 using Starshine.Abp.Domain.Entities;
 
 namespace Starshine.Abp.Domain.Repositories;
-
+/// <summary>
+/// 用于基本操作的基本存储库接口。
+/// </summary>
+/// <typeparam name="TEntity"></typeparam>
 public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     where TEntity : class, IEntity
 {
@@ -18,8 +21,7 @@ public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     /// </param>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <param name="entity">Inserted entity</param>
-    [NotNull]
-    Task<TEntity> InsertAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
+    Task<TEntity> InsertAsync([NotNull] TEntity entity, bool autoSave = true, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Inserts multiple new entities.
@@ -31,7 +33,7 @@ public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <param name="entities">Entities to be inserted.</param>
     /// <returns>Awaitable <see cref="Task"/>.</returns>
-    Task InsertManyAsync([NotNull] IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
+    Task InsertManyAsync(IEnumerable<TEntity> entities, bool autoSave = true, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates an existing entity.
@@ -43,7 +45,7 @@ public interface IBasicRepository<TEntity> : IReadOnlyBasicRepository<TEntity>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <param name="entity">Entity</param>
     [NotNull]
-    Task<TEntity> UpdateAsync([NotNull] TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
+    Task<TEntity> UpdateAsync([NotNull] TEntity entity, bool autoSave = true, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates multiple entities.
