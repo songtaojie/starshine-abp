@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Caching;
@@ -14,7 +9,7 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp;
 
-namespace Starshine.Abp.Identity;
+namespace Starshine.Abp.Identity.Managers;
 
 /// <summary>
 /// 身份角色管理器
@@ -41,10 +36,12 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
     /// 组织单位存储库
     /// </summary>
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+
     /// <summary>
     /// 组织单位
     /// </summary>
     protected OrganizationUnitManager OrganizationUnitManager { get; }
+
     /// <summary>
     /// 动态声明缓存
     /// </summary>

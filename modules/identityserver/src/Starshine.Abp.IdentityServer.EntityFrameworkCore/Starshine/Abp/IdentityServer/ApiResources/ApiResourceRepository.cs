@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Starshine.Abp.IdentityServer.EntityFrameworkCore;
+using Starshine.Abp.IdentityServer.Entities;
+using Starshine.Abp.IdentityServer.Repositories;
 
 namespace Starshine.Abp.IdentityServer.ApiResources;
 

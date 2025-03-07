@@ -8,13 +8,13 @@ using Starshine.IdentityServer.Stores;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Caching;
-using Starshine.Abp.IdentityServer.ApiResources;
 using Starshine.Abp.IdentityServer.ApiScopes;
 using Starshine.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.ObjectMapping;
-using ApiResource = Starshine.Abp.IdentityServer.ApiResources.ApiResource;
+using ApiResource = Starshine.Abp.IdentityServer.Entities.ApiResource;
 using ApiScope = Starshine.Abp.IdentityServer.ApiScopes.ApiScope;
 using IdentityResource = Starshine.Abp.IdentityServer.IdentityResources.IdentityResource;
+using Starshine.Abp.IdentityServer.Repositories;
 
 namespace Starshine.Abp.IdentityServer;
 
@@ -140,7 +140,7 @@ public class ResourceStore : IResourceStore
 
             return new Resources(
                 ObjectMapper.Map<List<Starshine.Abp.IdentityServer.IdentityResources.IdentityResource>, List<Starshine.IdentityServer.Models.IdentityResource>>(identityResources),
-                ObjectMapper.Map<List<Starshine.Abp.IdentityServer.ApiResources.ApiResource>, List<Starshine.IdentityServer.Models.ApiResource>>(apiResources),
+                ObjectMapper.Map<List<ApiResource>, List<Starshine.IdentityServer.Models.ApiResource>>(apiResources),
                 ObjectMapper.Map<List<Starshine.Abp.IdentityServer.ApiScopes.ApiScope>, List<Starshine.IdentityServer.Models.ApiScope>>(apiScopes));
         }, () => new DistributedCacheEntryOptions
         {

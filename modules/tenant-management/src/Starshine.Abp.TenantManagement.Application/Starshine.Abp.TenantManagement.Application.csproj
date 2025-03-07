@@ -15,7 +15,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Starshine.Abp.TenantManagement.Application.Contracts\Starshine.Abp.TenantManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\Starshine.Abp.TenantManagement.Domain\Starshine.Abp.TenantManagement.Domain.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Starshine.Abp.Ddd.Application\Starshine.Abp.Ddd.Application.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(AbpVersion)" />
+	</ItemGroup>
 </Project>

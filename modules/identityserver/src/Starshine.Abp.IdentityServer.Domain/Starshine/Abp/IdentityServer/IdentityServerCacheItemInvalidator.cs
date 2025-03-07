@@ -7,9 +7,9 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 using Starshine.Abp.IdentityServer.Clients;
-using Starshine.Abp.IdentityServer.ApiResources;
 using Starshine.Abp.IdentityServer.ApiScopes;
 using Starshine.Abp.IdentityServer.IdentityResources;
+using Starshine.Abp.IdentityServer.Entities;
 
 namespace Starshine.Abp.IdentityServer;
 

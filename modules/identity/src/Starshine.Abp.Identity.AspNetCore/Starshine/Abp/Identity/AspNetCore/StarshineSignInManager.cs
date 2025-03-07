@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Starshine.Abp.Identity.Managers;
 using Starshine.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;

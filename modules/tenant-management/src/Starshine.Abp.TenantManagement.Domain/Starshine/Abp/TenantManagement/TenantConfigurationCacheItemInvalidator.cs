@@ -1,3 +1,4 @@
+using Starshine.Abp.TenantManagement.Entities;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
@@ -12,8 +13,12 @@ namespace Starshine.Abp.TenantManagement;
 /// <summary>
 /// 租户配置缓存项验证器
 /// </summary>
+/// <remarks>
+/// 构造函数
+/// </remarks>
+/// <param name="cache"></param>
 [LocalEventHandlerOrder(-1)]
-public class TenantConfigurationCacheItemInvalidator :
+public class TenantConfigurationCacheItemInvalidator(IDistributedCache<TenantConfigurationCacheItem> cache) :
     ILocalEventHandler<EntityChangedEventData<Tenant>>,
     ILocalEventHandler<TenantChangedEvent>,
     ITransientDependency
@@ -21,16 +26,7 @@ public class TenantConfigurationCacheItemInvalidator :
     /// <summary>
     /// 缓存服务
     /// </summary>
-    protected IDistributedCache<TenantConfigurationCacheItem> Cache { get; }
-
-    /// <summary>
-    /// 构造函数
-    /// </summary>
-    /// <param name="cache"></param>
-    public TenantConfigurationCacheItemInvalidator(IDistributedCache<TenantConfigurationCacheItem> cache)
-    {
-        Cache = cache;
-    }
+    protected IDistributedCache<TenantConfigurationCacheItem> Cache { get; } = cache;
 
     /// <summary>
     /// 处理事件
@@ -66,11 +62,10 @@ public class TenantConfigurationCacheItemInvalidator :
     protected virtual async Task ClearCacheAsync(Guid? id, string? normalizedName)
     {
         await Cache.RemoveManyAsync(
-            new[]
-            {
+            [
                 TenantConfigurationCacheItem.CalculateCacheKey(id, null),
                 TenantConfigurationCacheItem.CalculateCacheKey(null, normalizedName),
                 TenantConfigurationCacheItem.CalculateCacheKey(id, normalizedName),
-            }, considerUow: true);
+            ], considerUow: true);
     }
 }

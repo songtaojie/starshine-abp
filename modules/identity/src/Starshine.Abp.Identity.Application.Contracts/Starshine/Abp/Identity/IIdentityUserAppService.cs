@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Starshine.Abp.Identity.Dtos;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -11,7 +12,7 @@ public interface IIdentityUserAppService
     : ICrudAppService<
         IdentityUserDto,
         Guid,
-        GetIdentityUsersInput,
+        GetIdentityUsersInputDto,
         IdentityUserCreateDto,
         IdentityUserUpdateDto>
 {

@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Starshine.Abp.Identity.Consts;
+using Starshine.Abp.Identity.Dtos;
+using Starshine.Abp.Identity.Managers;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization.Permissions;
@@ -13,57 +16,50 @@ using Volo.Abp.ObjectExtending;
 
 namespace Starshine.Abp.Identity;
 /// <summary>
-/// 
+/// 认证用户应用服务
 /// </summary>
-[Authorize(IdentityPermissions.Users.Default)]
-public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppService
+/// <param name="userManager"></param>
+/// <param name="userRepository"></param>
+/// <param name="roleRepository"></param>
+/// <param name="identityOptions"></param>
+/// <param name="permissionChecker"></param>
+/// <param name="abpLazyServiceProvider"></param>
+[Authorize(IdentityPermissionConsts.Users.Default)]
+public class IdentityUserAppService(
+    IdentityUserManager userManager,
+    IIdentityUserRepository userRepository,
+    IIdentityRoleRepository roleRepository,
+    IOptions<IdentityOptions> identityOptions,
+    IPermissionChecker permissionChecker,
+    IAbpLazyServiceProvider abpLazyServiceProvider) : IdentityAppServiceBase(abpLazyServiceProvider), IIdentityUserAppService
 {
     /// <summary>
-    /// 
+    /// 用户管理器
     /// </summary>
-    protected IdentityUserManager UserManager { get; }
-    /// <summary>
-    /// 
-    /// </summary>
-    protected IIdentityUserRepository UserRepository { get; }
-    /// <summary>
-    /// /
-    /// </summary>
-    protected IIdentityRoleRepository RoleRepository { get; }
-    /// <summary>
-    /// 
-    /// </summary>
-    protected IOptions<IdentityOptions> IdentityOptions { get; }
-    /// <summary>
-    /// 
-    /// </summary>
-    protected IPermissionChecker PermissionChecker { get; }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="userManager"></param>
-    /// <param name="userRepository"></param>
-    /// <param name="roleRepository"></param>
-    /// <param name="identityOptions"></param>
-    /// <param name="permissionChecker"></param>
-    /// <param name="abpLazyServiceProvider"></param>
-    public IdentityUserAppService(
-        IdentityUserManager userManager,
-        IIdentityUserRepository userRepository,
-        IIdentityRoleRepository roleRepository,
-        IOptions<IdentityOptions> identityOptions,
-        IPermissionChecker permissionChecker,
-        IAbpLazyServiceProvider abpLazyServiceProvider):base(abpLazyServiceProvider)
-    {
-        UserManager = userManager;
-        UserRepository = userRepository;
-        RoleRepository = roleRepository;
-        IdentityOptions = identityOptions;
-        PermissionChecker = permissionChecker;
-    }
+    protected IdentityUserManager UserManager { get; } = userManager;
 
     /// <summary>
-    /// 
+    /// 用户存储库
+    /// </summary>
+    protected IIdentityUserRepository UserRepository { get; } = userRepository;
+
+    /// <summary>
+    /// 角色存储库
+    /// </summary>
+    protected IIdentityRoleRepository RoleRepository { get; } = roleRepository;
+
+    /// <summary>
+    /// 认证选项
+    /// </summary>
+    protected IOptions<IdentityOptions> IdentityOptions { get; } = identityOptions;
+
+    /// <summary>
+    /// 权限检查器
+    /// </summary>
+    protected IPermissionChecker PermissionChecker { get; } = permissionChecker;
+
+    /// <summary>
+    /// 获取用户
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -73,19 +69,19 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     /// <summary>
-    /// 
+    /// 获取用户列表
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
+    public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInputDto input)
     {
         var count = await UserRepository.GetCountAsync(input.Filter);
         var list = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
         return new PagedResultDto<IdentityUserDto>(count,list.ConvertAll(DtoExtensions.ToIdentityUserDto));
     }
-   
+
     /// <summary>
-    /// 
+    /// 获取用户角色
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -106,7 +102,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     /// <summary>
-    /// 
+    /// 获取可分配的角色
     /// </summary>
     /// <returns></returns>
     public virtual async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync()
@@ -115,13 +111,13 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         return new ListResultDto<IdentityRoleDto>(list.ConvertAll(DtoExtensions.ToIdentityRoleDto));
     }
 
-    
+
     /// <summary>
-    /// 
+    /// 创建用户
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    [Authorize(IdentityPermissions.Users.Create)]
+    [Authorize(IdentityPermissionConsts.Users.Create)]
     public virtual async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
     {
         await IdentityOptions.SetAsync();
@@ -144,12 +140,12 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     /// <summary>
-    /// 
+    /// 更新用户
     /// </summary>
     /// <param name="id"></param>
     /// <param name="input"></param>
     /// <returns></returns>
-    [Authorize(IdentityPermissions.Users.Update)]
+    [Authorize(IdentityPermissionConsts.Users.Update)]
     public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
     {
         await IdentityOptions.SetAsync();
@@ -176,12 +172,12 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     /// <summary>
-    /// 
+    /// 删除用户
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     /// <exception cref="BusinessException"></exception>
-    [Authorize(IdentityPermissions.Users.Delete)]
+    [Authorize(IdentityPermissionConsts.Users.Delete)]
     public virtual async Task DeleteAsync(Guid id)
     {
         if (CurrentUser.Id == id)
@@ -199,12 +195,12 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     /// <summary>
-    /// 
+    /// 更新用户角色
     /// </summary>
     /// <param name="id"></param>
     /// <param name="input"></param>
     /// <returns></returns>
-    [Authorize(IdentityPermissions.Users.Update)]
+    [Authorize(IdentityPermissionConsts.Users.Update)]
     public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
     {
         await IdentityOptions.SetAsync();
@@ -214,7 +210,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     /// <summary>
-    /// 
+    /// 根据用户名查找
     /// </summary>
     /// <param name="userName"></param>
     /// <returns></returns>
@@ -224,8 +220,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         if (identityUser == null) return null;
         return identityUser.ToIdentityUserDto();
     }
+
     /// <summary>
-    /// 
+    /// 根据邮箱查找
     /// </summary>
     /// <param name="email"></param>
     /// <returns></returns>
@@ -235,8 +232,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         if (identityUser == null) return null;
         return identityUser.ToIdentityUserDto();
     }
+
     /// <summary>
-    /// 
+    /// 根据输入进行更新
     /// </summary>
     /// <param name="user"></param>
     /// <param name="input"></param>
@@ -263,7 +261,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         user.Surname = input.Surname;
         (await UserManager.UpdateAsync(user)).CheckErrors();
         user.SetIsActive(input.IsActive);
-        if (input.RoleNames != null && await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
+        if (input.RoleNames != null && await PermissionChecker.IsGrantedAsync(IdentityPermissionConsts.Users.ManageRoles))
         {
             (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
         }

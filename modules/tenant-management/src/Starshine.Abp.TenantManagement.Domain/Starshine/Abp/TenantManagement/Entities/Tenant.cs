@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Starshine.Abp.TenantManagement;
+namespace Starshine.Abp.TenantManagement.Entities;
 
 /// <summary>
 /// ×â»§

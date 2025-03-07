@@ -1,8 +1,4 @@
 ﻿using Microsoft.Extensions.Localization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Services;
@@ -11,8 +7,9 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using Volo.Abp;
+using Volo.Abp.DependencyInjection;
 
-namespace Starshine.Abp.Identity;
+namespace Starshine.Abp.Identity.Managers;
 
 /// <summary>
 ///为组织单位执行域逻辑。
@@ -39,26 +36,30 @@ public class OrganizationUnitManager : DomainService
     /// CancellationToken 提供程序
     /// </summary>
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
     /// <summary>
-    /// 
+    /// 组织单元管理器
     /// </summary>
     /// <param name="organizationUnitRepository"></param>
     /// <param name="localizer"></param>
     /// <param name="identityRoleRepository"></param>
     /// <param name="dynamicClaimCache"></param>
     /// <param name="cancellationTokenProvider"></param>
+    /// <param name="abpLazyServiceProvider"></param>
     public OrganizationUnitManager(
         IOrganizationUnitRepository organizationUnitRepository,
         IStringLocalizer<IdentityResource> localizer,
         IIdentityRoleRepository identityRoleRepository,
         IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache,
-        ICancellationTokenProvider cancellationTokenProvider)
+        ICancellationTokenProvider cancellationTokenProvider,
+        IAbpLazyServiceProvider abpLazyServiceProvider)
     {
         OrganizationUnitRepository = organizationUnitRepository;
         Localizer = localizer;
         IdentityRoleRepository = identityRoleRepository;
         DynamicClaimCache = dynamicClaimCache;
         CancellationTokenProvider = cancellationTokenProvider;
+        LazyServiceProvider = abpLazyServiceProvider;
     }
 
     /// <summary>

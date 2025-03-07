@@ -25,4 +25,8 @@
 		<ProjectReference Include="..\..\..\..\modules\identity\src\Starshine.Abp.Identity.Domain\Starshine.Abp.Identity.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Starshine\Abp\IdentityServer\ApiResources\" />
+	</ItemGroup>
+
 </Project>

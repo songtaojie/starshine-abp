@@ -1,12 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SecurityLog;
 using Volo.Abp.Users;
 
-namespace Starshine.Abp.Identity;
+namespace Starshine.Abp.Identity.Managers;
 
 /// <summary>
 /// 身份安全日志管理器

@@ -10,7 +10,7 @@ namespace Starshine.Abp.TenantManagement;
 public class TenantEto : IHasEntityVersion
 {
     /// <summary>
-    /// 
+    /// 主键
     /// </summary>
     public Guid Id { get; set; }
 

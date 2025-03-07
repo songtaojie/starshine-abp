@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.TenantManagement.Entities;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 

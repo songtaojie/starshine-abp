@@ -7,6 +7,7 @@ using Starshine.Abp.IdentityServer.Devices;
 using Starshine.Abp.IdentityServer.Grants;
 using Starshine.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.Modularity;
+using Starshine.Abp.IdentityServer.Entities;
 
 namespace Starshine.Abp.IdentityServer.EntityFrameworkCore;
 

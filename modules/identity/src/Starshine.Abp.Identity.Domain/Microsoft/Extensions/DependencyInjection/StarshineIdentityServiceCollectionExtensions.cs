@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Starshine.Abp.Identity;
+using Starshine.Abp.Identity.Managers;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

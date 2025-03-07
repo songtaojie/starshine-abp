@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Starshine.Abp.Identity.Consts;
+using Starshine.Abp.Identity.Dtos;
+using Starshine.Abp.Identity.Managers;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -10,35 +10,32 @@ using Volo.Abp.ObjectExtending;
 
 namespace Starshine.Abp.Identity;
 /// <summary>
-/// 
+/// 认证角色应用服务
 /// </summary>
-[Authorize(IdentityPermissions.Roles.Default)]
-public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppService
+/// <remarks>
+/// 
+/// </remarks>
+/// <param name="roleManager"></param>
+/// <param name="roleRepository"></param>
+/// <param name="abpLazyServiceProvider"></param>
+[Authorize(IdentityPermissionConsts.Roles.Default)]
+public class IdentityRoleAppService(
+    IdentityRoleManager roleManager,
+    IIdentityRoleRepository roleRepository,
+    IAbpLazyServiceProvider abpLazyServiceProvider) : IdentityAppServiceBase(abpLazyServiceProvider), IIdentityRoleAppService
 {
     /// <summary>
-    /// 
+    /// 角色管理器
     /// </summary>
-    protected IdentityRoleManager RoleManager { get; }
+    protected IdentityRoleManager RoleManager { get; } = roleManager;
+
     /// <summary>
-    /// 
+    /// 角色存储
     /// </summary>
-    protected IIdentityRoleRepository RoleRepository { get; }
+    protected IIdentityRoleRepository RoleRepository { get; } = roleRepository;
+
     /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="roleManager"></param>
-    /// <param name="roleRepository"></param>
-    /// <param name="abpLazyServiceProvider"></param>
-    public IdentityRoleAppService(
-        IdentityRoleManager roleManager,
-        IIdentityRoleRepository roleRepository,
-        IAbpLazyServiceProvider abpLazyServiceProvider):base(abpLazyServiceProvider)
-    {
-        RoleManager = roleManager;
-        RoleRepository = roleRepository;
-    }
-    /// <summary>
-    /// 
+    /// 获取认证角色
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -48,7 +45,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     }
 
     /// <summary>
-    /// 
+    /// 获取所有角色
     /// </summary>
     /// <returns></returns>
     public virtual async Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
@@ -58,11 +55,11 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     }
 
     /// <summary>
-    /// 
+    /// 获取认证角色列表
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
+    public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInputDto input)
     {
         var list = await RoleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
         var totalCount = await RoleRepository.GetCountAsync(input.Filter);
@@ -71,11 +68,11 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     }
 
     /// <summary>
-    /// 
+    /// 创建认证角色
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    [Authorize(IdentityPermissions.Roles.Create)]
+    [Authorize(IdentityPermissionConsts.Roles.Create)]
     public virtual async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
     {
         var role = new IdentityRole(GuidGenerator.Create(),input.Name,CurrentTenant.Id)
@@ -93,12 +90,12 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     }
 
     /// <summary>
-    /// 
+    /// 更新认证角色
     /// </summary>
     /// <param name="id"></param>
     /// <param name="input"></param>
     /// <returns></returns>
-    [Authorize(IdentityPermissions.Roles.Update)]
+    [Authorize(IdentityPermissionConsts.Roles.Update)]
     public virtual async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
     {
         var role = await RoleManager.GetByIdAsync(id);
@@ -123,7 +120,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [Authorize(IdentityPermissions.Roles.Delete)]
+    [Authorize(IdentityPermissionConsts.Roles.Delete)]
     public virtual async Task DeleteAsync(Guid id)
     {
         var role = await RoleManager.FindByIdAsync(id.ToString());

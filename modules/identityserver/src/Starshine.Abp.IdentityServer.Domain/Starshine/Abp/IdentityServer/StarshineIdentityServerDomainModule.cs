@@ -8,13 +8,11 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
-using Starshine.Abp.IdentityServer.ApiResources;
 using Starshine.Abp.IdentityServer.Clients;
 using Starshine.Abp.IdentityServer.Devices;
 using Starshine.Abp.IdentityServer.IdentityResources;
 using Starshine.Abp.IdentityServer.Tokens;
 using Volo.Abp.Modularity;
-using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Security;
 using Volo.Abp.Security.Claims;
@@ -22,6 +20,9 @@ using Volo.Abp.Validation;
 using Volo.Abp.Threading;
 using Starshine.Abp.Identity;
 using Volo.Abp;
+using Starshine.Abp.IdentityServer.Events;
+using Starshine.Abp.IdentityServer.Consts;
+using Starshine.Abp.IdentityServer.Entities;
 
 namespace Starshine.Abp.IdentityServer;
 

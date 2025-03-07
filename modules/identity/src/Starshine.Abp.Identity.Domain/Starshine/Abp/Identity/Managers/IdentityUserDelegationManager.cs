@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Services;
 
-namespace Starshine.Abp.Identity;
+namespace Starshine.Abp.Identity.Managers;
 /// <summary>
 /// 身份用户委派管理器
 /// </summary>
@@ -15,13 +16,17 @@ public class IdentityUserDelegationManager : DomainService
     /// 身份用户委托存储库
     /// </summary>
     protected IIdentityUserDelegationRepository IdentityUserDelegationRepository { get; }
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="identityUserDelegationRepository"></param>
-    public IdentityUserDelegationManager(IIdentityUserDelegationRepository identityUserDelegationRepository)
+    /// <param name="abpLazyServiceProvider"></param>
+    public IdentityUserDelegationManager(IIdentityUserDelegationRepository identityUserDelegationRepository,
+        IAbpLazyServiceProvider abpLazyServiceProvider)
     {
         IdentityUserDelegationRepository = identityUserDelegationRepository;
+        LazyServiceProvider = abpLazyServiceProvider;
     }
     /// <summary>
     /// 获取列表数据
@@ -35,7 +40,7 @@ public class IdentityUserDelegationManager : DomainService
         return await IdentityUserDelegationRepository.GetListAsync(sourceUserId, targetUserId, cancellationToken: cancellationToken);
     }
     /// <summary>
-    /// 获取可用的尾货
+    /// 获取可用的委托
     /// </summary>
     /// <param name="targetUseId"></param>
     /// <param name="cancellationToken"></param>

@@ -16,8 +16,5 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.14" />
 	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\Starshine.Abp.Ddd.Domain\Starshine.Abp.Ddd.Domain.csproj" />
-	</ItemGroup>
 
 </Project>

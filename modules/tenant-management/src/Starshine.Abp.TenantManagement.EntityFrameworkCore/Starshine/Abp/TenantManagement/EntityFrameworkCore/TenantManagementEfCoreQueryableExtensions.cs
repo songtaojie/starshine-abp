@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.TenantManagement.Entities;
 
 namespace Starshine.Abp.TenantManagement.EntityFrameworkCore;
 /// <summary>
@@ -15,12 +16,7 @@ public static class TenantManagementEfCoreQueryableExtensions
     /// <returns></returns>
     public static IQueryable<Tenant> IncludeDetails(this IQueryable<Tenant> queryable, bool include = true)
     {
-        if (!include)
-        {
-            return queryable;
-        }
-
-        return queryable
-            .Include(x => x.ConnectionStrings);
+        if (!include) return queryable;
+        return queryable.Include(x => x.ConnectionStrings);
     }
 }

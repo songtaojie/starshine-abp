@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
-namespace Starshine.Abp.TenantManagement;
+namespace Starshine.Abp.TenantManagement.Entities;
 /// <summary>
 /// ×â»§Á¬½Ó×Ö·û´®
 /// </summary>

@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
-using Starshine.Abp.IdentityServer.ApiResources;
 using Starshine.Abp.IdentityServer.ApiScopes;
 using Starshine.Abp.IdentityServer.Clients;
 using Starshine.Abp.IdentityServer.Devices;
 using Starshine.Abp.IdentityServer.Grants;
 using Starshine.Abp.IdentityServer.IdentityResources;
 using Volo.Abp;
+using Starshine.Abp.IdentityServer.Consts;
+using Starshine.Abp.IdentityServer.Entities;
 
 namespace Starshine.Abp.IdentityServer.EntityFrameworkCore;
 

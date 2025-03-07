@@ -1,40 +1,44 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.MultiTenancy;
 
-namespace Starshine.Abp.Identity;
+namespace Starshine.Abp.Identity.Managers;
 /// <summary>
-/// 
+/// 身份链接用户管理
 /// </summary>
 public class IdentityLinkUserManager : DomainService
 {
     /// <summary>
-    /// 
+    /// 身份链接用户仓储
     /// </summary>
     protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
+
     /// <summary>
     /// 用户管理
     /// </summary>
     protected IdentityUserManager UserManager { get; }
+
     /// <summary>
     /// 当前租户
     /// </summary>
     protected new ICurrentTenant CurrentTenant { get; }
+
     /// <summary>
-    /// 
+    ///  构造函数
     /// </summary>
     /// <param name="identityLinkUserRepository"></param>
     /// <param name="userManager"></param>
     /// <param name="currentTenant"></param>
-    public IdentityLinkUserManager(IIdentityLinkUserRepository identityLinkUserRepository, IdentityUserManager userManager, ICurrentTenant currentTenant)
+    /// <param name="abpLazyServiceProvider"></param>
+    public IdentityLinkUserManager(IIdentityLinkUserRepository identityLinkUserRepository, 
+        IdentityUserManager userManager, 
+        ICurrentTenant currentTenant,
+        IAbpLazyServiceProvider abpLazyServiceProvider)
     {
         IdentityLinkUserRepository = identityLinkUserRepository;
         UserManager = userManager;
         CurrentTenant = currentTenant;
+        LazyServiceProvider = abpLazyServiceProvider;
     }
     /// <summary>
     /// 获取用户列表
@@ -54,9 +58,9 @@ public class IdentityLinkUserManager : DomainService
             }
 
             var userInfos = new List<IdentityLinkUserInfo>()
-                {
-                    linkUserInfo
-                };
+            {
+                linkUserInfo
+            };
 
             var allUsers = new List<IdentityLinkUser>();
             allUsers.AddRange(users);
@@ -77,7 +81,7 @@ public class IdentityLinkUserManager : DomainService
                     }
                 }
 
-                users = new List<IdentityLinkUser>();
+                users = new List<IdentityLinkUser>(nextUsers.Count);
                 foreach (var next in nextUsers)
                 {
                     users.AddRange(await IdentityLinkUserRepository.GetListAsync(next, userInfos, cancellationToken));

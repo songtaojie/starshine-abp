@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Starshine.Abp.Identity.Managers;
 using Starshine.Abp.ObjectExtending;
 using Starshine.Abp.Users;
 using Volo.Abp.Domain;

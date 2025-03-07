@@ -14,7 +14,7 @@ using Volo.Abp.Settings;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
-namespace Starshine.Abp.Identity;
+namespace Starshine.Abp.Identity.Managers;
 /// <summary>
 /// 身份用户管理器
 /// </summary>

@@ -7,7 +7,7 @@ namespace Starshine.Abp.TenantManagement;
 /// <summary>
 /// 租户应用服务
 /// </summary>
-public interface ITenantAppService : ICrudAppService<TenantDto, Guid, GetTenantsRequest, TenantCreateDto, TenantUpdateDto>
+public interface ITenantAppService : ICrudAppService<TenantDto, Guid, TenantsRequestDto, TenantCreateDto, TenantUpdateDto>
 {
     /// <summary>
     /// 获取租户默认连接字符串

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Starshine.Abp.TenantManagement.Entities;
+using Starshine.Abp.TenantManagement.Managers;
+using Starshine.Abp.TenantManagement.Repositories;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus.Distributed;
@@ -13,51 +13,42 @@ namespace Starshine.Abp.TenantManagement;
 /// <summary>
 /// 租户应用服务
 /// </summary>
+/// <remarks>
+/// 租户应用服务
+/// </remarks>
+/// <param name="tenantRepository"></param>
+/// <param name="tenantManager"></param>
+/// <param name="dataSeeder"></param>
+/// <param name="distributedEventBus"></param>
+/// <param name="localEventBus"></param>
 [Authorize(TenantManagementPermissions.Tenants.Default)]
-public class TenantAppService : TenantManagementAppServiceBase, ITenantAppService
+public class TenantAppService(
+    ITenantRepository tenantRepository,
+    ITenantManager tenantManager,
+    IDataSeeder dataSeeder,
+    IDistributedEventBus distributedEventBus,
+    ILocalEventBus localEventBus) : TenantManagementAppServiceBase, ITenantAppService
 {
     /// <summary>
     /// 数据种子
     /// </summary>
-    protected IDataSeeder DataSeeder { get; }
+    protected IDataSeeder DataSeeder { get; } = dataSeeder;
     /// <summary>
     /// 租户仓库
     /// </summary>
-    protected ITenantRepository TenantRepository { get; }
+    protected ITenantRepository TenantRepository { get; } = tenantRepository;
     /// <summary>
     /// 租户管理
     /// </summary>
-    protected ITenantManager TenantManager { get; }
+    protected ITenantManager TenantManager { get; } = tenantManager;
     /// <summary>
     /// 分布式事件总线
     /// </summary>
-    protected IDistributedEventBus DistributedEventBus { get; }
+    protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
     /// <summary>
     /// 本地事件总线
     /// </summary>
-    protected ILocalEventBus LocalEventBus { get; }
-
-    /// <summary>
-    /// 租户应用服务
-    /// </summary>
-    /// <param name="tenantRepository"></param>
-    /// <param name="tenantManager"></param>
-    /// <param name="dataSeeder"></param>
-    /// <param name="distributedEventBus"></param>
-    /// <param name="localEventBus"></param>
-    public TenantAppService(
-        ITenantRepository tenantRepository,
-        ITenantManager tenantManager,
-        IDataSeeder dataSeeder,
-        IDistributedEventBus distributedEventBus,
-        ILocalEventBus localEventBus)
-    {
-        DataSeeder = dataSeeder;
-        TenantRepository = tenantRepository;
-        TenantManager = tenantManager;
-        DistributedEventBus = distributedEventBus;
-        LocalEventBus = localEventBus;
-    }
+    protected ILocalEventBus LocalEventBus { get; } = localEventBus;
 
     /// <summary>
     /// 获取租户
@@ -80,7 +71,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsRequest input)
+    public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(TenantsRequestDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {

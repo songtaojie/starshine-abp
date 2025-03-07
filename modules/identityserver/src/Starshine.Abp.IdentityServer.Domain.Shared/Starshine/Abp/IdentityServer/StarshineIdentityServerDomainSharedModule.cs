@@ -9,7 +9,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Starshine.Abp.IdentityServer;
 
 /// <summary>
-/// 
+/// 身份服务器领域共享模块
 /// </summary>
 [DependsOn(
     typeof(AbpValidationModule)
@@ -17,7 +17,7 @@ namespace Starshine.Abp.IdentityServer;
 public class StarshineIdentityServerDomainSharedModule : AbpModule
 {
     /// <summary>
-    /// 
+    /// 配置服务
     /// </summary>
     /// <param name="context"></param>
     public override void ConfigureServices(ServiceConfigurationContext context)

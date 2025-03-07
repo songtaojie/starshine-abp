@@ -15,6 +15,8 @@ using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using IdentityUser = Starshine.Abp.Identity.IdentityUser;
 using Starshine.Abp.IdentityServer.Localization;
+using Starshine.Abp.Identity.Managers;
+using Starshine.Abp.IdentityServer.Consts;
 
 namespace Starshine.Abp.IdentityServer.AspNetIdentity;
 

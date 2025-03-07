@@ -5,7 +5,7 @@ using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Services;
 
-namespace Starshine.Abp.Identity;
+namespace Starshine.Abp.Identity.Managers;
 
 /// <summary>
 /// 身份声明类型管理器
@@ -41,7 +41,7 @@ public class IdentityClaimTypeManager : DomainService
         IdentityClaimTypeRepository = identityClaimTypeRepository;
         IdentityUserRepository = identityUserRepository;
         IdentityRoleRepository = identityRoleRepository;
-        base.LazyServiceProvider = lazyServiceProvider;
+        LazyServiceProvider = lazyServiceProvider;
     }
 
     /// <summary>

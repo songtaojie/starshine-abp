@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.TenantManagement.Entities;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;

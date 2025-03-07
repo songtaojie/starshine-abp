@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Starshine.Abp.IdentityServer.ApiResources;
 using Starshine.Abp.IdentityServer.ApiScopes;
 using Starshine.Abp.IdentityServer.Clients;
+using Starshine.Abp.IdentityServer.Entities;
 using Starshine.Abp.IdentityServer.IdentityResources;
 
 namespace Starshine.Abp.IdentityServer;

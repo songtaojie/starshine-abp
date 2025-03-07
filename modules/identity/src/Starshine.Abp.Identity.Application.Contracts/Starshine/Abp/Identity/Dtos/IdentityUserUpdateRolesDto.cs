@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Starshine.Abp.Identity;
+namespace Starshine.Abp.Identity.Dtos;
 /// <summary>
-/// 
+/// 认证用户更新角色DTO
 /// </summary>
 public class IdentityUserUpdateRolesDto
 {
     /// <summary>
-    /// 
+    /// 角色名称
     /// </summary>
     [Required]
-    public string[] RoleNames { get; set; } = [];
+    public required string[] RoleNames { get; set; }
 }

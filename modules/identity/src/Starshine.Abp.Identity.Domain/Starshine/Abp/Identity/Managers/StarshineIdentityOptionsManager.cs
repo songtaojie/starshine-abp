@@ -6,7 +6,7 @@ using Starshine.Abp.Identity.Settings;
 using Volo.Abp.Options;
 using Volo.Abp.Settings;
 
-namespace Starshine.Abp.Identity;
+namespace Starshine.Abp.Identity.Managers;
 
 /// <summary>
 /// 身份选项管理器

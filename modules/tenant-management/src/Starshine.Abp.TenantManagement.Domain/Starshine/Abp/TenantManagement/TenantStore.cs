@@ -1,4 +1,6 @@
 ﻿using JetBrains.Annotations;
+using Starshine.Abp.TenantManagement.Entities;
+using Starshine.Abp.TenantManagement.Repositories;
 using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
@@ -10,38 +12,31 @@ namespace Starshine.Abp.TenantManagement;
 /// <summary>
 /// 租户存储
 /// </summary>
-public class TenantStore : ITenantStore, ITransientDependency
+/// <remarks>
+/// 构造函数
+/// </remarks>
+/// <param name="tenantRepository"></param>
+/// <param name="currentTenant"></param>
+/// <param name="cache"></param>
+public class TenantStore(
+    ITenantRepository tenantRepository,
+    ICurrentTenant currentTenant,
+    IDistributedCache<TenantConfigurationCacheItem> cache) : ITenantStore, ITransientDependency
 {
     /// <summary>
     /// 租户存储
     /// </summary>
-    protected ITenantRepository TenantRepository { get; }
+    protected ITenantRepository TenantRepository { get; } = tenantRepository;
 
     /// <summary>
     /// 当前租户
     /// </summary>
-    protected ICurrentTenant CurrentTenant { get; }
+    protected ICurrentTenant CurrentTenant { get; } = currentTenant;
 
     /// <summary>
     /// 分布式缓存
     /// </summary>
-    protected IDistributedCache<TenantConfigurationCacheItem> Cache { get; }
-
-    /// <summary>
-    /// 构造函数
-    /// </summary>
-    /// <param name="tenantRepository"></param>
-    /// <param name="currentTenant"></param>
-    /// <param name="cache"></param>
-    public TenantStore(
-        ITenantRepository tenantRepository,
-        ICurrentTenant currentTenant,
-        IDistributedCache<TenantConfigurationCacheItem> cache)
-    {
-        TenantRepository = tenantRepository;
-        CurrentTenant = currentTenant;
-        Cache = cache;
-    }
+    protected IDistributedCache<TenantConfigurationCacheItem> Cache { get; } = cache;
 
     /// <summary>
     /// 根据租户名称查找租户配置
@@ -75,7 +70,7 @@ public class TenantStore : ITenantStore, ITransientDependency
         { 
             Id = t.Id,
             Name = t.Name,  
-            NormalizedName = t.NormalizedName,
+            NormalizedName = t.NormalizedName ?? string.Empty,
             ConnectionStrings = GetConnectionStrings(t),
             IsActive = false,
         });
@@ -138,7 +133,7 @@ public class TenantStore : ITenantStore, ITransientDependency
             }
         }
 
-        throw new AbpException("Both id and normalizedName can't be invalid.");
+        throw new AbpException("id 和 normalizedName 都不能无效。");
     }
 
     /// <summary>
@@ -161,12 +156,10 @@ public class TenantStore : ITenantStore, ITransientDependency
     private static ConnectionStrings GetConnectionStrings(Tenant tenant)
     {
         var connStrings = new ConnectionStrings();
-
         if (tenant.ConnectionStrings == null)
         {
             return connStrings;
         }
-
         foreach (var connectionString in tenant.ConnectionStrings)
         {
             connStrings[connectionString.Name] = connectionString.Value;

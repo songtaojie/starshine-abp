@@ -1,4 +1,4 @@
-﻿namespace Starshine.Abp.Identity;
+﻿namespace Starshine.Abp.Identity.Dtos;
 
 /// <summary>
 /// 用户查询

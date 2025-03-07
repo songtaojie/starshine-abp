@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Domain.Entities;
 
-namespace Starshine.Abp.Identity;
+namespace Starshine.Abp.Identity.Dtos;
 /// <summary>
 /// 
 /// </summary>

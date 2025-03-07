@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using AutoMapper;
-using Starshine.Abp.IdentityServer.ApiResources;
 using Starshine.Abp.IdentityServer.ApiScopes;
 using Starshine.Abp.IdentityServer.Clients;
 using Starshine.Abp.IdentityServer.Devices;
+using Starshine.Abp.IdentityServer.Entities;
+using Starshine.Abp.IdentityServer.Events;
 using Starshine.Abp.IdentityServer.Grants;
 using Starshine.Abp.IdentityServer.IdentityResources;
 

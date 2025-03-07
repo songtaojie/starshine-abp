@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Caching;
+﻿using Starshine.Abp.TenantManagement.Entities;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
