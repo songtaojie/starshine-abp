@@ -11,15 +11,36 @@ using Volo.Abp.Security.Claims;
 using IdentityUser = Starshine.Abp.Identity.IdentityUser;
 
 namespace Starshine.Abp.IdentityServer.AspNetIdentity;
-
+/// <summary>
+/// 接口声明主体工厂
+/// </summary>
+/// <typeparam name="TUser"></typeparam>
 public class StarshineUserClaimsFactory<TUser> : IUserClaimsPrincipalFactory<TUser>
     where TUser : class
 {
+    /// <summary>
+    ///
+    /// </summary>
     protected IObjectAccessor<IUserClaimsPrincipalFactory<TUser>> Inner { get; }
+    /// <summary>
+    /// 用户管理器
+    /// </summary>
     protected UserManager<TUser> UserManager { get; }
+    /// <summary>
+    /// 当前用户访问器
+    /// </summary>
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
+    /// <summary>
+    /// ABP声明主体工厂
+    /// </summary>
     protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
-
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="inner"></param>
+    /// <param name="userManager"></param>
+    /// <param name="currentPrincipalAccessor"></param>
+    /// <param name="abpClaimsPrincipalFactory"></param>
     public StarshineUserClaimsFactory(
         IObjectAccessor<IUserClaimsPrincipalFactory<TUser>> inner,
         UserManager<TUser> userManager,
@@ -32,6 +53,11 @@ public class StarshineUserClaimsFactory<TUser> : IUserClaimsPrincipalFactory<TUs
         AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
     }
 
+    /// <summary>
+    /// 创建声明主体
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     public virtual async Task<ClaimsPrincipal> CreateAsync(TUser user)
     {
         var principal = await Inner.Value!.CreateAsync(user);

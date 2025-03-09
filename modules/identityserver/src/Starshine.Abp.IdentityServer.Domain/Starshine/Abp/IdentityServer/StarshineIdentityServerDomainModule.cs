@@ -4,13 +4,9 @@ using Starshine.IdentityServer.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
-using Starshine.Abp.IdentityServer.Clients;
-using Starshine.Abp.IdentityServer.Devices;
-using Starshine.Abp.IdentityServer.IdentityResources;
 using Starshine.Abp.IdentityServer.Tokens;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -31,7 +27,6 @@ namespace Starshine.Abp.IdentityServer;
 /// </summary>
 [DependsOn(
     typeof(StarshineIdentityServerDomainSharedModule),
-    typeof(AbpAutoMapperModule),
     typeof(StarshineIdentityDomainModule),
     typeof(AbpSecurityModule),
     typeof(AbpCachingModule),
@@ -48,13 +43,6 @@ public class StarshineIdentityServerDomainModule : AbpModule
     /// <param name="context"></param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<StarshineIdentityServerDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<IdentityServerAutoMapperProfile>(validate: true);
-        });
-
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
             options.EtoMappings.Add<ApiResource, ApiResourceEto>(typeof(StarshineIdentityServerDomainModule));
@@ -86,7 +74,7 @@ public class StarshineIdentityServerDomainModule : AbpModule
             identityServerBuilder = identityServerBuilder.AddDeveloperSigningCredential();
         }
 
-        identityServerBuilder.AddAbpIdentityServer(builderOptions);
+        identityServerBuilder.AddStarshineIdentityServer(builderOptions);
 
         services.ExecutePreConfiguredActions(identityServerBuilder);
 

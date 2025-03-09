@@ -16,16 +16,25 @@ using System.Text.Json.Nodes;
 
 namespace Starshine.Abp.IdentityServer;
 
+/// <summary>
+/// 将 Starshine IdentityServer 服务添加到指定的 <see cref="IIdentityServerBuilder"/>。
+/// </summary>
 public static class StarshineIdentityServerBuilderExtensions
 {
-    public static IIdentityServerBuilder AddAbpIdentityServer(this IIdentityServerBuilder builder,StarshineIdentityServerBuilderOptions? options = null)
+    /// <summary>
+    /// 将 Starshine IdentityServer 服务添加到指定的 <see cref="IIdentityServerBuilder"/>。
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddStarshineIdentityServer(this IIdentityServerBuilder builder,StarshineIdentityServerBuilderOptions? options = null)
     {
         if (options == null)
         {
             options = new StarshineIdentityServerBuilderOptions();
         }
 
-        //TODO: AspNet Identity integration lines. Can be extracted to a extension method
+        //TODO:AspNet Identity 集成线。可以提取到扩展方法
         if (options.IntegrateToAspNetIdentity)
         {
             builder.AddAspNetIdentity<IdentityUser>();
@@ -59,7 +68,7 @@ public static class StarshineIdentityServerBuilderExtensions
         return builder;
     }
 
-    //TODO: Use the latest Identity server code to optimize performance.
+    //TODO: 使用最新的 Identity 服务器代码来优化性能。
     // https://github.com/IdentityServer/Starshine.IdentityServer/blob/main/src/Starshine.IdentityServer/src/Configuration/DependencyInjection/BuilderExtensions/Crypto.cs
     private static IIdentityServerBuilder AddStarshineDeveloperSigningCredential(
         this IIdentityServerBuilder builder,

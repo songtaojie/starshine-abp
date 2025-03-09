@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Starshine.IdentityServer;
 using JetBrains.Annotations;
-using Volo.Abp.Domain.Entities.Auditing;
+using Starshine.IdentityServer;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Starshine.Abp.IdentityServer.Entities;
 /// <summary>
@@ -81,12 +78,15 @@ public class ApiResource : FullAuditedAggregateRoot<Guid>
         : base(id)
     {
         Check.NotNull(name, nameof(name));
-
         Name = name;
         DisplayName = displayName;
         Description = description;
         Enabled = true;
-        Scopes = [new ApiResourceScope(id, name)];
+        Scopes = [new ApiResourceScope
+        {
+            ApiResourceId = id,
+            Scope = name
+        }];
     }
 
     /// <summary>
@@ -96,9 +96,16 @@ public class ApiResource : FullAuditedAggregateRoot<Guid>
     /// <param name="expiration"></param>
     /// <param name="type"></param>
     /// <param name="description"></param>
-    public virtual void AddSecret(string value, DateTimeOffset? expiration = null,string type = IdentityServerConstants.SecretTypes.SharedSecret,string? description = null)
+    public virtual void AddSecret(string value, DateTimeOffset? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string? description = null)
     {
-        Secrets.Add(new ApiResourceSecret(Id, value, expiration, type, description));
+        Secrets.Add(new ApiResourceSecret
+        {
+            ApiResourceId = Id,
+            Value = value,
+            Expiration = expiration,
+            Type = type,
+            Description = description
+        });
     }
 
     /// <summary>
@@ -129,7 +136,11 @@ public class ApiResource : FullAuditedAggregateRoot<Guid>
     /// <returns></returns>
     public virtual ApiResourceScope AddScope(string scope)
     {
-        var apiResourceScope = new ApiResourceScope(Id, scope);
+        var apiResourceScope = new ApiResourceScope
+        {
+            ApiResourceId = Id,
+            Scope = scope
+        };
         Scopes.Add(apiResourceScope);
         return apiResourceScope;
     }
@@ -138,52 +149,93 @@ public class ApiResource : FullAuditedAggregateRoot<Guid>
     /// 添加用户声明
     /// </summary>
     /// <param name="type"></param>
-    public virtual void AddUserClaim([NotNull] string type)
+    public virtual void AddUserClaim(string type)
     {
-        UserClaims.Add(new ApiResourceClaim(Id, type));
+        UserClaims.Add(new ApiResourceClaim
+        {
+            ApiResourceId = Id,
+            Type = type
+        });
     }
 
+    /// <summary>
+    /// 移除所有用户声明
+    /// </summary>
     public virtual void RemoveAllUserClaims()
     {
         UserClaims.Clear();
     }
 
+    /// <summary>
+    /// 删除声明
+    /// </summary>
+    /// <param name="type"></param>
     public virtual void RemoveClaim(string type)
     {
         UserClaims.RemoveAll(c => c.Type == type);
     }
 
+    /// <summary>
+    /// 查找声明
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public virtual ApiResourceClaim? FindClaim(string type)
     {
         return UserClaims.FirstOrDefault(c => c.Type == type);
     }
 
+    /// <summary>
+    /// 移除所有凭证
+    /// </summary>
     public virtual void RemoveAllSecrets()
     {
         Secrets.Clear();
     }
 
+    /// <summary>
+    /// 移除所有范围
+    /// </summary>
     public virtual void RemoveAllScopes()
     {
         Scopes.Clear();
     }
 
+    /// <summary>
+    /// 移除范围
+    /// </summary>
+    /// <param name="scope"></param>
     public virtual void RemoveScope(string scope)
     {
         Scopes.RemoveAll(r => r.Scope == scope);
     }
 
+    /// <summary>
+    /// 查找范围
+    /// </summary>
+    /// <param name="scope"></param>
+    /// <returns></returns>
     public virtual ApiResourceScope? FindScope(string scope)
     {
         return Scopes.FirstOrDefault(r => r.Scope == scope);
     }
 
-    public virtual void AddProperty([NotNull] string key, string value)
+    /// <summary>
+    /// 添加属性
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    public virtual void AddProperty(string key, string value)
     {
         var property = FindProperty(key);
         if (property == null)
         {
-            Properties.Add(new ApiResourceProperty(Id, key, value));
+            Properties.Add(new ApiResourceProperty
+            {
+                ApiResourceId = Id,
+                Key = key,
+                Value = value
+            });
         }
         else
         {
@@ -191,16 +243,28 @@ public class ApiResource : FullAuditedAggregateRoot<Guid>
         }
     }
 
+    /// <summary>
+    /// 移除所有属性
+    /// </summary>
     public virtual void RemoveAllProperties()
     {
         Properties.Clear();
     }
 
+    /// <summary>
+    /// 移除属性
+    /// </summary>
+    /// <param name="key"></param>
     public virtual void RemoveProperty(string key)
     {
         Properties.RemoveAll(r => r.Key == key);
     }
 
+    /// <summary>
+    /// 查找属性
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
     public virtual ApiResourceProperty? FindProperty(string key)
     {
         return Properties.FirstOrDefault(r => r.Key == key);

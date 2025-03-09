@@ -9,11 +9,22 @@ using IdentityUser = Starshine.Abp.Identity.IdentityUser;
 using Starshine.Abp.Identity.Managers;
 
 namespace Starshine.Abp.IdentityServer.AspNetIdentity;
-
+/// <summary>
+/// IdentityServer 配置文件服务
+/// </summary>
 public class StarshineProfileService : ProfileService<IdentityUser>
 {
+    /// <summary>
+    /// 当前租户
+    /// </summary>
     protected ICurrentTenant CurrentTenant { get; }
 
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="userManager"></param>
+    /// <param name="claimsFactory"></param>
+    /// <param name="currentTenant"></param>
     public StarshineProfileService(
         IdentityUserManager userManager,
         IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
@@ -23,6 +34,11 @@ public class StarshineProfileService : ProfileService<IdentityUser>
         CurrentTenant = currentTenant;
     }
 
+    /// <summary>
+    /// 获取用户信息
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
     [UnitOfWork]
     public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
@@ -32,6 +48,11 @@ public class StarshineProfileService : ProfileService<IdentityUser>
         }
     }
 
+    /// <summary>
+    /// 获取用户是否激活
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
     [UnitOfWork]
     public override async Task IsActiveAsync(IsActiveContext context)
     {

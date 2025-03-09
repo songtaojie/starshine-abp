@@ -1,32 +1,36 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-using Starshine.Abp.IdentityServer.ApiResources;
-using Starshine.Abp.IdentityServer.ApiScopes;
-using Starshine.Abp.IdentityServer.Clients;
-using Starshine.Abp.IdentityServer.Devices;
-using Starshine.Abp.IdentityServer.Grants;
-using Starshine.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.Modularity;
 using Starshine.Abp.IdentityServer.Entities;
+using Starshine.Abp.IdentityServer.Repositories;
 
 namespace Starshine.Abp.IdentityServer.EntityFrameworkCore;
-
+/// <summary>
+/// IdentityServer EntityFrameworkCore 模块
+/// </summary>
 [DependsOn(
     typeof(StarshineIdentityServerDomainModule),
     typeof(AbpEntityFrameworkCoreModule)
     )]
 public class StarshineIdentityServerEntityFrameworkCoreModule : AbpModule
 {
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="context"></param>
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.PreConfigure<IIdentityServerBuilder>(
             builder =>
             {
-                builder.AddAbpStores();
+                builder.AddStores();
             }
         );
     }
-
+    /// <summary>
+    /// 配置服务
+    /// </summary>
+    /// <param name="context"></param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddAbpDbContext<IdentityServerDbContext>(options =>

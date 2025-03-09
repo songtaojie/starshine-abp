@@ -2,7 +2,9 @@ using System.IdentityModel.Tokens.Jwt;
 using Volo.Abp.Security.Claims;
 
 namespace Starshine.Abp.IdentityServer;
-
+/// <summary>
+/// IdentityServerBuilder—°œÓ
+/// </summary>
 public class StarshineIdentityServerBuilderOptions
 {
     /// <summary>

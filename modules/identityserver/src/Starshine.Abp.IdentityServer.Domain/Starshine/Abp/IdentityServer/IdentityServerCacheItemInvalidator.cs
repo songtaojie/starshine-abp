@@ -1,18 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
-using Starshine.Abp.IdentityServer.Clients;
-using Starshine.Abp.IdentityServer.ApiScopes;
-using Starshine.Abp.IdentityServer.IdentityResources;
 using Starshine.Abp.IdentityServer.Entities;
+using Starshine.Abp.IdentityServer.Stores;
 
 namespace Starshine.Abp.IdentityServer;
-
+/// <summary>
+/// 缓存项失效器
+/// </summary>
 public class IdentityServerCacheItemInvalidator :
     ILocalEventHandler<EntityChangedEventData<Client>>,
     ILocalEventHandler<EntityChangedEventData<ClientCorsOrigin>>,
@@ -21,13 +18,23 @@ public class IdentityServerCacheItemInvalidator :
     ILocalEventHandler<EntityChangedEventData<ApiScope>>,
     ITransientDependency
 {
+    /// <summary>
+    /// 服务提供者
+    /// </summary>
     protected IServiceProvider ServiceProvider { get; }
-
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="serviceProvider"></param>
     public IdentityServerCacheItemInvalidator(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
     }
-
+    /// <summary>
+    /// 处理事件
+    /// </summary>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
     public virtual async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
     {
         var clientCache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.Client>>();
@@ -36,13 +43,21 @@ public class IdentityServerCacheItemInvalidator :
         var corsCache = ServiceProvider.GetRequiredService<IDistributedCache<AllowedCorsOriginsCacheItem>>();
         await corsCache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
     }
-
+    /// <summary>
+    /// 处理事件
+    /// </summary>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
     public async Task HandleEventAsync(EntityChangedEventData<ClientCorsOrigin> eventData)
     {
         var corsCache = ServiceProvider.GetRequiredService<IDistributedCache<AllowedCorsOriginsCacheItem>>();
         await corsCache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
     }
-
+    /// <summary>
+    /// 处理事件
+    /// </summary>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
     public virtual async Task HandleEventAsync(EntityChangedEventData<IdentityResource> eventData)
     {
         var cache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.IdentityResource>>();
@@ -51,7 +66,11 @@ public class IdentityServerCacheItemInvalidator :
         var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.Resources>>();
         await resourcesCache.RemoveAsync(ResourceStore.AllResourcesKey);
     }
-
+    /// <summary>
+    /// 处理事件
+    /// </summary>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
     public virtual async Task HandleEventAsync(EntityChangedEventData<ApiResource> eventData)
     {
         var cache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.ApiResource>>();
@@ -61,7 +80,11 @@ public class IdentityServerCacheItemInvalidator :
         var resourcesCache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.Resources>>();
         await resourcesCache.RemoveAsync(ResourceStore.AllResourcesKey);
     }
-
+    /// <summary>
+    /// 处理事件
+    /// </summary>
+    /// <param name="eventData"></param>
+    /// <returns></returns>
     public virtual async Task HandleEventAsync(EntityChangedEventData<ApiScope> eventData)
     {
         var cache = ServiceProvider.GetRequiredService<IDistributedCache<Starshine.IdentityServer.Models.ApiScope>>();

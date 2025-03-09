@@ -19,20 +19,65 @@ using Starshine.Abp.Identity.Managers;
 using Starshine.Abp.IdentityServer.Consts;
 
 namespace Starshine.Abp.IdentityServer.AspNetIdentity;
-
+/// <summary>
+/// 资源所有者密码验证器
+/// </summary>
 public class StarshineResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 {
+    /// <summary>
+    /// 登录管理器
+    /// </summary>
     protected SignInManager<IdentityUser> SignInManager { get; }
+    /// <summary>
+    /// 用户管理器
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
+    /// <summary>
+    /// 身份安全日志管理器
+    /// </summary>
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
+    /// <summary>
+    /// 日志
+    /// </summary>
     protected ILogger<ResourceOwnerPasswordValidator<IdentityUser>> Logger { get; }
+
+    /// <summary>
+    /// 本地化
+    /// </summary>
     protected IStringLocalizer<StarshineIdentityServerResource> Localizer { get; }
+
+    /// <summary>
+    /// 服务范围工厂
+    /// </summary>
     protected IServiceScopeFactory ServiceScopeFactory { get; }
+
+    /// <summary>
+    /// 身份选项
+    /// </summary>
     protected StarshineIdentityOptions StarshineIdentityOptions { get; }
+
+    /// <summary>
+    /// 身份选项
+    /// </summary>
     protected IOptions<IdentityOptions> IdentityOptions { get; }
 
+    /// <summary>
+    /// 设置提供者
+    /// </summary>
     protected ISettingProvider SettingProvider { get; }
 
+    /// <summary>
+    ///     构造函数
+    /// </summary>
+    /// <param name="userManager"></param>
+    /// <param name="signInManager"></param>
+    /// <param name="identitySecurityLogManager"></param>
+    /// <param name="logger"></param>
+    /// <param name="localizer"></param>
+    /// <param name="starshineIdentityOptions"></param>
+    /// <param name="serviceScopeFactory"></param>
+    /// <param name="identityOptions"></param>
+    /// <param name="settingProvider"></param>
     public StarshineResourceOwnerPasswordValidator(
         IdentityUserManager userManager,
         SignInManager<IdentityUser> signInManager,
@@ -167,7 +212,12 @@ public class StarshineResourceOwnerPasswordValidator : IResourceOwnerPasswordVal
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, errorDescription);
         }
     }
-
+    /// <summary>
+    /// 处理双因素登录
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="user"></param>
+    /// <returns></returns>
     protected virtual async Task HandleTwoFactorLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user)
     {
         var recoveryCode = context.Request?.Raw?["RecoveryCode"];
@@ -221,16 +271,38 @@ public class StarshineResourceOwnerPasswordValidator : IResourceOwnerPasswordVal
         }
     }
 
+    /// <summary>
+    /// 处理下次登录时应更改密码
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="user"></param>
+    /// <param name="currentPassword"></param>
+    /// <returns></returns>
     protected virtual async Task HandleShouldChangePasswordOnNextLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user, string currentPassword)
     {
         await HandlerChangePasswordAsync(context, user, currentPassword, ChangePasswordType.ShouldChangePasswordOnNextLogin);
     }
 
+    /// <summary>
+    /// 处理定期更改密码
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="user"></param>
+    /// <param name="currentPassword"></param>
+    /// <returns></returns>
     protected virtual async Task HandlePeriodicallyChangePasswordAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user, string currentPassword)
     {
         await HandlerChangePasswordAsync(context, user, currentPassword, ChangePasswordType.PeriodicallyChangePassword);
     }
 
+    /// <summary>
+    /// 处理用户密码过期
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="user"></param>
+    /// <param name="currentPassword"></param>
+    /// <param name="changePasswordType"></param>
+    /// <returns></returns>
     protected virtual async Task HandlerChangePasswordAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user, string currentPassword, ChangePasswordType changePasswordType)
     {
         var changePasswordToken = context.Request?.Raw?["ChangePasswordToken"];
@@ -290,6 +362,12 @@ public class StarshineResourceOwnerPasswordValidator : IResourceOwnerPasswordVal
         }
     }
 
+    /// <summary>
+    /// 设置成功结果
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="user"></param>
+    /// <returns></returns>
     protected virtual async Task SetSuccessResultAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user)
     {
         var sub = await UserManager.GetUserIdAsync(user);
@@ -317,6 +395,11 @@ public class StarshineResourceOwnerPasswordValidator : IResourceOwnerPasswordVal
         );
     }
 
+    /// <summary>
+    /// 如果需要，请将电子邮件替换为用户名
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(ResourceOwnerPasswordValidationContext context)
     {
         if (!ValidationHelper.IsValidEmailAddress(context.UserName))
@@ -339,16 +422,33 @@ public class StarshineResourceOwnerPasswordValidator : IResourceOwnerPasswordVal
         context.UserName = userByEmail.UserName;
     }
 
+    /// <summary>
+    /// 查找客户端ID
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
     protected virtual Task<string?> FindClientIdAsync(ResourceOwnerPasswordValidationContext context)
     {
         return Task.FromResult(context.Request?.Client?.ClientId);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     protected virtual async Task<bool> IsTfaEnabledAsync(IdentityUser user)
         => UserManager.SupportsUserTwoFactor &&
            await UserManager.GetTwoFactorEnabledAsync(user) &&
            (await UserManager.GetValidTwoFactorProvidersAsync(user)).Count > 0;
 
+    /// <summary>
+    /// 添加自定义声明
+    /// </summary>
+    /// <param name="customClaims"></param>
+    /// <param name="user"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
     protected virtual Task AddCustomClaimsAsync(List<Claim> customClaims, IdentityUser user, ResourceOwnerPasswordValidationContext context)
     {
         if (user.TenantId.HasValue)
@@ -359,9 +459,18 @@ public class StarshineResourceOwnerPasswordValidator : IResourceOwnerPasswordVal
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// 密码修改类型
+    /// </summary>
     public enum ChangePasswordType
     {
+        /// <summary>
+        /// 下次登录时应更改密码
+        /// </summary>
         ShouldChangePasswordOnNextLogin,
+        /// <summary>
+        /// 定期更改密码
+        /// </summary>
         PeriodicallyChangePassword
     }
 }
