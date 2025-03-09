@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
 namespace Starshine.Abp.IdentityServer.Tokens;
@@ -21,12 +22,13 @@ public class TokenCleanupBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
     /// <param name="timer"></param>
     /// <param name="serviceScopeFactory"></param>
     /// <param name="options"></param>
-    public TokenCleanupBackgroundWorker(
-        AbpAsyncTimer timer,
+    /// <param name="abpLazyServiceProvider"></param>
+    public TokenCleanupBackgroundWorker(AbpAsyncTimer timer,
         IServiceScopeFactory serviceScopeFactory,
-        IOptions<TokenCleanupOptions> options)
-        : base( timer, serviceScopeFactory)
+        IOptions<TokenCleanupOptions> options,
+        IAbpLazyServiceProvider abpLazyServiceProvider): base( timer, serviceScopeFactory)
     {
+        LazyServiceProvider = abpLazyServiceProvider;
         Options = options.Value;
         timer.Period = Options.CleanupPeriod;
     }

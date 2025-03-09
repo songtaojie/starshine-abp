@@ -53,9 +53,10 @@ public class StarshineIdentityServerDomainModule : AbpModule
 
         Configure<StarshineClaimsServiceOptions>(options =>
         {
-            options.RequestedClaims.AddRange(new[]{
-                    AbpClaimTypes.TenantId,
-                    AbpClaimTypes.EditionId
+            options.RequestedClaims.AddRange(new[]
+            {
+                AbpClaimTypes.TenantId,
+                AbpClaimTypes.EditionId
             });
         });
 
@@ -166,15 +167,16 @@ public class StarshineIdentityServerDomainModule : AbpModule
     /// <returns></returns>
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
+
         var options = context.ServiceProvider.GetRequiredService<IOptions<TokenCleanupOptions>>().Value;
         if (options.IsCleanupEnabled)
         {
-            await context.ServiceProvider
-                .GetRequiredService<IBackgroundWorkerManager>()
-                .AddAsync(
-                    context.ServiceProvider
-                        .GetRequiredService<TokenCleanupBackgroundWorker>()
-                );
+            //await context.ServiceProvider
+            //    .GetRequiredService<IBackgroundWorkerManager>()
+            //    .AddAsync(
+            //        context.ServiceProvider
+            //            .GetRequiredService<TokenCleanupBackgroundWorker>()
+            //    );
         }
     }
 

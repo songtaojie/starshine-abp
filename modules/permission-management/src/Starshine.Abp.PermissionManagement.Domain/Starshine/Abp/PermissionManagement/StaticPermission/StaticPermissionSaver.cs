@@ -214,9 +214,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     {
         var newRecords = new List<PermissionGroupDefinitionRecord>();
         var changedRecords = new List<PermissionGroupDefinitionRecord>();
-
-        var permissionGroupRecordsInDatabase = (await PermissionGroupRepository.GetListAsync())
-            .ToDictionary(x => x.Name);
+        var list = await PermissionGroupRepository.GetListAsync();
+        var permissionGroupRecordsInDatabase = list.ToDictionary(x => x.Name);
 
         foreach (var permissionGroupRecord in permissionGroupRecords)
         {
