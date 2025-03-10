@@ -15,7 +15,6 @@
 		<PackageReadmeFile>NuGet.md</PackageReadmeFile>
 		<PackageTags>aspnetcore boilerplate framework web best-practices </PackageTags>
 		<PublishDocumentationFiles>true</PublishDocumentationFiles>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
 	<ItemGroup>

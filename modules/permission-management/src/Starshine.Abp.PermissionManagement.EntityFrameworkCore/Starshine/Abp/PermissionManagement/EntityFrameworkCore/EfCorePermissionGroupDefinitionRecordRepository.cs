@@ -5,6 +5,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace Starshine.Abp.PermissionManagement.EntityFrameworkCore;
@@ -27,5 +28,6 @@ public class EfCorePermissionGroupDefinitionRecordRepository :
         : base(dbContextProvider)
     {
         LazyServiceProvider = abpLazyServiceProvider;
+        var c = LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
     }
 }
