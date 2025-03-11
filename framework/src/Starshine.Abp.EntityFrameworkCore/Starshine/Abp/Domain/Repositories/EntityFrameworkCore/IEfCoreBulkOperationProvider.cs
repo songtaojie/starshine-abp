@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 using Starshine.Abp.EntityFrameworkCore;
 
-namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+namespace Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
 
 public interface IEfCoreBulkOperationProvider
 {

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Starshine.Abp.EntityFrameworkCore;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Uow.EntityFrameworkCore;
+namespace Starshine.Abp.Uow.EntityFrameworkCore;
 
 public class EfCoreTransactionApi : ITransactionApi, ISupportsRollback
 {

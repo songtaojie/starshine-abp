@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Volo.Abp.ObjectExtending;
+namespace Starshine.Abp.ObjectExtending;
 
 public class ObjectExtensionInfoEfCoreMappingOptions
 {

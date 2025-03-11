@@ -13,7 +13,7 @@ using Starshine.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Uow.EntityFrameworkCore;
+namespace Starshine.Abp.Uow.EntityFrameworkCore;
 
 public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
     where TDbContext : IEfCoreDbContext

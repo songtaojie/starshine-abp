@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.ObjectExtending;
+namespace Starshine.Abp.ObjectExtending;
 
 public static class EfCoreObjectExtensionManagerExtensions
 {

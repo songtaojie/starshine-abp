@@ -16,7 +16,7 @@ using Starshine.Abp.EntityFrameworkCore;
 using Starshine.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.Guids;
 
-namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+namespace Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
 
 public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IEfCoreRepository<TEntity>
     where TDbContext : IEfCoreDbContext

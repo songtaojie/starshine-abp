@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+namespace Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
 
 public interface IEfCoreRepository<TEntity> : IRepository<TEntity>
     where TEntity : class, IEntity

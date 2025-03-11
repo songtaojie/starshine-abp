@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Starshine.Abp.EntityFrameworkCore;
 
-namespace Volo.Abp.Uow.EntityFrameworkCore;
+namespace Starshine.Abp.Uow.EntityFrameworkCore;
 
 public class EfCoreDatabaseApi : IDatabaseApi, ISupportsSavingChanges
 {
