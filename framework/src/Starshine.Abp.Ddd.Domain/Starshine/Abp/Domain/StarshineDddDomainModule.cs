@@ -26,7 +26,7 @@ namespace Starshine.Abp.Domain;
     typeof(AbpExceptionHandlingModule),
     typeof(AbpSpecificationsModule),
     typeof(AbpCachingModule),
-    typeof(StarshineDddDomainSharedModule)
+    typeof(StarshineAbpDddDomainSharedModule)
     )]
 public class StarshineDddDomainModule : AbpModule
 {

@@ -6,9 +6,8 @@
 
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using Starshine.Abp.AspNetCore.Middleware;
 using Volo.Abp.AspNetCore.ExceptionHandling;
-using Volo.Abp.AspNetCore.Middleware;
-using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
@@ -20,9 +19,9 @@ namespace Starshine.Abp.AspNetCore.ExceptionHandling;
 /// <summary>
 /// 异常处理中间件
 /// </summary>
-public class StarshineExceptionHandlingMiddleware : AbpMiddlewareBase, ITransientDependency
+public class ExceptionHandlingMiddleware : MiddlewareBase, ITransientDependency
 {
-    private readonly ILogger<AbpExceptionHandlingMiddleware> _logger;
+    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
     private readonly Func<object, Task> _clearCacheHeadersDelegate;
 
@@ -30,7 +29,7 @@ public class StarshineExceptionHandlingMiddleware : AbpMiddlewareBase, ITransien
     /// 异常处理中间件
     /// </summary>
     /// <param name="logger"></param>
-    public StarshineExceptionHandlingMiddleware(ILogger<AbpExceptionHandlingMiddleware> logger)
+    public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
     {
         _logger = logger;
 
@@ -71,10 +70,10 @@ public class StarshineExceptionHandlingMiddleware : AbpMiddlewareBase, ITransien
                 new ExceptionNotificationContext(exception)
             );
 
-        if (exception is AbpAuthorizationException)
+        if (exception is AbpAuthorizationException abpAuthorizationException)
         {
-            await httpContext.RequestServices.GetRequiredService<IAbpAuthorizationExceptionHandler>()
-                .HandleAsync(exception.As<AbpAuthorizationException>(), httpContext);
+            await httpContext.RequestServices.GetRequiredService<IAuthorizationExceptionHandler>()
+                .HandleAsync(abpAuthorizationException, httpContext);
         }
         else
         {

@@ -39,7 +39,7 @@ public class DeviceFlowCodes : CreationAuditedAggregateRoot<Guid>
     /// <summary>
     /// 过期时间
     /// </summary>
-    public virtual DateTimeOffset? Expiration { get; set; }
+    public virtual DateTimeOffset Expiration { get; set; }
 
     /// <summary>
     /// 数据

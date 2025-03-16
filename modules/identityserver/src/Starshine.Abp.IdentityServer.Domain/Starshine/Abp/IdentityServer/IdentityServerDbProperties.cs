@@ -9,7 +9,7 @@ public static class IdentityServerDbProperties
     /// <summary>
     /// 数据库表前缀
     /// </summary>
-    public static string DbTablePrefix { get; set; } = "IdentityServer";
+    public static string DbTablePrefix { get; set; } = "Starshine";
 
     /// <summary>
     /// 数据库架构

@@ -13,6 +13,7 @@ namespace Starshine.Abp.IdentityServer
                 {
                     Key = grant.Key,
                     Type = grant.Type,
+                    ClientId = grant.ClientId
                 };
             }
             else

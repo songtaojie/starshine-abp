@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Volo.Abp;
+﻿using Volo.Abp;
 
 namespace Starshine.Abp.Domain;
 /// <summary>

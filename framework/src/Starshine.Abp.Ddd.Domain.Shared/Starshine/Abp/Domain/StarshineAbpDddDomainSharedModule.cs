@@ -11,6 +11,6 @@ namespace Starshine.Abp.Domain;
     typeof(AbpMultiTenancyAbstractionsModule),
     typeof(AbpEventBusAbstractionsModule)
 )]
-public class StarshineDddDomainSharedModule : AbpModule
+public class StarshineAbpDddDomainSharedModule : AbpModule
 {
 }

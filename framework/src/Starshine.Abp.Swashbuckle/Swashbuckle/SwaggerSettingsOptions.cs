@@ -1,10 +1,6 @@
-using Starshine.Abp.Swashbuckle.Internal;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using System;
-using System.Linq;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Diagnostics.CodeAnalysis;
 using SwashbuckleDocExpansion = Swashbuckle.AspNetCore.SwaggerUI.DocExpansion;
@@ -148,7 +144,7 @@ namespace Starshine.Abp.Swashbuckle
 
             options.Servers ??= Array.Empty<OpenApiServer>();
             options.HideServers ??= false;
-            options.RouteTemplate ??= "swagger/{documentName}/swagger.json";
+            options.RouteTemplate ??= "/swagger/{documentName}/swagger.json";
             options.EnableEnumSchemaFilter ??= true;
             options.EnableTagsOrderDocumentFilter ??= true;
             options.EnableAllGroups ??= false;

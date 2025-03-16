@@ -7,7 +7,7 @@
 using Microsoft.AspNetCore.Mvc.Controllers;
 using System.Text;
 
-namespace AspNetCore.Microsoft.Http;
+namespace Microsoft.AspNetCore.Http;
 
 /// <summary>
 /// HttpContext扩展类

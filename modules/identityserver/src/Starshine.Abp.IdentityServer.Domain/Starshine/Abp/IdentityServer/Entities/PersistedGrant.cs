@@ -30,7 +30,7 @@ public class PersistedGrant : AggregateRoot<Guid>
     /// <summary>
     /// ¿Í»§¶Ë
     /// </summary>
-    public virtual string? ClientId { get; set; }
+    public required virtual string ClientId { get; set; }
 
     /// <summary>
     /// ÃèÊö

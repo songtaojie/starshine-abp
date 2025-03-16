@@ -11,12 +11,12 @@ public class EntityEto : EtoBase
     /// <summary>
     /// 实体类型
     /// </summary>
-    public string EntityType { get; set; } = default!;
+    public required string EntityType { get; set; }
 
     /// <summary>
     /// 实体主键
     /// </summary>
-    public string KeysAsString { get; set; } = default!;
+    public required string KeysAsString { get; set; }
 
     /// <summary>
     /// 构造函数
