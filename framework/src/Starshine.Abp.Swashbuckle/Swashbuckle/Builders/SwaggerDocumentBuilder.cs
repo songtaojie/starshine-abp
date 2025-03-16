@@ -580,7 +580,7 @@ internal class SwaggerDocumentBuilder: ISwaggerDocumentBuilder
         var thisAssembly = thisType.Assembly;
 
         // 判断是否启用 MiniProfile
-        var customIndex = $"{thisType.Namespace}.Assets.{(swaggerSettings.EnabledMiniProfiler != true ? "index" : "index-mini-profiler")}.html";
+        var customIndex = $"wwwroot.swagger.ui.{(swaggerSettings.EnabledMiniProfiler != true ? "index" : "index-mini-profiler")}.html";
         swaggerUIOptions.IndexStream = () =>
         {
             StringBuilder htmlBuilder;
@@ -593,6 +593,8 @@ internal class SwaggerDocumentBuilder: ISwaggerDocumentBuilder
             // 读取文件内容
             using (var stream = thisAssembly.GetManifestResourceStream(customIndex))
             {
+                if(stream == null)
+                    throw new Exception($"{customIndex} 文件不存在");
                 using var reader = new StreamReader(stream!);
                 htmlBuilder = new StringBuilder(reader.ReadToEnd());
             }

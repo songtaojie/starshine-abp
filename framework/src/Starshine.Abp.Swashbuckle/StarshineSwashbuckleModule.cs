@@ -5,6 +5,7 @@ using Volo.Abp.VirtualFileSystem;
 using Microsoft.AspNetCore.Builder;
 using Volo.Abp.DependencyInjection;
 using Starshine.Abp.Core;
+using Microsoft.Extensions.Options;
 
 namespace Starshine.Abp.Swashbuckle
 {
@@ -31,7 +32,15 @@ namespace Starshine.Abp.Swashbuckle
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = GetApplicationBuilder(context);
-            app.UseStarshineSwaggerKnife4j();
+            var options = app.ApplicationServices.GetRequiredService<IOptions<SwaggerSettingsOptions>>().Value;
+            if (options.SwaggerUI == 2)
+            {
+                app.UseStarshineSwaggerKnife4j();
+            }
+            else
+            {
+                app.UseStarshineSwagger();
+            }
         }
 
         public static IApplicationBuilder GetApplicationBuilder(ApplicationInitializationContext context)

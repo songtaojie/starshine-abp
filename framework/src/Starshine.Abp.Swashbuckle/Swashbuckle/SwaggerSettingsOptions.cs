@@ -13,9 +13,15 @@ namespace Starshine.Abp.Swashbuckle
     public sealed class SwaggerSettingsOptions:IConfigureOptions<SwaggerSettingsOptions>
     {
         /// <summary>
+        /// 1:原生UI，2：Knife4jUI
+        /// </summary>
+        public int? SwaggerUI { get; set; }
+
+        /// <summary>
         /// 是否允许启用MiniProfiler，默认为true
         /// </summary>
         public bool? EnabledMiniProfiler { get; set; }
+
         /// <summary>
         /// 文档标题
         /// </summary>
@@ -144,7 +150,7 @@ namespace Starshine.Abp.Swashbuckle
 
             options.Servers ??= Array.Empty<OpenApiServer>();
             options.HideServers ??= false;
-            options.RouteTemplate ??= "/swagger/{documentName}/swagger.json";
+            options.RouteTemplate ??= "swagger/{documentName}/swagger.json";
             options.EnableEnumSchemaFilter ??= true;
             options.EnableTagsOrderDocumentFilter ??= true;
             options.EnableAllGroups ??= false;

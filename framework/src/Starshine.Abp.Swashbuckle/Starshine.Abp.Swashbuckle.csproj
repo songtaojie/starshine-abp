@@ -10,6 +10,16 @@
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
 	</PropertyGroup>
+	
+	<ItemGroup>
+	  <None Remove="wwwroot\swagger\ui\index-mini-profiler.html" />
+	  <None Remove="wwwroot\swagger\ui\index.html" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <EmbeddedResource Include="wwwroot\swagger\ui\index-mini-profiler.html" />
+	  <EmbeddedResource Include="wwwroot\swagger\ui\index.html" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="IGeekFan.AspNetCore.Knife4jUI" Version="0.0.16" />
