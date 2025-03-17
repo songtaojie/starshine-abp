@@ -44,12 +44,15 @@ namespace Microsoft.Extensions.DependencyInjection
                     else
                         services.PostConfigureAll<TOptions>(options => postConfigureMethod.Invoke(options, new object[] { optionsType.Name, options }));
                 }
-                //services.AddSingleton(typeof(IPostConfigureOptions<TOptions>), optionsType);
             }
             // 配置后期配置
             if (typeof(IConfigureOptions<TOptions>).IsAssignableFrom(optionsType))
             {
-                services.AddSingleton(typeof(IConfigureOptions<TOptions>), optionsType);
+                var configureMethod = optionsType.GetMethod(nameof(IConfigureOptions<TOptions>.Configure), new[] { optionsType } );
+                if (configureMethod != null)
+                {
+                    optionsBuilder.Configure(options => configureMethod.Invoke(options,new object[] { options}));
+                }
             }
 
             return services;

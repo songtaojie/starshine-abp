@@ -1,7 +1,13 @@
+// MIT License
+//
+// Copyright (c) 2021-present songtaojie, Daming Co.,Ltd and Contributors
+//
+// 电话/微信：song977601042
+
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerUI;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Diagnostics.CodeAnalysis;
 using SwashbuckleDocExpansion = Swashbuckle.AspNetCore.SwaggerUI.DocExpansion;
 
@@ -10,7 +16,7 @@ namespace Starshine.Abp.Swashbuckle
     /// <summary>
     /// 规范化文档Swagger配置选项
     /// </summary>
-    public sealed class SwaggerSettingsOptions:IConfigureOptions<SwaggerSettingsOptions>
+    public sealed class SwaggerSettingsOptions : IConfigureOptions<SwaggerSettingsOptions>
     {
         /// <summary>
         /// 1:原生UI，2：Knife4jUI
@@ -132,25 +138,25 @@ namespace Starshine.Abp.Swashbuckle
             options.EnableAuthorized ??= true;
             if (options.EnableAuthorized == true)
             {
-                options.SecurityDefinitions ??= new SwaggerOpenApiSecurityScheme[]
-                {
+                options.SecurityDefinitions ??=
+                [
                     new SwaggerOpenApiSecurityScheme
                     {
-                        Id="oauth2",
-                        Type= SecuritySchemeType.Http,
-                        Name="Authorization",
-                        Description="JWT Authorization header using the Bearer scheme.Enter Bearer {Token} in box below (note space between two)",
-                        BearerFormat="JWT",
-                        Scheme="Bearer",
-                        In= ParameterLocation.Header,
+                        Id = "oauth2",
+                        Type = SecuritySchemeType.Http,
+                        Name = "Authorization",
+                        Description = "JWT Authorization header using the Bearer scheme.Enter Bearer {Token} in box below (note space between two)",
+                        BearerFormat = "JWT",
+                        Scheme = "Bearer",
+                        In = ParameterLocation.Header,
 
                     }
-                };
+                ];
             }
 
             options.Servers ??= Array.Empty<OpenApiServer>();
             options.HideServers ??= false;
-            options.RouteTemplate ??= "swagger/{documentName}/swagger.json";
+            options.RouteTemplate ??= ((SwaggerUI == 2 ? "/" : string.Empty) + "swagger/{documentName}/swagger.json");
             options.EnableEnumSchemaFilter ??= true;
             options.EnableTagsOrderDocumentFilter ??= true;
             options.EnableAllGroups ??= false;
