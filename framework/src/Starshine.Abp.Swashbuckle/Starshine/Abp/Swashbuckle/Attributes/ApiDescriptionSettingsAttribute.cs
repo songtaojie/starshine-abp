@@ -1,7 +1,8 @@
-﻿using Starshine.Abp.Swashbuckle.Internal;
+﻿using Microsoft.AspNetCore.Mvc;
+using Starshine.Abp.Swashbuckle;
 using System;
 
-namespace Microsoft.AspNetCore.Mvc
+namespace Starshine.Abp.Swashbuckle.Attributes
 {
     /// <summary>
     /// 接口描述设置

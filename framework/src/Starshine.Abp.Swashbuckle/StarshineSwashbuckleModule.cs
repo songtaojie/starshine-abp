@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Builder;
 using Volo.Abp.DependencyInjection;
 using Starshine.Abp.Core;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Mvc;
 
 namespace Starshine.Abp.Swashbuckle
 {
     /// <summary>
     /// Swashbuckle模块入口
     /// </summary>
-    [DependsOn(typeof(AbpVirtualFileSystemModule))]
+    [DependsOn(typeof(AbpAspNetCoreMvcModule))]
     public class StarshineSwashbuckleModule : StarshineAbpModule
     {
         /// <summary>
@@ -29,9 +30,13 @@ namespace Starshine.Abp.Swashbuckle
             context.Services.AddEndpointsApiExplorer();
         }
 
+        /// <summary>
+        /// 配置应用程序
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            var app = GetApplicationBuilder(context);
+            var app = context.GetApplicationBuilder();
             var options = app.ApplicationServices.GetRequiredService<IOptions<SwaggerSettingsOptions>>().Value;
             if (options.SwaggerUI == 2)
             {
@@ -41,13 +46,6 @@ namespace Starshine.Abp.Swashbuckle
             {
                 app.UseStarshineSwagger();
             }
-        }
-
-        public static IApplicationBuilder GetApplicationBuilder(ApplicationInitializationContext context)
-        {
-            IApplicationBuilder? value = context.ServiceProvider.GetRequiredService<IObjectAccessor<IApplicationBuilder>>().Value;
-            Check.NotNull(value, "applicationBuilder");
-            return value;
         }
     }
 }

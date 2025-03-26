@@ -1,10 +1,10 @@
-﻿using Starshine.Abp.Swashbuckle;
-using IGeekFan.AspNetCore.Knife4jUI;
+﻿using IGeekFan.AspNetCore.Knife4jUI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
+using Starshine.Abp.Swashbuckle.Builders;
 
 namespace Microsoft.AspNetCore.Builder
 {

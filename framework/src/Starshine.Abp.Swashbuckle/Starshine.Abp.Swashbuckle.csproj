@@ -25,12 +25,20 @@
 		<PackageReference Include="IGeekFan.AspNetCore.Knife4jUI" Version="0.0.16" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
-		<!--<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />-->
-		<PackageReference Include="Volo.Abp.VirtualFileSystem" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Starshine.Abp.Core\Starshine.Abp.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="wwwroot\swagger\ui\abp.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="wwwroot\swagger\ui\abp.swagger.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

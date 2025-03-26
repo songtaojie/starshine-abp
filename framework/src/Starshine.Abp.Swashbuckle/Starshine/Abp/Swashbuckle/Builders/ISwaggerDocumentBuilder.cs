@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Starshine.Abp.Swashbuckle
+namespace Starshine.Abp.Swashbuckle.Builders
 {
     /// <summary>
     /// Document构建器

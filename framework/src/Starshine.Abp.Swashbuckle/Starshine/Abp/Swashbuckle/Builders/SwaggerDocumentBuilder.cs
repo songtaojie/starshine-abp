@@ -6,7 +6,6 @@
 
 using Starshine.Abp.Swashbuckle.Attributes;
 using Starshine.Abp.Swashbuckle.Filters;
-using Starshine.Abp.Swashbuckle.Internal;
 using IGeekFan.AspNetCore.Knife4jUI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -27,9 +26,11 @@ using System.Xml.XPath;
 using DocExpansion = Swashbuckle.AspNetCore.SwaggerUI.DocExpansion;
 using Swashbuckle.AspNetCore.Filters;
 using Volo.Abp.Reflection;
+using static IdentityModel.ClaimComparer;
+using Volo.Abp.DependencyInjection;
 
-namespace Starshine.Abp.Swashbuckle;
-internal class SwaggerDocumentBuilder: ISwaggerDocumentBuilder
+namespace Starshine.Abp.Swashbuckle.Builders;
+internal class SwaggerDocumentBuilder: ISwaggerDocumentBuilder, ISingletonDependency
 {
     /// <summary>
     /// 所有分组默认的组名 Key
@@ -80,13 +81,19 @@ internal class SwaggerDocumentBuilder: ISwaggerDocumentBuilder
     /// </summary>
     private static ConcurrentDictionary<MethodInfo, IEnumerable<GroupExtraInfo>>? _getActionGroupsCached;
 
+    private readonly ISwaggerHtmlResolver _swaggerHtmlResolver;
+
     private readonly ITypeFinder _typeFinder;
     private readonly IAssemblyFinder _assemblyFinder;
-    public SwaggerDocumentBuilder(IAssemblyFinder assemblyFinder,ITypeFinder typeFinder,IOptions<SwaggerSettingsOptions> options)
+    public SwaggerDocumentBuilder(IAssemblyFinder assemblyFinder,
+        ITypeFinder typeFinder,
+        IOptions<SwaggerSettingsOptions> options,
+        ISwaggerHtmlResolver swaggerHtmlResolver)
     {
         _assemblyFinder = assemblyFinder;
         _typeFinder = typeFinder;
         _swaggerSettings = options.Value;
+        _swaggerHtmlResolver = swaggerHtmlResolver;
 
         // 初始化常量
         _groupOrderRegex ??= new Regex(@"@(?<order>[0-9]+$)");
@@ -197,9 +204,9 @@ internal class SwaggerDocumentBuilder: ISwaggerDocumentBuilder
         swaggerUIOptions.DocExpansion(_swaggerSettings.DocExpansion ?? DocExpansion.None);
 
         // 自定义首页
-        CustomizeIndex(swaggerUIOptions, _swaggerSettings);
+        CustomizeIndex(swaggerUIOptions);
 
-        AddDefaultInterceptor(swaggerUIOptions);
+        //AddDefaultInterceptor(swaggerUIOptions);
 
         // 自定义配置
         configure?.Invoke(swaggerUIOptions);
@@ -574,41 +581,44 @@ internal class SwaggerDocumentBuilder: ISwaggerDocumentBuilder
     /// </summary>
     /// <param name="swaggerUIOptions"></param>
     /// <param name="swaggerSettings"></param>
-    private static void CustomizeIndex(SwaggerUIOptions swaggerUIOptions, SwaggerSettingsOptions swaggerSettings)
+    private void CustomizeIndex(SwaggerUIOptions swaggerUIOptions)
     {
         var thisType = typeof(SwaggerDocumentBuilder);
         var thisAssembly = thisType.Assembly;
 
-        // 判断是否启用 MiniProfile
-        var customIndex = $"wwwroot.swagger.ui.{(swaggerSettings.EnabledMiniProfiler != true ? "index" : "index-mini-profiler")}.html";
-        swaggerUIOptions.IndexStream = () =>
-        {
-            StringBuilder htmlBuilder;
-            // 自定义首页模板参数
-            var indexArguments = new Dictionary<string, string>
-                {
-                    {"%(VirtualPath)", swaggerSettings.VirtualPath! }    // 解决二级虚拟目录 MiniProfiler 丢失问题
-                };
+        swaggerUIOptions.InjectJavascript("ui/abp.js");
+        swaggerUIOptions.IndexStream = _swaggerHtmlResolver.Resolver;
 
-            // 读取文件内容
-            using (var stream = thisAssembly.GetManifestResourceStream(customIndex))
-            {
-                if(stream == null)
-                    throw new Exception($"{customIndex} 文件不存在");
-                using var reader = new StreamReader(stream!);
-                htmlBuilder = new StringBuilder(reader.ReadToEnd());
-            }
+        //// 判断是否启用 MiniProfile
+        //var customIndex = $"wwwroot.swagger.ui.{(swaggerSettings.EnabledMiniProfiler != true ? "index" : "index-mini-profiler")}.html";
+        //swaggerUIOptions.IndexStream = () =>
+        //{
+        //    StringBuilder htmlBuilder;
+        //    // 自定义首页模板参数
+        //    var indexArguments = new Dictionary<string, string>
+        //        {
+        //            {"%(VirtualPath)", swaggerSettings.VirtualPath! }    // 解决二级虚拟目录 MiniProfiler 丢失问题
+        //        };
 
-            // 替换模板参数
-            foreach (var (template, value) in indexArguments)
-            {
-                htmlBuilder.Replace(template, value);
-            }
+        //    // 读取文件内容
+        //    using (var stream = thisAssembly.GetManifestResourceStream(customIndex))
+        //    {
+        //        if(stream == null)
+        //            throw new Exception($"{customIndex} 文件不存在");
+        //        using var reader = new StreamReader(stream!);
+        //        htmlBuilder = new StringBuilder(reader.ReadToEnd());
+        //    }
 
-            // 返回新的内存流
-            var byteArray = Encoding.UTF8.GetBytes(htmlBuilder.ToString());
-            return new MemoryStream(byteArray);
-        };
+        //    // 替换模板参数
+        //    foreach (var (template, value) in indexArguments)
+        //    {
+        //        htmlBuilder.Replace(template, value);
+        //    }
+
+        //    // 返回新的内存流
+        //    var byteArray = Encoding.UTF8.GetBytes(htmlBuilder.ToString());
+        //    return new MemoryStream(byteArray);
+        //};
     }
 
     /// <summary>

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Starshine.Abp.Swashbuckle.Builders;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -22,7 +23,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddStarshineOptions<SwaggerSettingsOptions>();
             if (action != null)services.Configure(action);
-            services.TryAddSingleton<ISwaggerDocumentBuilder,SwaggerDocumentBuilder>();
             services.Configure<SwaggerGenOptions,ISwaggerDocumentBuilder>((options, builder) =>
             {
                 builder.BuildSwaggerGen(options);

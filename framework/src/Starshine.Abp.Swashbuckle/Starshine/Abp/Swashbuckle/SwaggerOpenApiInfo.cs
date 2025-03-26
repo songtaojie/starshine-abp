@@ -1,5 +1,4 @@
-﻿using Starshine.Abp.Swashbuckle.Internal;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 
 namespace Starshine.Abp.Swashbuckle
 {

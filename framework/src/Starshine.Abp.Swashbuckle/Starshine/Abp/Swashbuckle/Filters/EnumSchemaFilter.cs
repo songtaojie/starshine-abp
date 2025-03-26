@@ -1,12 +1,14 @@
-using Starshine.Abp.Swashbuckle.Internal;
+// MIT License
+//
+// Copyright (c) 2021-present songtaojie, Daming Co.,Ltd and Contributors
+//
+// 电话/微信：song977601042
+
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 
 namespace Starshine.Abp.Swashbuckle.Filters
 {

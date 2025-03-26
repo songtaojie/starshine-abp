@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Text.RegularExpressions;
 
-namespace Starshine.Abp.Swashbuckle.Internal
+namespace Starshine.Abp.Swashbuckle
 {
     /// <summary>
     /// 常量、公共方法配置类
