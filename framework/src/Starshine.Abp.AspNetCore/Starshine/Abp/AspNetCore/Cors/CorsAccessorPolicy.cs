@@ -4,12 +4,9 @@
 //
 // 电话/微信：song977601042
 
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Cors.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Volo.Abp.Http;
 
 namespace Starshine.Abp.AspNetCore.Cors;
 internal static class CorsAccessorPolicy
@@ -18,11 +15,13 @@ internal static class CorsAccessorPolicy
     /// 默认跨域导出响应头 Key
     /// </summary>
     /// <remarks>解决 ajax，XMLHttpRequest，axios 不能获取请求头问题</remarks>
-    private static readonly string[] _defaultExposedHeaders = new[]
-    {
+    private static readonly string[] _defaultExposedHeaders =
+    [
         "access-token",
-        "x-access-token"
-    };
+        "x-access-token",
+        AbpHttpConsts.AbpErrorFormat,
+        AbpHttpConsts.AbpTenantResolveError
+    ];
 
     /// <summary>
     /// 设置跨域策略
@@ -74,8 +73,7 @@ internal static class CorsAccessorPolicy
         {
             exposedHeaders = exposedHeaders.Concat(corsAccessorSettings.WithExposedHeaders).Distinct(StringComparer.OrdinalIgnoreCase);
         }
-
-        if (exposedHeaders.Any()) builder.WithExposedHeaders(exposedHeaders.ToArray());
+        if (exposedHeaders.Any()) builder.WithExposedHeaders([.. exposedHeaders]);
 
         // 设置预检过期时间，如果不设置默认为 24小时
         builder.SetPreflightMaxAge(TimeSpan.FromSeconds(corsAccessorSettings.SetPreflightMaxAge ?? 24 * 60 * 60));

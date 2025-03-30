@@ -12,9 +12,13 @@ namespace Starshine.Abp.AspNetCore.Cors
     public sealed class CorsSettingsOptions : IPostConfigureOptions<CorsSettingsOptions>
     {
         /// <summary>
+        /// Default: true.
+        /// </summary>
+        public bool IsEnabled { get; set; } = true;
+
+        /// <summary>
         /// 策略名称
         /// </summary>
-        [Required]
         public string? PolicyName { get; set; }
 
         /// <summary>

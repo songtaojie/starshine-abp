@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.RequestLocalization;
-using Microsoft.Extensions.FileProviders;
-using Starshine.Abp.AspNetCore.Auditing;
-using Starshine.Abp.AspNetCore.VirtualFileSystem;
+﻿using Microsoft.Extensions.FileProviders;
 using Starshine.Abp.Core;
 using Volo.Abp;
 using Volo.Abp.AspNetCore;
@@ -9,7 +6,6 @@ using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
 using Volo.Abp.ExceptionHandling;
-using Volo.Abp.Http;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 using Volo.Abp.Uow;
@@ -22,53 +18,21 @@ namespace Starshine.Abp.AspNetCore
     /// StarshineAbpAspNetCore模块入口
     /// </summary>
     [DependsOn(
-     typeof(AbpAuditingModule),
-     typeof(AbpSecurityModule),
-     typeof(AbpVirtualFileSystemModule),
-     typeof(AbpUnitOfWorkModule),
-     typeof(AbpAuthorizationModule),
-     typeof(AbpValidationModule),
-     typeof(AbpExceptionHandlingModule),
-     typeof(AbpAspNetCoreAbstractionsModule)
+     typeof(AbpAspNetCoreModule)
      )]
     public class StarshineAspNetCoreModule : StarshineAbpModule
     {
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAuthorization();
-
-            Configure<AbpAuditingOptions,IServiceProvider>((options,privoder) =>
-            {
-                options.Contributors.Add(new AspNetCoreAuditLogContributor(privoder.GetRequiredService<ILogger<AspNetCoreAuditLogContributor>>()));
-            });
-
-            Configure<StaticFileOptions>(options =>
-            {
-                options.ContentTypeProvider = context.Services.GetRequiredService<StarshineFileExtensionContentTypeProvider>();
-            });
-
-            AddAspNetServices(context.Services);
-            context.Services.AddObjectAccessor<IApplicationBuilder>();
-            context.Services.AddAbpDynamicOptions<RequestLocalizationOptions, RequestLocalizationOptionsManager>();
+            context.Services.AddStarshineCors();
         }
 
-        private static void AddAspNetServices(IServiceCollection services)
-        {
-            services.AddHttpContextAccessor();
-        }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            var environment = context.ServiceProvider.GetService<IWebHostEnvironment>();
-            if (environment != null)
-            {
-                environment.WebRootFileProvider =
-                    new CompositeFileProvider(
-                        environment.WebRootFileProvider,
-                        context.ServiceProvider.GetRequiredService<IWebContentFileProvider>()
-                    );
-            }
+            var app = context.ServiceProvider.GetService<IApplicationBuilder>();
+            app?.UseStarshineCors();
         }
     }
 }

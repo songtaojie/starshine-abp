@@ -16,19 +16,10 @@
 
 	<ItemGroup>
 		<Folder Include="Microsoft\AspNetCore\Cors\" />
-		<Folder Include="Extensions\" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AspNetCore.Abstractions" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Auditing" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.ExceptionHandling" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Security" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Uow" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.VirtualFileSystem" Version="$(AbpVersion)" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.4" />
+		<PackageReference Include="Volo.Abp.AspNetCore" Version="$(AbpVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
