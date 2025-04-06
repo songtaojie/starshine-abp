@@ -1,16 +1,7 @@
-﻿using Microsoft.Extensions.FileProviders;
-using Starshine.Abp.Core;
+﻿using Starshine.Abp.Core;
 using Volo.Abp;
 using Volo.Abp.AspNetCore;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
-using Volo.Abp.Auditing;
-using Volo.Abp.Authorization;
-using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Modularity;
-using Volo.Abp.Security;
-using Volo.Abp.Uow;
-using Volo.Abp.Validation;
-using Volo.Abp.VirtualFileSystem;
 
 namespace Starshine.Abp.AspNetCore
 {
@@ -31,7 +22,7 @@ namespace Starshine.Abp.AspNetCore
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            var app = context.ServiceProvider.GetService<IApplicationBuilder>();
+            var app = context.GetApplicationBuilder();
             app?.UseStarshineCors();
         }
     }
