@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Starshine.Abp.EntityFrameworkCore;
 
+#pragma warning disable EF1001 // Internal EF Core API usage.
 public interface IEfCoreDbContext : IDisposable, IInfrastructure<IServiceProvider>, IDbContextDependencies, IDbSetCache, IDbContextPoolable
 {
     EntityEntry<TEntity> Attach<TEntity>([NotNull] TEntity entity) where TEntity : class;
@@ -88,3 +89,4 @@ public interface IEfCoreDbContext : IDisposable, IInfrastructure<IServiceProvide
 
     void UpdateRange([NotNull] IEnumerable<object> entities);
 }
+#pragma warning restore EF1001 // Internal EF Core API usage.

@@ -4,18 +4,19 @@
 	<PropertyGroup>
 		<TargetFramework>$(NETVersion)</TargetFramework>
 		<WarningsAsErrors>Nullable</WarningsAsErrors>
-		<AssemblyName>Starshine.Abp.Ddd.Domain.Shared</AssemblyName>
-		<PackageId>Starshine.Abp.Ddd.Domain.Shared</PackageId>
+		<AssemblyName>Starshine.Abp.EntityFrameworkCore</AssemblyName>
+		<PackageId>Starshine.Abp.EntityFrameworkCore</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<RootNamespace />
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Json" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.13" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Starshine.Abp.Ddd.Domain\Starshine.Abp.Ddd.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -6,14 +6,8 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Starshine.Abp.Application.Dtos;
-using Starshine.Abp.Application.Localization.Resources.AbpDdd;
+using Starshine.Abp.Application.Localization.Resources;
 
 namespace Starshine.Abp.Application.Dtos;
 
@@ -60,7 +54,7 @@ public class LimitedRequestDto : ILimitedRequest, IValidatableObject
                     typeof(LimitedResultRequestDto).FullName!,
                     nameof(MaxPageSize)
                 ],
-                new[] { nameof(PageSize) });
+                [nameof(PageSize)]);
         }
     }
 }

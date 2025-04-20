@@ -1,20 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
 
 namespace Starshine.Abp.Domain.Repositories;
 
 public static class EfCoreRepositoryExtensions
 {
-    [Obsolete("Use GetDbContextAsync method.")]
-    public static DbContext GetDbContext<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
-        where TEntity : class, IEntity
-    {
-        return repository.ToEfCoreRepository().DbContext;
-    }
 
     public static Task<DbContext> GetDbContextAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
         where TEntity : class, IEntity
@@ -22,13 +12,7 @@ public static class EfCoreRepositoryExtensions
         return repository.ToEfCoreRepository().GetDbContextAsync();
     }
 
-    [Obsolete("Use GetDbSetAsync method.")]
-    public static DbSet<TEntity> GetDbSet<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
-        where TEntity : class, IEntity
-    {
-        return repository.ToEfCoreRepository().DbSet;
-    }
-
+   
     public static Task<DbSet<TEntity>> GetDbSetAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
         where TEntity : class, IEntity
     {

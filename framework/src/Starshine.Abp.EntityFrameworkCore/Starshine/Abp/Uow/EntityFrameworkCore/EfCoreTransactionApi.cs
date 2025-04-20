@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Starshine.Abp.EntityFrameworkCore;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 
 namespace Starshine.Abp.Uow.EntityFrameworkCore;
 

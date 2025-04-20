@@ -1,19 +1,10 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
 
 public interface IEfCoreRepository<TEntity> : IRepository<TEntity>
     where TEntity : class, IEntity
 {
-    [Obsolete("Use GetDbContextAsync() method.")]
-    DbContext DbContext { get; }
-
-    [Obsolete("Use GetDbSetAsync() method.")]
-    DbSet<TEntity> DbSet { get; }
-
     Task<DbContext> GetDbContextAsync();
 
     Task<DbSet<TEntity>> GetDbSetAsync();

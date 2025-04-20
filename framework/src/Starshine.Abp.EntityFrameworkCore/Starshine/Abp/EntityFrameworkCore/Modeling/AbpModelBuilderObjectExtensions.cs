@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending;
 
 namespace Starshine.Abp.EntityFrameworkCore.Modeling;

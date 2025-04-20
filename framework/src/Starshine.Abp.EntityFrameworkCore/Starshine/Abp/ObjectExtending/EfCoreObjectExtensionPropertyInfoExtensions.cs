@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Starshine.Abp.ObjectExtending;
@@ -23,23 +21,7 @@ public static class EfCoreObjectExtensionPropertyInfoExtensions
         return propertyExtension;
     }
 
-    [Obsolete("Use MapEfCore with EntityTypeAndPropertyBuildAction parameters.")]
-    [NotNull]
-    public static ObjectExtensionPropertyInfo MapEfCore(
-        [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
-        [CanBeNull] Action<PropertyBuilder> propertyBuildAction)
-    {
-        Check.NotNull(propertyExtension, nameof(propertyExtension));
-
-        propertyExtension.Configuration[EfCorePropertyConfigurationName] =
-            new ObjectExtensionPropertyInfoEfCoreMappingOptions(
-                propertyExtension,
-                propertyBuildAction
-            );
-
-        return propertyExtension;
-    }
-
+   
     [NotNull]
     public static ObjectExtensionPropertyInfo MapEfCore(
         [NotNull] this ObjectExtensionPropertyInfo propertyExtension,

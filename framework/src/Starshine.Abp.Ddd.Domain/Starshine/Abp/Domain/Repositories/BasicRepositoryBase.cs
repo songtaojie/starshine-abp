@@ -20,25 +20,33 @@ namespace Starshine.Abp.Domain.Repositories;
 /// Basic implementation of IBasicRepository.
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-public abstract class BasicRepositoryBase<TEntity> :
+/// <remarks>
+/// 构造函数。
+/// </remarks>
+/// <param name="abpLazyServiceProvider"></param>
+public abstract class BasicRepositoryBase<TEntity>:
     IBasicRepository<TEntity>,
     IUnitOfWorkEnabled
     where TEntity : class, IEntity
 {
+    public BasicRepositoryBase(IAbpLazyServiceProvider abpLazyServiceProvider)
+    {
+        LazyServiceProvider = abpLazyServiceProvider;
+    }
     /// <summary>
     /// 服务提供商。
     /// </summary>
-    public IAbpLazyServiceProvider LazyServiceProvider { get; } 
+    protected IAbpLazyServiceProvider LazyServiceProvider { get; }
 
     /// <summary>
     /// 数据过滤器。
     /// </summary>
-    public IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
+    protected IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
 
     /// <summary>
     /// 当前租户。
     /// </summary>
-    public ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
+    protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
 
     /// <summary>
     /// 异步查询执行器。
@@ -53,36 +61,27 @@ public abstract class BasicRepositoryBase<TEntity> :
     /// <summary>
     /// 取消令牌提供者。
     /// </summary>
-    public ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetService<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
+    protected ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetService<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
 
     /// <summary>
     /// 日志工厂。
     /// </summary>
-    public ILoggerFactory? LoggerFactory => LazyServiceProvider.LazyGetService<ILoggerFactory>();
+    protected ILoggerFactory? LoggerFactory => LazyServiceProvider.LazyGetService<ILoggerFactory>();
 
     /// <summary>
     /// 日志。
     /// </summary>
-    public ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
     /// <summary>
     /// 实体变更跟踪提供者。
     /// </summary>
-    public IEntityChangeTrackingProvider EntityChangeTrackingProvider => LazyServiceProvider.LazyGetRequiredService<IEntityChangeTrackingProvider>();
+    protected IEntityChangeTrackingProvider EntityChangeTrackingProvider => LazyServiceProvider.LazyGetRequiredService<IEntityChangeTrackingProvider>();
 
     /// <summary>
     /// 是否跟踪实体变更。
     /// </summary>
     public bool? IsChangeTrackingEnabled { get; protected set; }
-
-    /// <summary>
-    /// 构造函数。
-    /// </summary>
-    /// <param name="abpLazyServiceProvider"></param>
-    protected BasicRepositoryBase(IAbpLazyServiceProvider abpLazyServiceProvider)
-    {
-        LazyServiceProvider = abpLazyServiceProvider;
-    }
 
     /// <summary>
     /// 插入实体。

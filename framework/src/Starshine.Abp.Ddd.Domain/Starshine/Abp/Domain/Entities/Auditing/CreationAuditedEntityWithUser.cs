@@ -4,9 +4,9 @@ using Volo.Abp.Auditing;
 namespace Starshine.Abp.Domain.Entities.Auditing;
 
 /// <summary>
-/// This class can be used to simplify implementing <see cref="ICreationAuditedObject{TCreator}"/>.
+/// 此类可用于简化实现<see cref="ICreationAuditedObject{TCreator}"/>。
 /// </summary>
-/// <typeparam name="TUser">Type of the user</typeparam>
+/// <typeparam name="TUser">用户类型</typeparam>
 [Serializable]
 public abstract class CreationAuditedEntityWithUser<TUser> : CreationAuditedEntity, ICreationAuditedObject<TUser>
 {
@@ -15,10 +15,10 @@ public abstract class CreationAuditedEntityWithUser<TUser> : CreationAuditedEnti
 }
 
 /// <summary>
-/// This class can be used to simplify implementing <see cref="ICreationAuditedObjectObject{TCreator}"/>.
+/// 此类可用于简化实现<see cref="ICreationAuditedObject{TCreator}"/>。
 /// </summary>
-/// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
-/// <typeparam name="TUser">Type of the user</typeparam>
+/// <typeparam name="TKey">实体主键的类型</typeparam>
+/// <typeparam name="TUser">用户类型</typeparam>
 [Serializable]
 public abstract class CreationAuditedEntityWithUser<TKey, TUser> : CreationAuditedEntity<TKey>, ICreationAuditedObject<TUser>
 {

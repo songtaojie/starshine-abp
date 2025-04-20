@@ -9,6 +9,7 @@ using Starshine.Abp.EntityFrameworkCore.ValueComparers;
 using Starshine.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
+using Starshine.Abp.ObjectExtending;
 
 namespace Starshine.Abp.EntityFrameworkCore.Modeling;
 

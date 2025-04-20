@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Volo.Abp;
 
 namespace Starshine.Abp.Domain.Entities.Events.Distributed;
 

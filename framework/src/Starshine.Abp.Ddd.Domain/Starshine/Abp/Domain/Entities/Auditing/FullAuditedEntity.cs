@@ -4,7 +4,7 @@ using Volo.Abp.Auditing;
 namespace Starshine.Abp.Domain.Entities.Auditing;
 
 /// <summary>
-/// Implements <see cref="IFullAuditedObject"/> to be a base class for full-audited entities.
+/// 实现 <see cref="IFullAuditedObject"/> 作为全面审计实体的基类。
 /// </summary>
 [Serializable]
 public abstract class FullAuditedEntity : AuditedEntity, IFullAuditedObject

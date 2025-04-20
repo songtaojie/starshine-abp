@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
+using Starshine.Abp.Domain.Repositories;
+using Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
 
 namespace Starshine.Abp.EntityFrameworkCore.DependencyInjection;
 

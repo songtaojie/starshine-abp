@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Starshine.Abp.Application.Localization.Resources.AbpDdd;
+using Starshine.Abp.Application.Localization.Resources;
 
 namespace Starshine.Abp.Application.Dtos;
 

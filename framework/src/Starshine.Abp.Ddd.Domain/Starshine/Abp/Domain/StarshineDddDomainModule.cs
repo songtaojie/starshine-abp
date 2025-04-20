@@ -9,7 +9,6 @@ using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
-using Volo.Abp.Specifications;
 using Volo.Abp.Timing;
 
 namespace Starshine.Abp.Domain;
@@ -24,7 +23,6 @@ namespace Starshine.Abp.Domain;
     typeof(AbpTimingModule),
     typeof(AbpObjectMappingModule),
     typeof(AbpExceptionHandlingModule),
-    typeof(AbpSpecificationsModule),
     typeof(AbpCachingModule),
     typeof(StarshineAbpDddDomainSharedModule)
     )]

@@ -11,9 +11,22 @@
 		<RootNamespace />
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Features" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.GlobalFeatures" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Http" Version="$(AbpVersion)"  />
+		<PackageReference Include="Volo.Abp.Localization" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Security" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Settings" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
 	</ItemGroup>
+	
 	<ItemGroup>
 	  <Folder Include="Starshine\Abp\Application\Services\" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\Starshine.Abp.Ddd.Application.Contracts\Starshine.Abp.Ddd.Application.Contracts.csproj" />
+	  <ProjectReference Include="..\Starshine.Abp.Ddd.Domain\Starshine.Abp.Ddd.Domain.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,19 +1,19 @@
+// MIT License
+//
+// Copyright (c) 2021-present songtaojie, Daming Co.,Ltd and Contributors
+//
+// µç»°/Î¢ÐÅ£ºsong977601042
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Logging;
-using Volo.Abp.Data;
-using Volo.Abp.Domain.Entities;
 using Starshine.Abp.EntityFrameworkCore;
 using Starshine.Abp.EntityFrameworkCore.DependencyInjection;
+using System.Data;
+using System.Linq.Expressions;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 
 namespace Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -22,30 +22,10 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     where TDbContext : IEfCoreDbContext
     where TEntity : class, IEntity
 {
-    [Obsolete("Use GetDbContextAsync() method.")]
-    protected virtual TDbContext DbContext => GetDbContext();
-
-    [Obsolete("Use GetDbContextAsync() method.")]
-    DbContext IEfCoreRepository<TEntity>.DbContext => (GetDbContext() as DbContext)!;
 
     async Task<DbContext> IEfCoreRepository<TEntity>.GetDbContextAsync()
     {
         return (await GetDbContextAsync() as DbContext)!;
-    }
-
-    [Obsolete("Use GetDbContextAsync() method.")]
-    private TDbContext GetDbContext()
-    {
-        // Multi-tenancy unaware entities should always use the host connection string
-        if (!EntityHelper.IsMultiTenant<TEntity>())
-        {
-            using (CurrentTenant.Change(null))
-            {
-                return _dbContextProvider.GetDbContext();
-            }
-        }
-
-        return _dbContextProvider.GetDbContext();
     }
 
     protected virtual Task<TDbContext> GetDbContextAsync()
@@ -62,8 +42,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
         return _dbContextProvider.GetDbContextAsync();
     }
 
-    [Obsolete("Use GetDbSetAsync() method.")]
-    public virtual DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
 
     Task<DbSet<TEntity>> IEfCoreRepository<TEntity>.GetDbSetAsync()
     {
@@ -94,12 +72,12 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     public IEfCoreBulkOperationProvider? BulkOperationProvider => LazyServiceProvider.LazyGetService<IEfCoreBulkOperationProvider>();
 
-    public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
+    public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider, IAbpLazyServiceProvider lazyServiceProvider) : base(lazyServiceProvider)
     {
         _dbContextProvider = dbContextProvider;
 
         _entityOptionsLazy = new Lazy<AbpEntityOptions<TEntity>>(
-            () => ServiceProvider
+            () => LazyServiceProvider
                       .GetRequiredService<IOptions<AbpEntityOptions>>()
                       .Value
                       .GetOrNull<TEntity>() ?? AbpEntityOptions<TEntity>.Empty
@@ -287,12 +265,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    [Obsolete("Use GetQueryableAsync method.")]
-    protected override IQueryable<TEntity> GetQueryable()
-    {
-        return DbSet.AsQueryable().AsNoTrackingIf(!ShouldTrackingEntityChange());
-    }
-
     public async override Task<IQueryable<TEntity>> GetQueryableAsync()
     {
         return (await GetDbSetAsync()).AsQueryable().AsNoTrackingIf(!ShouldTrackingEntityChange());
@@ -365,17 +337,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
             .LoadAsync(GetCancellationToken(cancellationToken));
     }
 
-    [Obsolete("Use WithDetailsAsync")]
-    public override IQueryable<TEntity> WithDetails()
-    {
-        if (AbpEntityOptions.DefaultWithDetailsFunc == null)
-        {
-            return base.WithDetails();
-        }
-
-        return AbpEntityOptions.DefaultWithDetailsFunc(GetQueryable());
-    }
-
     public async override Task<IQueryable<TEntity>> WithDetailsAsync()
     {
         if (AbpEntityOptions.DefaultWithDetailsFunc == null)
@@ -384,15 +345,6 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
         }
 
         return AbpEntityOptions.DefaultWithDetailsFunc(await GetQueryableAsync());
-    }
-
-    [Obsolete("Use WithDetailsAsync method.")]
-    public override IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
-    {
-        return IncludeDetails(
-            GetQueryable(),
-            propertySelectors
-        );
     }
 
     public async override Task<IQueryable<TEntity>> WithDetailsAsync(params Expression<Func<TEntity, object>>[] propertySelectors)
@@ -448,8 +400,8 @@ public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbC
     where TDbContext : IEfCoreDbContext
     where TEntity : class, IEntity<TKey>
 {
-    public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
-        : base(dbContextProvider)
+    public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider,IAbpLazyServiceProvider lazyServiceProvider)
+        : base(dbContextProvider, lazyServiceProvider)
     {
 
     }

@@ -4,7 +4,7 @@ using Volo.Abp.Auditing;
 namespace Starshine.Abp.Domain.Entities.Auditing;
 
 /// <summary>
-/// This class can be used to simplify implementing <see cref="IAuditedObject"/> for aggregate roots.
+/// 此类可用于简化聚合根的 <see cref="IAuditedObject"/> 实现.
 /// </summary>
 [Serializable]
 public abstract class AuditedAggregateRoot : CreationAuditedAggregateRoot, IAuditedObject
@@ -17,9 +17,9 @@ public abstract class AuditedAggregateRoot : CreationAuditedAggregateRoot, IAudi
 }
 
 /// <summary>
-/// This class can be used to simplify implementing <see cref="IAuditedObject"/> for aggregate roots.
+///此类可用于简化聚合根的 <see cref="IAuditedObject"/> 实现。
 /// </summary>
-/// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
+/// <typeparam name="TKey">实体主键的类型</typeparam>
 [Serializable]
 public abstract class AuditedAggregateRoot<TKey> : CreationAuditedAggregateRoot<TKey>, IAuditedObject
 {

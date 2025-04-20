@@ -1,7 +1,8 @@
 ﻿using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore;
+using Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
+using Starshine.Abp.EntityFrameworkCore;
+using Volo.Abp.DependencyInjection;
 
 namespace Starshine.Abp.Users.EntityFrameworkCore;
 
@@ -18,8 +19,8 @@ public abstract class EfCoreUserRepositoryBase<TDbContext, TUser> : EfCoreReposi
     /// 构造方法
     /// </summary>
     /// <param name="dbContextProvider"></param>
-    protected EfCoreUserRepositoryBase(IDbContextProvider<TDbContext> dbContextProvider)
-        : base(dbContextProvider)
+    protected EfCoreUserRepositoryBase(IDbContextProvider<TDbContext> dbContextProvider, IAbpLazyServiceProvider lazyServiceProvider)
+        : base(dbContextProvider, lazyServiceProvider)
     {
 
     }

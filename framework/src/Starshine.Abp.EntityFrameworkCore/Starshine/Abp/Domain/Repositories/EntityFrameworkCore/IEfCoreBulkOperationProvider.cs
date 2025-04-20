@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 using Starshine.Abp.EntityFrameworkCore;
+using Starshine.Abp.Domain.Entities;
 
 namespace Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
 

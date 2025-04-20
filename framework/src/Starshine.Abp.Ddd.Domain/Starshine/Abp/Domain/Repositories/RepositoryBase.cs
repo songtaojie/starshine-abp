@@ -10,6 +10,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp;
+using Volo.Abp.DependencyInjection;
 
 namespace Starshine.Abp.Domain.Repositories;
 
@@ -17,9 +18,13 @@ namespace Starshine.Abp.Domain.Repositories;
 /// 存储库的基类。
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
+public abstract class RepositoryBase<TEntity>: BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
     where TEntity : class, IEntity
 {
+
+    public RepositoryBase(IAbpLazyServiceProvider abpLazyServiceProvider) : base(abpLazyServiceProvider)
+    {
+    }
     /// <summary>
     /// 获取所有实体的查询。
     /// </summary>
@@ -131,6 +136,9 @@ public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IR
 public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
 {
+    public RepositoryBase(IAbpLazyServiceProvider abpLazyServiceProvider) : base(abpLazyServiceProvider)
+    {
+    }
     /// <summary>
     /// 查找实体。
     /// </summary>
@@ -185,4 +193,5 @@ public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, I
             await SaveChangesAsync(cancellationToken);
         }
     }
+   
 }

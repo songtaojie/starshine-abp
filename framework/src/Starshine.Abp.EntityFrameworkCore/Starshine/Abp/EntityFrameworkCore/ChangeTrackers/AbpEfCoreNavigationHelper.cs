@@ -1,11 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.EntityFrameworkCore.ChangeTrackers;
 

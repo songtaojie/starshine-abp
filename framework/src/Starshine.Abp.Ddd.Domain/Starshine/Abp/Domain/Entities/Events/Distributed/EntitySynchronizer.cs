@@ -6,6 +6,7 @@ using Starshine.Abp.Domain.Repositories;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
+using Volo.Abp;
 
 namespace Starshine.Abp.Domain.Entities.Events.Distributed;
 

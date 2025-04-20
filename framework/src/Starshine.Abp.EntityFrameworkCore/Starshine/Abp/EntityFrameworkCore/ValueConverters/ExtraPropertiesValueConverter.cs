@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Starshine.Abp.ObjectExtending;
 using Volo.Abp.Data;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
 using Volo.Abp.ObjectExtending;

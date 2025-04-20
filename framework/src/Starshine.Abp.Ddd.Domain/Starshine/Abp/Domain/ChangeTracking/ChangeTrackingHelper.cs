@@ -2,6 +2,7 @@ using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 using Starshine.Abp.Domain.Repositories;
+using Volo.Abp;
 
 namespace Starshine.Abp.Domain.ChangeTracking;
 
@@ -18,7 +19,7 @@ public static class ChangeTrackingHelper
 
         //Method declaration
         var attrs = methodInfo.GetCustomAttributes(true).OfType<EntityChangeTrackingAttribute>().ToArray();
-        if (attrs.Any())
+        if (attrs.Length != 0)
         {
             entityChangeTrackingAttribute = attrs.First();
             return true;
@@ -28,7 +29,7 @@ public static class ChangeTrackingHelper
         {
             //Class declaration
             attrs = methodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes(true).OfType<EntityChangeTrackingAttribute>().ToArray();
-            if (attrs.Any())
+            if (attrs.Length != 0)
             {
                 entityChangeTrackingAttribute = attrs.First();
                 return true;

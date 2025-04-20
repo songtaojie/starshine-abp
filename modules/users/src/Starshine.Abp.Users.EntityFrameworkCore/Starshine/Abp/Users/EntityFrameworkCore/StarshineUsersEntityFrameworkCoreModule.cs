@@ -1,4 +1,4 @@
-﻿using Volo.Abp.EntityFrameworkCore;
+﻿using Starshine.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace Starshine.Abp.Users.EntityFrameworkCore;
@@ -8,7 +8,7 @@ namespace Starshine.Abp.Users.EntityFrameworkCore;
 /// </summary>
 [DependsOn(
     typeof(StarshineUsersDomainModule),
-    typeof(AbpEntityFrameworkCoreModule)
+    typeof(StarshineEntityFrameworkCoreModule)
     )]
 public class StarshineUsersEntityFrameworkCoreModule : AbpModule
 {

@@ -1,5 +1,5 @@
-﻿using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
+﻿using Starshine.Abp.Domain.Entities;
+using Starshine.Abp.Domain.Repositories;
 
 namespace Starshine.Abp.Users;
 

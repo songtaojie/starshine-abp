@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starshine.Abp.EntityFrameworkCore.MySQL", "Starshine.Abp.EntityFrameworkCore.MySQL.csproj", "{0F17DF35-E12C-2E9B-271C-2D9863C1F559}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F17DF35-E12C-2E9B-271C-2D9863C1F559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F17DF35-E12C-2E9B-271C-2D9863C1F559}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F17DF35-E12C-2E9B-271C-2D9863C1F559}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F17DF35-E12C-2E9B-271C-2D9863C1F559}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4CE3D70-4EF3-4AB0-9848-99727FFCB47E}
+	EndGlobalSection
+EndGlobal
