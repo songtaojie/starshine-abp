@@ -7,6 +7,8 @@ using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
+using Starshine.Abp.PermissionManagement.Entities;
+using Starshine.Abp.PermissionManagement.Repositories;
 using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;

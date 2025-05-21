@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Starshine.Abp.Domain.Entities;
 using Volo.Abp;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
 namespace Starshine.Abp.PermissionManagement;

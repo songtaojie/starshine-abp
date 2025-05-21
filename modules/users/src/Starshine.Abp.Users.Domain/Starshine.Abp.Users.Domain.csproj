@@ -12,7 +12,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\framework\src\Starshine.Abp.Ddd.Domain\Starshine.Abp.Ddd.Domain.csproj" />
 	  <ProjectReference Include="..\Starshine.Abp.Users.Abstractions\Starshine.Abp.Users.Abstractions.csproj" />
 	  <ProjectReference Include="..\Starshine.Abp.Users.Domain.Shared\Starshine.Abp.Users.Domain.Shared.csproj" />
 	</ItemGroup>

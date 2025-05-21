@@ -1,6 +1,6 @@
-﻿using Volo.Abp.Application.Dtos;
+﻿using Starshine.Abp.Application.Dtos;
 
-namespace Starshine.Abp.TenantManagement;
+namespace Starshine.Abp.TenantManagement.Dtos;
 
 /// <summary>
 /// 获取租户请求

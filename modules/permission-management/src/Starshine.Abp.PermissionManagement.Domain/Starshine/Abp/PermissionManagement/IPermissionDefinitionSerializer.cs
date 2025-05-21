@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Starshine.Abp.PermissionManagement.Entities;
 using Volo.Abp.Authorization.Permissions;
 
 namespace Starshine.Abp.PermissionManagement;

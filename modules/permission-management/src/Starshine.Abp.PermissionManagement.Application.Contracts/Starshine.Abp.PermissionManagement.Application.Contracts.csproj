@@ -13,7 +13,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
 		<PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="$(AbpVersion)" />
 	</ItemGroup>
 

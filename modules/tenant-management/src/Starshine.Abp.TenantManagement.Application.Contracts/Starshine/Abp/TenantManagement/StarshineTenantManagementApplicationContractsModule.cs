@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Application;
+﻿using Starshine.Abp.Application;
+using Starshine.Abp.TenantManagement.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
@@ -11,7 +12,7 @@ namespace Starshine.Abp.TenantManagement;
 /// 租户管理应用合同模块
 /// </summary>
 [DependsOn(
-    typeof(AbpDddApplicationContractsModule),
+    typeof(StarshineDddApplicationContractsModule),
     typeof(StarshineTenantManagementDomainSharedModule),
     typeof(AbpAuthorizationAbstractionsModule)
     )]

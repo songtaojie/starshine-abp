@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Starshine.Abp.Application.Dtos;
+using Starshine.Abp.Application.Services;
 using Volo.Abp;
-using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
+using Volo.Abp.DependencyInjection;
 
 namespace Starshine.Abp.PermissionManagement.Integration;
 
@@ -21,7 +20,7 @@ public class PermissionIntegrationService : ApplicationService, IPermissionInteg
     /// 权限集成服务
     /// </summary>
     /// <param name="permissionFinder">权限查找器</param>
-    public PermissionIntegrationService(IPermissionFinder permissionFinder)
+    public PermissionIntegrationService(IPermissionFinder permissionFinder,IAbpLazyServiceProvider abpLazyServiceProvider):base(abpLazyServiceProvider)
     {
         PermissionFinder = permissionFinder;
     }

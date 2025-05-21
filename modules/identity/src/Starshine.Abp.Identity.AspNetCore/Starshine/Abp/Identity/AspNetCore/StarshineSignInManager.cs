@@ -1,14 +1,9 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Starshine.Abp.Identity.Managers;
-using Starshine.Abp.Identity.Settings;
+using Volo.Abp.Identity;
 using Volo.Abp.Settings;
-using Volo.Abp.Timing;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Starshine.Abp.Identity.AspNetCore;
 /// <summary>
@@ -19,7 +14,7 @@ public class StarshineSignInManager : SignInManager<IdentityUser>
     /// <summary>
     /// 权限配置
     /// </summary>
-    protected StarshineIdentityOptions StarshineIdentityOptions { get; }
+    protected AbpIdentityOptions StarshineIdentityOptions { get; }
 
     /// <summary>
     /// 设置
@@ -48,7 +43,7 @@ public class StarshineSignInManager : SignInManager<IdentityUser>
         ILogger<SignInManager<IdentityUser>> logger,
         IAuthenticationSchemeProvider schemes,
         IUserConfirmation<IdentityUser> confirmation,
-        IOptions<StarshineIdentityOptions> options,
+        IOptions<AbpIdentityOptions> options,
         ISettingProvider settingProvider) : base(
         userManager,
         contextAccessor,

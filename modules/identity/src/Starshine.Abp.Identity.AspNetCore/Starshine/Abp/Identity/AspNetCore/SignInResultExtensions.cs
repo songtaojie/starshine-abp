@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Volo.Abp.Identity;
 
 namespace Starshine.Abp.Identity.AspNetCore;
 

@@ -13,8 +13,10 @@
 		<RootNamespace />
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="8.3.4" />
-		<PackageReference Include="Volo.Abp.OpenIddict.Domain" Version="8.3.4" />
+		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.OpenIddict.Domain" Version="$(AbpVersion)" />
+		<!--<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(AbpVersion)" />-->
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="OpenIddict.Server.AspNetCore" Version="5.5.0" />

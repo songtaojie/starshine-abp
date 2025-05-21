@@ -16,7 +16,6 @@
     <ProjectReference Include="..\Starshine.Abp.TenantManagement.Domain.Shared\Starshine.Abp.TenantManagement.Domain.Shared.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
 		<PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="$(AbpVersion)" />
 	</ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Application;
+﻿using Starshine.Abp.Application;
 using Volo.Abp.Modularity;
 
 namespace Starshine.Abp.PermissionManagement;
@@ -9,7 +9,7 @@ namespace Starshine.Abp.PermissionManagement;
 [DependsOn(
     typeof(StarshinePermissionManagementDomainModule),
     typeof(StarshinePermissionManagementApplicationContractsModule),
-    typeof(AbpDddApplicationModule)
+    typeof(StarshineDddApplicationModule)
     )]
 public class StarshinePermissionManagementApplicationModule : AbpModule
 {

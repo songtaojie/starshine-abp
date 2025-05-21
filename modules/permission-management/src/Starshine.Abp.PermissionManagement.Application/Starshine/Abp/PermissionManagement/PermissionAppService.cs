@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Starshine.Abp.Application.Services;
 using Volo.Abp;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
@@ -50,13 +46,12 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
         IPermissionDefinitionManager permissionDefinitionManager,
         IOptions<PermissionManagementOptions> options,
         ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager,
-        IAbpLazyServiceProvider abpLazyServiceProvider)
+        IAbpLazyServiceProvider abpLazyServiceProvider):base(abpLazyServiceProvider)
     {
         Options = options.Value;
         PermissionManager = permissionManager;
         PermissionDefinitionManager = permissionDefinitionManager;
         SimpleStateCheckerManager = simpleStateCheckerManager;
-        LazyServiceProvider = abpLazyServiceProvider;
     }
 
     /// <summary>

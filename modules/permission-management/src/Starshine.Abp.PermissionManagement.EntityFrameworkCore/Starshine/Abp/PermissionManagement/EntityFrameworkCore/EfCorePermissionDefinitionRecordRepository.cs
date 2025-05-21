@@ -3,8 +3,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore;
+using Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
+using Starshine.Abp.EntityFrameworkCore;
+using Starshine.Abp.PermissionManagement.Entities;
+using Starshine.Abp.PermissionManagement.Repositories;
+using Volo.Abp.DependencyInjection;
 
 namespace Starshine.Abp.PermissionManagement.EntityFrameworkCore;
 
@@ -20,8 +23,9 @@ public class EfCorePermissionDefinitionRecordRepository :
     /// </summary>
     /// <param name="dbContextProvider"></param>
     public EfCorePermissionDefinitionRecordRepository(
-        IDbContextProvider<IPermissionManagementDbContext> dbContextProvider)
-        : base(dbContextProvider)
+        IDbContextProvider<IPermissionManagementDbContext> dbContextProvider,
+        IAbpLazyServiceProvider abpLazyServiceProvider)
+        : base(dbContextProvider, abpLazyServiceProvider)
     {
     }
 

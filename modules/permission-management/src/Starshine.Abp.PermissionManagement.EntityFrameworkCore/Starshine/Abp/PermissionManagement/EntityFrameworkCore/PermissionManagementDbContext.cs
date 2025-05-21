@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.EntityFrameworkCore;
+using Starshine.Abp.PermissionManagement.Entities;
 using Volo.Abp.Data;
-using Volo.Abp.EntityFrameworkCore;
 
 namespace Starshine.Abp.PermissionManagement.EntityFrameworkCore;
 

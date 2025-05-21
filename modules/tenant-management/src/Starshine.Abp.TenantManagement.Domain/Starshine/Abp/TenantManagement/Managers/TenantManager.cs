@@ -1,7 +1,8 @@
-﻿using Starshine.Abp.TenantManagement.Entities;
+﻿using Starshine.Abp.Domain.Services;
+using Starshine.Abp.TenantManagement.Entities;
 using Starshine.Abp.TenantManagement.Repositories;
 using Volo.Abp;
-using Volo.Abp.Domain.Services;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.MultiTenancy;
 
@@ -16,7 +17,8 @@ namespace Starshine.Abp.TenantManagement.Managers;
 public class TenantManager(
     ITenantRepository tenantRepository,
     ITenantNormalizer tenantNormalizer,
-    ILocalEventBus localEventBus) : DomainService, ITenantManager
+    ILocalEventBus localEventBus,
+    IAbpLazyServiceProvider abpLazyServiceProvider) : DomainService(abpLazyServiceProvider), ITenantManager
 {
     /// <summary>
     /// 租户存储

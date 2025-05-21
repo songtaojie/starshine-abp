@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Starshine.Abp.Application.Dtos;
+using Starshine.Abp.TenantManagement.Dtos;
 using Starshine.Abp.TenantManagement.Entities;
 using Starshine.Abp.TenantManagement.Managers;
 using Starshine.Abp.TenantManagement.Repositories;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.MultiTenancy;
@@ -13,9 +15,6 @@ namespace Starshine.Abp.TenantManagement;
 /// <summary>
 /// 租户应用服务
 /// </summary>
-/// <remarks>
-/// 租户应用服务
-/// </remarks>
 /// <param name="tenantRepository"></param>
 /// <param name="tenantManager"></param>
 /// <param name="dataSeeder"></param>
@@ -27,7 +26,8 @@ public class TenantAppService(
     ITenantManager tenantManager,
     IDataSeeder dataSeeder,
     IDistributedEventBus distributedEventBus,
-    ILocalEventBus localEventBus) : TenantManagementAppServiceBase, ITenantAppService
+    ILocalEventBus localEventBus,
+    IAbpLazyServiceProvider abpLazyServiceProvider) : TenantManagementAppServiceBase(abpLazyServiceProvider), ITenantAppService
 {
     /// <summary>
     /// 数据种子

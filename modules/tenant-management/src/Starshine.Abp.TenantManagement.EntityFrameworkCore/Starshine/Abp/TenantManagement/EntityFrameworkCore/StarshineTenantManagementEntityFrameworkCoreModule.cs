@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EntityFrameworkCore;
+using Starshine.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace Starshine.Abp.TenantManagement.EntityFrameworkCore;
@@ -8,7 +8,7 @@ namespace Starshine.Abp.TenantManagement.EntityFrameworkCore;
 /// 租户管理EntityFrameworkCoreModule
 /// </summary>
 [DependsOn(typeof(StarshineTenantManagementDomainModule))]
-[DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+[DependsOn(typeof(StarshineEntityFrameworkCoreModule))]
 public class StarshineTenantManagementEntityFrameworkCoreModule : AbpModule
 {
     /// <summary>

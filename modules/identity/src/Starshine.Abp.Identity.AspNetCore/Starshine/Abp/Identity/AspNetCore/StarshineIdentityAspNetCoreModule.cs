@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Starshine.Abp.Identity.AspNetCore;
 
@@ -8,7 +10,7 @@ namespace Starshine.Abp.Identity.AspNetCore;
 /// 认证模块
 /// </summary>
 [DependsOn(
-    typeof(StarshineIdentityDomainModule)
+    typeof(AbpIdentityDomainModule)
     )]
 public class StarshineIdentityAspNetCoreModule : AbpModule
 {
@@ -24,7 +26,7 @@ public class StarshineIdentityAspNetCoreModule : AbpModule
                 .AddDefaultTokenProviders()
                 .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProviderConsts.LinkUserTokenProviderName)
                 .AddSignInManager<StarshineSignInManager>()
-                .AddUserValidator<StarshineIdentityUserValidator>();
+                .AddUserValidator<AbpIdentityUserValidator>();
         });
     }
 

@@ -1,12 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
+using Starshine.Abp.EntityFrameworkCore;
+using Starshine.Abp.PermissionManagement.Entities;
+using Starshine.Abp.PermissionManagement.Repositories;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.Threading;
 
 namespace Starshine.Abp.PermissionManagement.EntityFrameworkCore;
 
@@ -25,9 +21,7 @@ public class EfCorePermissionGroupDefinitionRecordRepository :
     public EfCorePermissionGroupDefinitionRecordRepository(
         IDbContextProvider<IPermissionManagementDbContext> dbContextProvider,
         IAbpLazyServiceProvider abpLazyServiceProvider)
-        : base(dbContextProvider)
+        : base(dbContextProvider, abpLazyServiceProvider)
     {
-        LazyServiceProvider = abpLazyServiceProvider;
-        var c = LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
     }
 }

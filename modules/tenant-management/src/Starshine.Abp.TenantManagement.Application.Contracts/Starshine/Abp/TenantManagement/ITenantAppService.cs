@@ -1,6 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using Volo.Abp.Application.Services;
+﻿using Starshine.Abp.Application.Services;
+using Starshine.Abp.TenantManagement.Dtos;
 
 namespace Starshine.Abp.TenantManagement;
 

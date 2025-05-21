@@ -1,10 +1,10 @@
 ﻿using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.Domain.Repositories.EntityFrameworkCore;
+using Starshine.Abp.EntityFrameworkCore;
 using Starshine.Abp.TenantManagement.Entities;
 using Starshine.Abp.TenantManagement.Repositories;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore;
 
 namespace Starshine.Abp.TenantManagement.EntityFrameworkCore;
 /// <summary>
@@ -12,9 +12,8 @@ namespace Starshine.Abp.TenantManagement.EntityFrameworkCore;
 /// </summary>
 public class EfCoreTenantRepository : EfCoreRepository<ITenantManagementDbContext, Tenant, Guid>, ITenantRepository
 {
-    public EfCoreTenantRepository(IDbContextProvider<ITenantManagementDbContext> dbContextProvider, IAbpLazyServiceProvider abpLazyServiceProvider):base(dbContextProvider)
+    public EfCoreTenantRepository(IDbContextProvider<ITenantManagementDbContext> dbContextProvider, IAbpLazyServiceProvider abpLazyServiceProvider):base(dbContextProvider, abpLazyServiceProvider)
     {
-        LazyServiceProvider = abpLazyServiceProvider;
     }
     /// <summary>
     /// 根据名称查找租户

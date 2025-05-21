@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
+using Starshine.Abp.Domain;
 using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
@@ -20,10 +21,8 @@ namespace Starshine.Abp.PermissionManagement;
 /// 权限管理领域模型
 /// </summary>
 [DependsOn(typeof(AbpAuthorizationModule))]
-[DependsOn(typeof(AbpDddDomainModule))]
+[DependsOn(typeof(StarshineDddDomainModule))]
 [DependsOn(typeof(StarshinePermissionManagementDomainSharedModule))]
-[DependsOn(typeof(AbpCachingModule))]
-[DependsOn(typeof(AbpJsonModule))]
 public class StarshinePermissionManagementDomainModule : AbpModule
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();

@@ -14,7 +14,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(AbpVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

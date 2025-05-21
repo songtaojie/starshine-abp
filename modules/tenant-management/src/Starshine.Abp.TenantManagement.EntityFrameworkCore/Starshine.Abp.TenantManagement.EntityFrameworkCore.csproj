@@ -15,7 +15,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Starshine.Abp.TenantManagement.Domain\Starshine.Abp.TenantManagement.Domain.csproj" />
   </ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="$(AbpVersion)" />
-	</ItemGroup>
 </Project>

@@ -1,8 +1,6 @@
-﻿using Starshine.Abp.TenantManagement.Entities;
-using Volo.Abp.Caching;
-using Volo.Abp.Data;
-using Volo.Abp.Domain;
-using Volo.Abp.Domain.Entities.Events.Distributed;
+﻿using Starshine.Abp.Domain;
+using Starshine.Abp.Domain.Entities.Events.Distributed;
+using Starshine.Abp.TenantManagement.Entities;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
@@ -16,9 +14,7 @@ namespace Starshine.Abp.TenantManagement;
 /// </summary>
 [DependsOn(typeof(AbpMultiTenancyModule))]
 [DependsOn(typeof(StarshineTenantManagementDomainSharedModule))]
-[DependsOn(typeof(AbpDataModule))]
-[DependsOn(typeof(AbpDddDomainModule))]
-[DependsOn(typeof(AbpCachingModule))]
+[DependsOn(typeof(StarshineDddDomainModule))]
 public class StarshineTenantManagementDomainModule : AbpModule
 {
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();

@@ -1,11 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using Starshine.Abp.Domain.Entities.Events;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 using Volo.Abp.MultiTenancy;
 
-namespace Starshine.Abp.PermissionManagement;
+namespace Starshine.Abp.PermissionManagement.EventHandler;
 
 /// <summary>
 /// 权限授予缓存项无效器本地事件处理程序

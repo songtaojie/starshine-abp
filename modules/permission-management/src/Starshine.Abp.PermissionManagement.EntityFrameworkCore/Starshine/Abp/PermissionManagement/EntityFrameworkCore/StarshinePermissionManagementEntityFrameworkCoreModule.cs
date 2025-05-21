@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EntityFrameworkCore;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Starshine.Abp.EntityFrameworkCore;
+using Starshine.Abp.PermissionManagement.Entities;
 using Volo.Abp.Modularity;
 
 namespace Starshine.Abp.PermissionManagement.EntityFrameworkCore;
@@ -9,7 +9,7 @@ namespace Starshine.Abp.PermissionManagement.EntityFrameworkCore;
 /// 
 /// </summary>
 [DependsOn(typeof(StarshinePermissionManagementDomainModule))]
-[DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+[DependsOn(typeof(StarshineEntityFrameworkCoreModule))]
 public class StarshinePermissionManagementEntityFrameworkCoreModule : AbpModule
 {
     /// <summary>

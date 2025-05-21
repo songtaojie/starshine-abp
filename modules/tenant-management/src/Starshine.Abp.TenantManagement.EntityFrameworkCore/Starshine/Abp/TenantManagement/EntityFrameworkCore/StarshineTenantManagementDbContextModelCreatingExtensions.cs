@@ -1,8 +1,8 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.EntityFrameworkCore.Modeling;
 using Starshine.Abp.TenantManagement.Entities;
 using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Starshine.Abp.TenantManagement.EntityFrameworkCore;
 

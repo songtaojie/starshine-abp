@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<AssemblyName>Starshine.Abp.Account.Web</AssemblyName>
+		<PackageId>Starshine.Abp.Account.Web</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<RootNamespace>Starshine.Abp.Account.Web</RootNamespace>
+		<IsPackable>true</IsPackable>
+		<OutputType>Library</OutputType>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="$(AbpVersion)" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.16" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Modules\**\*.js" />
+		<EmbeddedResource Include="Modules\**\*.css" />
+		<EmbeddedResource Include="Pages\**\*.js" />
+		<EmbeddedResource Include="Pages\**\*.css" />
+		<EmbeddedResource Include="Components\**\*.js" />
+		<EmbeddedResource Include="Components\**\*.css" />
+		<EmbeddedResource Include="wwwroot\**\*.js" />
+		<EmbeddedResource Include="wwwroot\**\*.css" />
+		<Content Remove="Modules\**\*.js" />
+		<Content Remove="Modules\**\*.css" />
+		<Content Remove="Pages\**\*.js" />
+		<Content Remove="Pages\**\*.css" />
+		<Content Remove="Components\**\*.js" />
+		<Content Remove="Components\**\*.css" />
+		<Content Remove="wwwroot\**\*.js" />
+		<Content Remove="wwwroot\**\*.css" />
+	</ItemGroup>
+</Project>

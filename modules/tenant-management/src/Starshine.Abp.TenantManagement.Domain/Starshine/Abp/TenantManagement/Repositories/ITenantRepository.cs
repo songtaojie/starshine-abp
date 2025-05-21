@@ -1,9 +1,5 @@
-﻿using Starshine.Abp.TenantManagement.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Volo.Abp.Domain.Repositories;
+﻿using Starshine.Abp.Domain.Repositories;
+using Starshine.Abp.TenantManagement.Entities;
 
 namespace Starshine.Abp.TenantManagement.Repositories;
 

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Starshine.Abp.Domain.Entities;
+using System;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
-namespace Starshine.Abp.PermissionManagement;
+namespace Starshine.Abp.PermissionManagement.Entities;
 
 /// <summary>
 /// 权限定义记录
@@ -155,11 +156,11 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
 
         if (!this.HasSameExtraProperties(otherRecord))
         {
-            this.ExtraProperties.Clear();
+            ExtraProperties.Clear();
 
             foreach (var property in otherRecord.ExtraProperties)
             {
-                this.ExtraProperties.Add(property.Key, property.Value);
+                ExtraProperties.Add(property.Key, property.Value);
             }
         }
     }

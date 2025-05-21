@@ -13,10 +13,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="$(AbpVersion)" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\Starshine.Abp.PermissionManagement.Domain\Starshine.Abp.PermissionManagement.Domain.csproj" />
 	</ItemGroup>
 

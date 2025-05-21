@@ -13,6 +13,6 @@
 		<RootNamespace />
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Starshine.Abp.Identity.Domain\Starshine.Abp.Identity.Domain.csproj" />
+		<PackageReference Include="Volo.Abp.Identity.Domain" Version="$(AbpVersion)" />
 	</ItemGroup>
 </Project>

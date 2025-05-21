@@ -1,8 +1,8 @@
-﻿using System;
-using Volo.Abp.Application.Dtos;
+﻿using Starshine.Abp.Application.Dtos;
+using System;
 using Volo.Abp.Domain.Entities;
 
-namespace Starshine.Abp.TenantManagement;
+namespace Starshine.Abp.TenantManagement.Dtos;
 /// <summary>
 /// 租户
 /// </summary>

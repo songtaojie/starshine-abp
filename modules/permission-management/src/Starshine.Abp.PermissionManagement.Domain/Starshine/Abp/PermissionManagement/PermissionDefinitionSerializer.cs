@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Starshine.Abp.PermissionManagement.Entities;
+using System.Globalization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;

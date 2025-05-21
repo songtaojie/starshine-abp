@@ -1,7 +1,8 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Starshine.Abp.EntityFrameworkCore.Modeling;
+using Starshine.Abp.PermissionManagement.Entities;
 using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Starshine.Abp.PermissionManagement.EntityFrameworkCore;
 

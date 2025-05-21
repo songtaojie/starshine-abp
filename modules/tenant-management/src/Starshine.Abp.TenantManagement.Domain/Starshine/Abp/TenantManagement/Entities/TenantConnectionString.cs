@@ -1,7 +1,5 @@
-using System;
-using JetBrains.Annotations;
+using Starshine.Abp.Domain.Entities;
 using Volo.Abp;
-using Volo.Abp.Domain.Entities;
 
 namespace Starshine.Abp.TenantManagement.Entities;
 /// <summary>

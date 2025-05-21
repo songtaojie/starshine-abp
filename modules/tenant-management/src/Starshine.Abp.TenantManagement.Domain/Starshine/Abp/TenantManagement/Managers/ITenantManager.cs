@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using Starshine.Abp.Domain.Services;
 using Starshine.Abp.TenantManagement.Entities;
-using Volo.Abp.Domain.Services;
 
 namespace Starshine.Abp.TenantManagement.Managers;
 /// <summary>
