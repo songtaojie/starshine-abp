@@ -16,8 +16,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Remove="E:\ProgramData\nuget\packages\volo.abp.aspnetcore.mvc.ui.multitenancy\8.3.4\contentFiles\any\net8.0\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.abppkg.analyze.json" />
-	  <Content Remove="E:\ProgramData\nuget\packages\volo.abp.aspnetcore.mvc.ui.theme.shared\8.3.4\contentFiles\any\net8.0\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.abppkg.analyze.json" />
+		<EmbeddedResource Include="wwwroot\**\*.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="wwwroot\**\*.*" />
 	</ItemGroup>
 
 	<ItemGroup>

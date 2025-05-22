@@ -49,6 +49,7 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
 </head>
+
 <body class="abp-account-layout @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Account)
 
@@ -57,10 +58,6 @@
     <div class="@containerClass">
         <abp-row>
             <abp-column class="col mx-auto" style="max-width: 440px">
-                <div class="brand-container">
-                    <img class="brand-logo" src="@(BrandingProvider.LogoUrl ?? Url.Content("~/themes/basic/logo.svg"))" alt="@BrandingProvider.AppName"/>
-                    <h2 class="brand-text">@BrandingProvider.AppName</h2>
-                </div>
                 @if (MultiTenancyOptions.Value.IsEnabled &&
                   (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true ||
                    TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(QueryStringTenantResolveContributor.ContributorName) == true))

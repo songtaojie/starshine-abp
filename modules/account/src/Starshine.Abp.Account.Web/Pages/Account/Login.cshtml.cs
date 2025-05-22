@@ -76,6 +76,7 @@ public class LoginModel : AccountPageModel
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
+        ViewData["FluidLayout"] = true;
         LoginInput = new LoginInputModel();
 
         ExternalProviders = await GetExternalProviders();

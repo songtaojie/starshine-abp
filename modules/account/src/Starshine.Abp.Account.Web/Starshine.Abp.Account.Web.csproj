@@ -32,6 +32,8 @@
 		<EmbeddedResource Include="Components\**\*.css" />
 		<EmbeddedResource Include="wwwroot\**\*.js" />
 		<EmbeddedResource Include="wwwroot\**\*.css" />
+		<EmbeddedResource Include="wwwroot\**\*.ttf" />
+		<EmbeddedResource Include="wwwroot\**\*.woff2" />
 		<Content Remove="Modules\**\*.js" />
 		<Content Remove="Modules\**\*.css" />
 		<Content Remove="Pages\**\*.js" />
@@ -40,5 +42,15 @@
 		<Content Remove="Components\**\*.css" />
 		<Content Remove="wwwroot\**\*.js" />
 		<Content Remove="wwwroot\**\*.css" />
+		<Content Remove="wwwroot\**\*.ttf" />
+		<Content Remove="wwwroot\**\*.woff2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\libs\starshine\css\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\libs\starshine\js\login.js" />
 	</ItemGroup>
 </Project>
