@@ -1,0 +1,7 @@
+{
+  "culture": "en",
+    "texts": {
+        "ResetPasswordError": "Password reset error",
+        "PasswordsDoNotMatch": "'Password' and 'Confirm Password' do not match"
+    }
+}

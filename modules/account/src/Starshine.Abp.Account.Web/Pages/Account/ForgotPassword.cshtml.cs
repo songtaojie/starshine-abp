@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Starshine.Abp.Account.Web.Consts;
 using Volo.Abp.Identity;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Validation;
 
 namespace Starshine.Abp.Account.Web.Pages.Account;
@@ -12,6 +14,7 @@ public class ForgotPasswordModel : AccountPageModel
     [EmailAddress]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
     [BindProperty]
+    [DisplayName("邮箱")]
     public string? Email { get; set; }
 
     [HiddenInput]
@@ -31,12 +34,14 @@ public class ForgotPasswordModel : AccountPageModel
     {
         try
         {
+            var AppUrlProvider = LazyServiceProvider.GetRequiredService<IAppUrlProvider>();
+            var url = await AppUrlProvider.GetUrlAsync(StarshineAccountConsts.AppName, StarshineAccountConsts.PasswordReset);
             await AccountAppService.SendPasswordResetCodeAsync(
                 new SendPasswordResetCodeDto
                 {
                     Email = Email,
-                    AppName = "MVC", //TODO: Const!
-                        ReturnUrl = ReturnUrl,
+                    AppName = StarshineAccountConsts.AppName, //TODO: Const!
+                    ReturnUrl = ReturnUrl,
                     ReturnUrlHash = ReturnUrlHash
                 }
             );
@@ -50,7 +55,8 @@ public class ForgotPasswordModel : AccountPageModel
 
         return RedirectToPage(
             "./PasswordResetLinkSent",
-            new {
+            new
+            {
                 returnUrl = ReturnUrl,
                 returnUrlHash = ReturnUrlHash
             });

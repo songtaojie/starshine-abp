@@ -34,6 +34,8 @@
 		<EmbeddedResource Include="wwwroot\**\*.css" />
 		<EmbeddedResource Include="wwwroot\**\*.ttf" />
 		<EmbeddedResource Include="wwwroot\**\*.woff2" />
+		<EmbeddedResource Include="Localization\Resources\*.json" />
+		<Content Remove="Localization\Resources\*.json" />
 		<Content Remove="Modules\**\*.js" />
 		<Content Remove="Modules\**\*.css" />
 		<Content Remove="Pages\**\*.js" />
@@ -44,10 +46,6 @@
 		<Content Remove="wwwroot\**\*.css" />
 		<Content Remove="wwwroot\**\*.ttf" />
 		<Content Remove="wwwroot\**\*.woff2" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="wwwroot\libs\starshine\css\" />
 	</ItemGroup>
 
 	<ItemGroup>

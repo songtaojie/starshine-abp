@@ -1,10 +1,11 @@
 ﻿@model Volo.Abp.AspNetCore.Mvc.UI.Alerts.AlertList
 @if (Model.Any())
 {
-    <div id="AbpPageAlerts">
+    <div id="pageAlerts">
         @foreach (var alertMessage in Model)
         {
-            <abp-alert alert-type="@(alertMessage.Type)" dismissible="@alertMessage.Dismissible">
+            <abp-alert alert-type="@(alertMessage.Type)" dismissible="@alertMessage.Dismissible"
+                       class="start-50 position-absolute translate-middle-x mt-6" >
                 @if (alertMessage.Title != null)
                 {
                     <h4>@alertMessage.Title</h4>

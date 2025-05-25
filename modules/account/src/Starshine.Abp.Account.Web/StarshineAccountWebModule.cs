@@ -17,6 +17,9 @@ using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.Account;
+using Volo.Abp.UI.Navigation.Urls;
+using Starshine.Abp.Account.Web.Consts;
+using Volo.Abp.Localization;
 
 namespace Starshine.Abp.Account.Web;
 
@@ -67,6 +70,18 @@ public class StarshineAccountWebModule : AbpModule
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {
             options.DisableModule(AccountRemoteServiceConsts.ModuleName);
+        });
+
+        Configure<AppUrlOptions>(options =>
+        {
+            options.Applications["MVC"].Urls[StarshineAccountConsts.PasswordReset] = "account/reset-password";
+        });
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<AccountResource>() // 获取内置资源
+                .AddVirtualJson("/Localization/Resources"); // 添加你自定义的资源目录
         });
     }
 

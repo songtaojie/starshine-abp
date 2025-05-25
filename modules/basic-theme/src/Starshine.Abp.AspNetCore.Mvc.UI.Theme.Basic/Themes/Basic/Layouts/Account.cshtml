@@ -21,7 +21,6 @@
 
 @{
     Layout = null;
-    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
     var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
 }
 
@@ -50,13 +49,17 @@
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
 </head>
 
-<body class="abp-account-layout @rtl">
+<body class="d-flex flex-column min-vh-100 @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Account)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
-    <div class="@containerClass">
-        <abp-row>
+    <main class="d-flex flex-grow-1">
+        @(await Component.InvokeAsync<PageAlertsViewComponent>())
+        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Account)
+        @RenderBody()
+        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Account)
+       @*  <abp-row>
             <abp-column class="col mx-auto" style="max-width: 440px">
                 @if (MultiTenancyOptions.Value.IsEnabled &&
                   (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true ||
@@ -92,8 +95,8 @@
                 @RenderBody()
                 @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Account)
             </abp-column>
-        </abp-row>
-    </div>
+        </abp-row> *@
+    </main>
 
     <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />
 

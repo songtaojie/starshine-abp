@@ -1,0 +1,8 @@
+{
+  "culture": "zh-Hant",
+    "texts": {
+        "ResetPasswordError": "重置密码异常",
+        "PasswordsDoNotMatch": "确认密码与密码不匹配",
+        "YourPasswordIsSuccessfullyReset": "您的密码已成功更新。系统将在<span id='countdown' class='fw-bold text-warning-emphasis fs-5' >5</span>秒后自动跳转至首页。"
+    }
+}

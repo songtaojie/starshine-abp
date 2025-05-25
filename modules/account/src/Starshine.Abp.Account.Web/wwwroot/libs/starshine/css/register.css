@@ -1,0 +1,13 @@
+﻿.register-container {
+    display: flex;
+    width: 900px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.btn-custom {
+    background-color: #ff6700;
+    color: white;
+}

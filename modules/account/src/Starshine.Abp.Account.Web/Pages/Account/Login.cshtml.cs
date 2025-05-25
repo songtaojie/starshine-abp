@@ -22,6 +22,7 @@ using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using Volo.Abp;
+using Starshine.Abp.Account.Web.Settings;
 
 namespace Starshine.Abp.Account.Web.Pages.Account;
 
@@ -39,6 +40,10 @@ public class LoginModel : AccountPageModel
     public LoginInputModel LoginInput { get; set; } = default!;
 
     public bool EnableLocalLogin { get; set; }
+
+    public bool EnableRememberMe { get; set; }
+
+    public bool IsSelfRegistrationEnabled { get; set; }
 
     //TODO: Why there is an ExternalProviders if only the VisibleExternalProviders is used.
     public IEnumerable<ExternalProviderModel>? ExternalProviders { get; set; }
@@ -76,13 +81,13 @@ public class LoginModel : AccountPageModel
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
-        ViewData["FluidLayout"] = true;
         LoginInput = new LoginInputModel();
 
         ExternalProviders = await GetExternalProviders();
 
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
+        EnableRememberMe = await SettingProvider.IsTrueAsync(StarshineAccountSettingNames.EnableRememberMe);
+        IsSelfRegistrationEnabled = await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled);
         if (IsExternalLoginOnly)
         {
             return await OnPostExternalLogin(ExternalProviders.First().AuthenticationScheme ?? string.Empty);
@@ -95,7 +100,8 @@ public class LoginModel : AccountPageModel
     {
         await CheckLocalLoginAsync();
 
-        ValidateModel();
+        //ValidateModel();
+        ModelValidator?.Validate(ModelState);
 
         ExternalProviders = await GetExternalProviders();
 

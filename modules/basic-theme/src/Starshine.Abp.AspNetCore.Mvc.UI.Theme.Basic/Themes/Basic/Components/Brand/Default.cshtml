@@ -1,6 +1,11 @@
-﻿@using Volo.Abp.Ui.Branding
-@inject IBrandingProvider BrandingProvider
-<a class="navbar-brand" href="~/">
+﻿@using Starshine.Abp.AspNetCore.Mvc.UI.Theme.Basic.Branding
+@using Volo.Abp.Ui.Branding
+@inject IStarshineBrandingProvider BrandingProvider
+<a class="navbar-brand  py-0 d-flex align-items-center" href="~/">
     <img class="brand-logo" src="@(BrandingProvider.LogoUrl ?? Url.Content("~/themes/basic/logo.svg"))" alt="@BrandingProvider.AppName" />
-    @BrandingProvider.AppName
+    <div class="d-flex flex-column ms-2">
+        <span class="fs-5 fw-bold">@BrandingProvider.AppName</span>
+        <span class="fs-7 fst-italic fw-light">@BrandingProvider.AppDescription</span>
+    </div>
 </a>
+

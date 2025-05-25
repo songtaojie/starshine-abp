@@ -9,7 +9,7 @@ namespace Starshine.Abp.Account.Web.Pages.Account;
 public class ResetPasswordConfirmationModel : AccountPageModel
 {
     [BindProperty(SupportsGet = true)]
-    public required string ReturnUrl { get; set; }
+    public string ReturnUrl { get; set; } = "/";
 
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrlHash { get; set; }

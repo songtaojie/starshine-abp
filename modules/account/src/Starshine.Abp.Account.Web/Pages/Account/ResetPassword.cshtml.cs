@@ -1,7 +1,5 @@
-using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
@@ -92,7 +90,8 @@ public class ResetPasswordModel : AccountPageModel
         }
 
         //TODO: Try to automatically login!
-        return RedirectToPage("./ResetPasswordConfirmation", new {
+        return RedirectToPage("./ResetPasswordConfirmation", new
+        {
             returnUrl = ReturnUrl,
             returnUrlHash = ReturnUrlHash
         });
@@ -102,8 +101,7 @@ public class ResetPasswordModel : AccountPageModel
     {
         if (!Equals(Password, ConfirmPassword))
         {
-            ModelState.AddModelError("ConfirmPassword",
-                L["'{0}' and '{1}' do not match.", "ConfirmPassword", "Password"]);
+            ModelState.AddModelError("ConfirmPassword", L["PasswordsDoNotMatch"]);
         }
 
         base.ValidateModel();

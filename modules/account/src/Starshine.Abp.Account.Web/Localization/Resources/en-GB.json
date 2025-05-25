@@ -1,0 +1,6 @@
+{
+  "culture": "en-GB",
+    "texts": {
+        "PasswordsDoNotMatch": "'Password' and 'Confirm Password' do not match"
+    }
+}

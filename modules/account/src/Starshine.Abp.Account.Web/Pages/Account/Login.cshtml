@@ -14,6 +14,10 @@
 @{
 	Layout = ThemeManager.CurrentTheme.GetAccountLayout();
 }
+@section styles {
+    <link rel="stylesheet" href="~/libs/starshine/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/libs/starshine/css/login.bg.css" asp-append-version="true" />
+}
 
 @if (Model.ShowRequireMigrateSeedMessage)
 {
@@ -22,6 +26,87 @@
 		<p>@L["RequireMigrateSeedMessage"]</p>
 	</div>
 }
+<div class="login-container d-flex flex-grow-1 w-100">
+    <div class="login-left w-100 w-xl-50 d-none d-sm-flex flex-column">
+        <partial name="./Components/LoginCarousel/Index" />
+    </div>
+
+    <div class="d-flex login-right flex-xl-grow-1 top-sm-50 start-sm-50 position-sm-absolute position-xl-relative top-xl-0 start-xl-0 bg-white translate-sm-middle translate-xl-none w-100 h-100 w-sm-auto h-sm-auto ">
+        <div class="login-right-warp pt-5 m-sm-auto pt-sm-0">
+            <span class="login-right-warp-one"></span>
+            <span class="login-right-warp-two"></span>
+            <div class="login-right-warp-main d-flex flex-column h-100">
+                <div class="login-right-warp-main-title text-center fs-2 fw-bold">@L["Login"]</div>
+                @* <partial name="_ValidationSummary" /> *@
+                <div class="px-5 flex-fill d-flex flex-column">
+                    @if (Model.EnableLocalLogin)
+                    {
+                        <form method="post" class="row needs-validation" novalidate>
+                            <div class="row mb-4 col-12">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                    <input asp-for="LoginInput.UserNameOrEmailAddress" value="admin@abp.io" placeholder="@Html.DisplayNameFor(m => m.LoginInput.UserNameOrEmailAddress)" class="form-control" />
+                                </div>
+                                <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
+                            </div>
+
+                            <div class="row mb-4  col-12">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                    <input type="password" value="1q2w3E*" placeholder="@Html.DisplayNameFor(m => m.LoginInput.Password)" class="form-control" autocomplete="new-password" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="LoginInput.Password" />
+                                    <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton">
+                                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
+                            </div>
+                            @if (Model.EnableRememberMe)
+                            {
+                                <div class="row mb-4 col-12">
+                                    <label asp-for="LoginInput.RememberMe">
+                                        <input asp-for="LoginInput.RememberMe">
+                                        <strong>记住我</strong>
+                                    </label>
+                                </div>
+                            }
+
+                            <div class="row mb-4 col-12">
+                                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                    <button type="submit" class="btn btn-primary" name="Action" value="Login">@L["Login"]</button>
+                                    @if (Model.ShowCancelButton)
+                                    {
+                                        <button type="button" name="Action" value="Cancel" class="btn btn-outline-secondary ms-2">@L["Cancel"]</button>
+                                    }
+                                </div>
+                            </div>
+                        </form>
+                    }
+
+                    <div class="row mb-4 col-12 z-2">
+                        <div class="d-flex justify-content-end">
+                            @if (Model.EnableLocalLogin)
+                            {
+                                <a class="text-decoration-none" href="@Url.Page("./ForgotPassword", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">
+                                    @L["ForgotPassword"]
+                                </a>
+                            }
+                            @if (Model.IsSelfRegistrationEnabled)
+                            {
+                                <strong>
+                                    @L["AreYouANewUser"]
+                                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" class="text-decoration-none">@L["Register"]</a>
+                                </strong>
+                            }
+                        </div>
+                    </div>
+                    <div class="row col-12 fs-7 text-secondary mt-4 mb-auto fs-6 pb-4">
+                        * 温馨提示：建议使用谷歌、Microsoft Edge，版本 79.0.1072.62 及以上浏览器，360浏览器请使用极速模式
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -29,8 +114,7 @@
 
 
 
-
-<div class="card mt-3 shadow-sm rounded">
+@* <div class="card mt-3 shadow-sm rounded">
 	<div class="card-body p-5">
 		<h4>@L["Login"]</h4>
 		@if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
@@ -97,7 +181,7 @@
 		}
 
 	</div>
-</div>
+</div> *@
 
 @section scripts
 {
