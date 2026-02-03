@@ -1,4 +1,4 @@
-﻿using Starshine.Abp.Domain;
+﻿using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 
 namespace Starshine.Abp.Users;
@@ -9,7 +9,7 @@ namespace Starshine.Abp.Users;
 [DependsOn(
     typeof(StarshineUsersDomainSharedModule),
     typeof(StarshineUsersAbstractionModule),
-    typeof(StarshineDddDomainModule)
+    typeof(AbpDddDomainModule)
     )]
 public class StarshineUsersDomainModule : AbpModule
 {

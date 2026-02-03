@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Security.Claims;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;

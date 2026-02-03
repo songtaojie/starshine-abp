@@ -20,11 +20,10 @@ public class OpenIddictSupportedLoginModel : LoginModel
     public OpenIddictSupportedLoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<StarshineAccountOptions> accountOptions,
-        IOptions<IdentityOptions> identityOptions,
         IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
         AbpOpenIddictRequestHelper openIddictRequestHelper,
         IWebHostEnvironment webHostEnvironment)
-        : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, webHostEnvironment)
+        : base(schemeProvider, accountOptions, identityDynamicClaimsPrincipalContributorCache, webHostEnvironment)
     {
         OpenIddictRequestHelper = openIddictRequestHelper;
     }

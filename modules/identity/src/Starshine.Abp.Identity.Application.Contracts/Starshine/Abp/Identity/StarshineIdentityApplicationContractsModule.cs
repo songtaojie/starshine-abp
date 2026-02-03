@@ -1,10 +1,10 @@
 ﻿using Starshine.Abp.Identity.Dtos;
 using Starshine.Abp.ObjectExtending;
-using Starshine.Abp.PermissionManagement;
 using Starshine.Abp.Users;
 using Volo.Abp.Authorization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.Threading;
 
 namespace Starshine.Abp.Identity;
@@ -15,7 +15,7 @@ namespace Starshine.Abp.Identity;
     typeof(StarshineIdentityDomainSharedModule),
     typeof(StarshineUsersAbstractionModule),
     typeof(AbpAuthorizationModule),
-    typeof(StarshinePermissionManagementApplicationContractsModule)
+    typeof(AbpPermissionManagementApplicationContractsModule)
     )]
 public class StarshineIdentityApplicationContractsModule : AbpModule
 {

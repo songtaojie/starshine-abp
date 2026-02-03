@@ -13,6 +13,10 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Starshine.Abp.Identity.Domain\Starshine.Abp.Identity.Domain.csproj" />
 		<ProjectReference Include="..\Starshine.Abp.Identity.Application.Contracts\Starshine.Abp.Identity.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\..\permission-management\src\Starshine.Abp.PermissionManagement.Application\Starshine.Abp.PermissionManagement.Application.csproj" />
+		<!--<ProjectReference Include="..\..\..\permission-management\src\Starshine.Abp.PermissionManagement.Application\Starshine.Abp.PermissionManagement.Application.csproj" />-->
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="$(AbpVersion)" />
 	</ItemGroup>
 </Project>

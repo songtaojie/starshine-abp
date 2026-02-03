@@ -15,5 +15,7 @@
 	  <ProjectReference Include="..\Starshine.Abp.Users.Abstractions\Starshine.Abp.Users.Abstractions.csproj" />
 	  <ProjectReference Include="..\Starshine.Abp.Users.Domain.Shared\Starshine.Abp.Users.Domain.Shared.csproj" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
+	</ItemGroup>
 </Project>

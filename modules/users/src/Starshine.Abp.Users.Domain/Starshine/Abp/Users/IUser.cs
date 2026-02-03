@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-using Starshine.Abp.Domain.Entities;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;

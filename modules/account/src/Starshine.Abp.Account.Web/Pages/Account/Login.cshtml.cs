@@ -59,7 +59,7 @@ public class LoginModel : AccountPageModel
 
     protected IAuthenticationSchemeProvider SchemeProvider { get; }
     protected StarshineAccountOptions AccountOptions { get; }
-    protected IOptions<IdentityOptions> IdentityOptions { get; }
+    //protected IOptions<IdentityOptions> IdentityOptions { get; }
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
     protected IWebHostEnvironment WebHostEnvironment { get; }
     public bool ShowCancelButton { get; set; }
@@ -68,12 +68,10 @@ public class LoginModel : AccountPageModel
     public LoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<StarshineAccountOptions> accountOptions,
-        IOptions<IdentityOptions> identityOptions,
         IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
         IWebHostEnvironment webHostEnvironment)
     {
         SchemeProvider = schemeProvider;
-        IdentityOptions = identityOptions;
         AccountOptions = accountOptions.Value;
         IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
         WebHostEnvironment = webHostEnvironment;
